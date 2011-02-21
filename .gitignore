@@ -1,0 +1,22 @@
+# My typical gitignore file
+
+# Compilation targets
+main
+
+# Build directory
+build/*
+
+# Generated files
+*~
+*.bak
+*.[oa]
+*.so
+*.os
+*.pyc
+
+# Debugging
+core
+
+# Generic compilation
+a.out
+

@@ -1,0 +1,10 @@
+_**Work in progress...**_
+
+OS
+====
+
+A simple mock operating system.
+Future investigation: a compiler for the ISA. 
+
+_Requires a modern C++0x compatible compiler._
+
