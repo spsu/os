@@ -6,5 +6,7 @@ int main(int argc, char *argv[])
 
 	a = new Loader("data/datafile1.txt");
 
+	a->loadDisk();
+
 	return 0;
 }

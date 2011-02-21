@@ -8,7 +8,24 @@ using namespace std;
 class Loader 
 {
 	public:
-		Loader(string fname);
+		/**
+		 * CTOR: Filename unspec'd.
+		 */
+		Loader()
+			: filename("") {};
+
+		/**
+		 * CTOR: Set filename.
+		 */
+		Loader(string fname) 
+			: filename(fname) {};
+
+		// TODO: Return type, etc.
+		void loadDisk();
+
+	private:
+		// Name of file with instructions.
+		string filename;
 };
 
 #endif

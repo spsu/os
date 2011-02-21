@@ -8,19 +8,14 @@
 
 using namespace std;
 
-Loader::Loader(string fname)
+void Loader::loadDisk()
 {
 	ifstream f; 
 
-	f.open(fname, ios::in);
-	while(f.good()) {
+	f.open(filename, ios::in);
+	while(f.good()) 
+	{
 		string line;
-
-		// Get the current line...
-		getline(f, line);
-
-		//cout << "Job";
-		//cout << line;
 
 		boost::regex regex_job("JOB (\\w+) (\\w+) (\\w+)", 
 				boost::regbase::normal | boost::regbase::icase);
@@ -28,6 +23,10 @@ Loader::Loader(string fname)
 				boost::regbase::normal | boost::regbase::icase);
 
 		boost::smatch result;
+
+		getline(f, line);
+
+		// TODO: Implement a state machine here to extract data
 
 		if(boost::regex_search(line, result, regex_job)) {
 			cout << "JOB: ";
@@ -46,13 +45,6 @@ Loader::Loader(string fname)
 			cout << endl;
 		}
 
-
-		/*for(unsigned int i = 0; i < result.size(); i++) {
-			cout << result[i] << endl;
-		//	cout << result[i] << endl;
-		}*/
-		//cout << endl;
-		//cout << line << endl;*/
 	}
 
 }
