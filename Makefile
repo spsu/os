@@ -8,10 +8,10 @@ LN = g++ -g -lstdc++
 SHARED = g++ -shared -lstdc++
 CD = cd
 RM = /bin/rm -f
+#INC = -I/usr/include/boost/tr1/tr1
+LIB = -lboost_regex-mt
 #INC = `pkg-config --cflags-only-I ......` #
 #LIB = `pkg-config --libs ...... ` #
-#LOCALLIB = -Lbuild/lib -Wl,-rpath build/lib -llocal_app 
-GENERATED_FILES = *.o *.a *.so *.out
 
 
 # ================
