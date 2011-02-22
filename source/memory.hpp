@@ -35,13 +35,13 @@ class Memory
 		 * Get the contents of the memory.
 		 * Absolute addressing.
 		 */
-		word get(int offset);
+		word get(unsigned int offset);
 
 		/**
 		 * Set the contents of the memory.
 		 * Absolute addressing.
 		 */
-		void set(int offset, word data);
+		void set(unsigned int offset, word data);
 
 		/**
 		 * Print memory

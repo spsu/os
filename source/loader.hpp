@@ -5,6 +5,8 @@
 
 using namespace std;
 
+class Memory;
+
 class Loader 
 {
 	public:
@@ -21,7 +23,7 @@ class Loader
 			: filename(fname) {};
 
 		// TODO: Return type, etc.
-		void loadDisk();
+		void loadDisk(Memory* mem);
 
 	private:
 		// Name of file with instructions.

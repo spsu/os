@@ -56,7 +56,8 @@ main: source/main.cpp required
 ### ALL LIBS ##########################
 required: \
 	build/loader.o \
-	build/memory.o
+	build/memory.o \
+	build/number.o
 		@$(CD) .
 
 
@@ -71,4 +72,7 @@ build/memory.o: source/memory.hpp source/memory.cpp
 	@echo "[compile] memory"
 	@$(CD) ./build && $(C) $(INC) -c ../source/memory.cpp
 
+build/number.o: source/number.hpp source/number.cpp
+	@echo "[compile] number"
+	@$(CD) ./build && $(C) $(INC) -c ../source/number.cpp
 
