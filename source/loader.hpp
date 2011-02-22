@@ -1,5 +1,5 @@
-#ifndef OS_LOADER
-#define OS_LOADER
+#ifndef BT_OS_LOADER
+#define BT_OS_LOADER
 
 #include <string>
 

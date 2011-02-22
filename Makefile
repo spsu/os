@@ -55,13 +55,20 @@ main: source/main.cpp required
 
 ### ALL LIBS ##########################
 required: \
-	build/loader.o 
+	build/loader.o \
+	build/memory.o
 		@$(CD) .
 
-# =========================
+
+# Normally you don't maintain something like this by hand...
+# ==========================================================
 
 build/loader.o: source/loader.hpp source/loader.cpp
 	@echo "[compile] loader"
 	@$(CD) ./build && $(C) $(INC) -c ../source/loader.cpp
+
+build/memory.o: source/memory.hpp source/memory.cpp
+	@echo "[compile] memory"
+	@$(CD) ./build && $(C) $(INC) -c ../source/memory.cpp
 
 
