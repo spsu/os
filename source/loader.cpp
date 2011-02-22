@@ -6,6 +6,7 @@
 
 #include "loader.hpp"
 #include "memory.hpp"
+#include "number.hpp"
 
 using namespace std;
 //using namespace boost;
@@ -75,13 +76,15 @@ void Loader::loadDisk(Memory* memory)
 			state = nextState;		
 			nextState = NONE; 
 
-			int val = 10;
+			//cout << "DATA: ";
+			//cout << result[1];
 
-			cout << "DATA: ";
-			cout << result[1];
-			cout << ",  ";
+			memory->set(memPos, hex_to_dec(result[1]));
 
-			memory->set(memPos, val);
+			//cout << "STORED: ";
+			//cout << memory->get(memPos);
+			//cout << ",  ";
+
 			memPos++;
 		}
 

@@ -57,7 +57,8 @@ main: source/main.cpp required
 required: \
 	build/loader.o \
 	build/memory.o \
-	build/number.o
+	build/number.o \
+	build/instruction.o
 		@$(CD) .
 
 
@@ -75,4 +76,8 @@ build/memory.o: source/memory.hpp source/memory.cpp
 build/number.o: source/number.hpp source/number.cpp
 	@echo "[compile] number"
 	@$(CD) ./build && $(C) $(INC) -c ../source/number.cpp
+
+build/instruction.o: source/instruction.hpp source/instruction.cpp
+	@echo "[compile] instruction"
+	@$(CD) ./build && $(C) $(INC) -c ../source/instruction.cpp
 

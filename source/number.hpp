@@ -9,4 +9,8 @@
  */
 word hex_to_dec(std::string hex);
 
+// TODO:
+// string dec_to_hex(word dec);
+// string dec_to_hex(int dec);
+
 #endif
