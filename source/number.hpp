@@ -13,4 +13,8 @@ word hex_to_dec(std::string hex);
 // string dec_to_hex(word dec);
 // string dec_to_hex(int dec);
 
+//XXX: TEMP
+std::string dec2binA(unsigned d);
+std::string dec2binB(unsigned dec, bool zerofill = true, bool splitByte = true);
+
 #endif
