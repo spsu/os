@@ -21,7 +21,10 @@ string Pcb::toString() const
 
 void Pcb::printCode(const Memory& mem) const
 {
-	for(unsigned int i = diskInstructionsStart; i < mem.size(); i++)
+	unsigned int start = diskInstructionsStart;
+	unsigned int end = start + diskInstructionsLimit;
+
+	for(unsigned int i = start; i < end; i++)
 	{
 		Instruction instr(mem.get(i));
 		instr.print(); // TODO: toString instead!
