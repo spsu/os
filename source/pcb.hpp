@@ -1,6 +1,8 @@
 #ifndef BT_OS_PCB
 #define BT_OS_PCB
 
+#include <string>
+
 /**
  * TODO: Documentation.
  */
@@ -18,7 +20,7 @@ struct Pcb
 	/**
 	 * Debug method
 	 */
-	void print(); // TODO: toString would be better
+	std::string toString();
 
 	/**
 	 * Data Members

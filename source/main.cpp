@@ -16,22 +16,7 @@ int main(int argc, char *argv[])
 	Instruction* instr = 0;
 
 	loader = new Loader("data/datafile2.txt");
-
 	mem = new Memory(2048);
-	//cout << mem->size() << endl;
-
-
-	/*cout << hex_to_dec("0A") << endl;
-	cout << hex_to_dec("A") << endl;
-	cout << hex_to_dec("C0500") << endl;
-	cout << hex_to_dec("C05000") << endl;
-	cout << hex_to_dec("C050005") << endl;
-	cout << hex_to_dec("C050005C") << endl;*/
-
-	// XXX: Memory test
-	/*m->set(2030, 0xfff);
-	m->set(2031, 9000);
-	m->print();*/
 
 	pcbList = loader->loadDisk(mem); // TODO: Poor form
 
@@ -47,10 +32,9 @@ int main(int argc, char *argv[])
 
 	for(unsigned int i = 0; i < pcbList->size(); i++)
 	{
-		pcbList->at(i)->print();
+		cout << pcbList->at(i)->toString();
 		cout << endl;
 	}
-
 
 	//mem->print();
 

@@ -1,14 +1,18 @@
 #include <iostream>
+#include <sstream>
 #include "pcb.hpp"
 
 using namespace std;
 
-// TODO: toString would be better.
-void Pcb::print()
+string Pcb::toString()
 {
-	cout << "PCB <"
-		<< "pri: " << priority
-		<< ", start: " << diskInstructionsStart
-		<< ", len: " << diskInstructionsLimit
-		<< ">";
+	stringstream s;
+
+	s << "PCB <";
+	s << "pri: " << priority << ", ";
+	s << "start: " << diskInstructionsStart << ", ";
+	s << "len: " << diskInstructionsLimit;
+	s << ">";
+
+	return s.str();
 }
