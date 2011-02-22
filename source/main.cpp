@@ -32,7 +32,9 @@ int main(int argc, char *argv[])
 
 	for(unsigned int i = 0; i < pcbList->size(); i++)
 	{
-		cout << pcbList->at(i)->toString();
+		cout << "================\n";
+		cout << pcbList->at(i)->toString() << endl;
+		pcbList->at(i)->printCode(*mem);
 		cout << endl;
 	}
 

@@ -2,7 +2,7 @@
 #include "memory.hpp"
 #include "types.hpp"
 
-word Memory::get(unsigned int offset)
+word Memory::get(unsigned int offset) const
 {
 	// TODO: Bounds checking
 	return words[offset];
@@ -14,7 +14,7 @@ void Memory::set(unsigned int offset, word data)
 	words[offset] = data;
 }
 
-void Memory::print()
+void Memory::print() const
 {
 	for(unsigned int i = 0; i < words.size(); i++)
 		cout << i << ": " << words[i] << ",  "; //<< endl;

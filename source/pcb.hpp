@@ -7,32 +7,42 @@
  * TODO: Documentation.
  */
 
-struct Pcb 
+class Memory;
+
+class Pcb 
 {
-	// TODO: CTORs
-	Pcb()
-		: priority(0),
-		diskInstructionsStart(0),
-		diskInstructionsLimit(0),
-		diskDataStart(0),
-		diskDataLimit(0) {};
+	public:
 
-	/**
-	 * Debug method
-	 */
-	std::string toString();
+		// TODO: CTORs
 
-	/**
-	 * Data Members
-	 */
+		/**
+		 * Default CTOR.
+		 */
+		Pcb()
+			: priority(0),
+			diskInstructionsStart(0),
+			diskInstructionsLimit(0),
+			diskDataStart(0),
+			diskDataLimit(0) {};
 
-	int priority;
+		/**
+		 * Debug methods
+		 */
+		std::string toString() const;
+		void printCode(const Memory& mem) const;
+		//void printData(const Memory& mem);
 
-	// TODO: These are a WIP 
-	int diskInstructionsStart;
-	int diskInstructionsLimit;
-	int diskDataStart;
-	int diskDataLimit;
+	private:
+		/**
+		 * Data Members
+		 */
+		int priority;
+
+		// TODO: These are a WIP 
+		int diskInstructionsStart;
+		int diskInstructionsLimit;
+		int diskDataStart;
+		int diskDataLimit;
 };
 
 #endif

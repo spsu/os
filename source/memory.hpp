@@ -29,13 +29,13 @@ class Memory
 		/**
 		 * Get the size of memory.
 		 */
-		unsigned int size() { return words.size(); };
+		unsigned int size() const { return words.size(); };
 
 		/**
 		 * Get the contents of the memory.
 		 * Absolute addressing.
 		 */
-		word get(unsigned int offset);
+		word get(unsigned int offset) const;
 
 		/**
 		 * Set the contents of the memory.
@@ -47,7 +47,7 @@ class Memory
 		 * Print memory
 		 * XXX: For debug.
 		 */
-		void print();
+		void print() const;
 
 	private:
 		/**
