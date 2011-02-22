@@ -58,7 +58,8 @@ required: \
 	build/loader.o \
 	build/memory.o \
 	build/number.o \
-	build/instruction.o
+	build/instruction.o \
+	build/pcb.o
 		@$(CD) .
 
 
@@ -80,4 +81,8 @@ build/number.o: source/number.hpp source/number.cpp
 build/instruction.o: source/instruction.hpp source/instruction.cpp
 	@echo "[compile] instruction"
 	@$(CD) ./build && $(C) $(INC) -c ../source/instruction.cpp
+
+build/pcb.o: source/pcb.hpp source/pcb.cpp
+	@echo "[compile] pcb"
+	@$(CD) ./build && $(C) $(INC) -c ../source/pcb.cpp
 

@@ -29,7 +29,7 @@ class Memory
 		/**
 		 * Get the size of memory.
 		 */
-		int size() { return words.size(); };
+		unsigned int size() { return words.size(); };
 
 		/**
 		 * Get the contents of the memory.

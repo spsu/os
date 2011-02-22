@@ -2,10 +2,14 @@
 #define BT_OS_LOADER
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
 class Memory;
+struct Pcb;
+
+typedef vector<Pcb*> PcbList;
 
 class Loader 
 {
@@ -22,8 +26,8 @@ class Loader
 		Loader(string fname) 
 			: filename(fname) {};
 
-		// TODO: Return type, etc.
-		void loadDisk(Memory* mem);
+		// TODO: I don't like the semantics of this class anymore.
+		PcbList* loadDisk(Memory* mem);
 
 	private:
 		// Name of file with instructions.
