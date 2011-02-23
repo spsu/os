@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm> // reverse()
+#include <boost/algorithm/string.hpp> // May as well...
 
 #include "number.hpp"
 
@@ -10,8 +11,10 @@ word bin_to_dec(string bin)
 {
 	word dec = 0;
 
+	// TODO: Remove dependence on Boost 
+	boost::erase_all(bin, " ");
+
 	// TODO: No error checking
-	// XXX: Does not work with spaces!
 	for(unsigned int i = 0; i < bin.size(); i++) {
 		dec *= 2;
 		dec += (bin[i]-'0');
@@ -28,7 +31,7 @@ word hex_to_dec(string hexStr)
 	return ret;
 }
 
-// Based on a simple algorithm found at:
+// Greatly expanded from a simple algorithm found at:
 // http://www.cplusplus.com/forum/general/10898
 string dec_to_bin(unsigned int dec, bool zerofill, bool splitBytes)
 {
@@ -71,5 +74,4 @@ string dec_to_bin(unsigned int dec, bool zerofill, bool splitBytes)
 
 	return ret;
 }
-
 

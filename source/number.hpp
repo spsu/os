@@ -6,6 +6,7 @@
 
 /**
  * Return a decimal word from a binary string.
+ * XXX: Can remove spaces in the number, but no error check.
  */
 word bin_to_dec(std::string bin);
 
@@ -22,9 +23,5 @@ word hex_to_dec(std::string hex);
 std::string dec_to_bin(unsigned int dec, 
 					   bool zerofill = true, 
 					   bool splitByte = false);
-
-// TODO:
-// string dec_to_hex(word dec);
-// string dec_to_hex(int dec);
 
 #endif
