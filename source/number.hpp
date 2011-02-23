@@ -4,6 +4,9 @@
 #include <string>
 #include "types.hpp"
 
+// TODO: Rename to convert.[hc]pp ? 
+// Depends on what else goes in here... 
+
 /**
  * Return a decimal word from a binary string.
  * XXX: Can remove spaces in the number, but no error check.
