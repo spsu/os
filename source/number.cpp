@@ -6,6 +6,21 @@
 
 using namespace std;
 
+word bin_to_dec(string bin)
+{
+	word dec = 0;
+
+	// TODO: No error checking
+	// XXX: Does not work with spaces!
+	for(unsigned int i = 0; i < bin.size(); i++) {
+		dec *= 2;
+		dec += (bin[i]-'0');
+	}
+
+	return dec;
+}
+
+
 word hex_to_dec(string hexStr)
 {
 	word ret(0);

@@ -15,6 +15,4 @@ void Instruction::print() const
 	unsigned int form = instr >> 30;
 
 	cout << ", Form: " << form << ", ";
-
-
 }

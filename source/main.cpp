@@ -26,6 +26,9 @@ int main(int argc, char *argv[])
 	cout << dec_to_bin(1000, true, false) << endl;
 	cout << dec_to_bin(mem->get(0)) << endl;
 
+	cout << bin_to_dec(  dec_to_bin(541000)  ) << endl;
+
+
 	cout << endl;
 	return 0;
 
