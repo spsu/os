@@ -20,6 +20,16 @@ int main(int argc, char *argv[])
 
 	pcbList = loader->loadDisk(mem); // TODO: Poor form
 
+	cout << dec_to_bin(1000) << endl;
+	cout << dec_to_bin(1000, false, false) << endl;
+	cout << dec_to_bin(1000, false, true) << endl;
+	cout << dec_to_bin(1000, true, false) << endl;
+	cout << dec_to_bin(mem->get(0)) << endl;
+
+	cout << endl;
+	return 0;
+
+
 	// XXX: Instruction decode test
 	for(unsigned int i = 0; i < mem->size(); i++)
 	{
@@ -39,11 +49,12 @@ int main(int argc, char *argv[])
 		cout << endl;
 	}*/
 
-	cout << pcbList->at(0)->toString() << endl;
-	pcbList->at(0)->printCode(*mem);
+	cout << pcbList->at(1)->toString() << endl;
+	pcbList->at(1)->printCode(*mem);
 	cout << endl;
 
 	//mem->print();
 
 	return 0;
 }
+

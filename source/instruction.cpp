@@ -3,12 +3,12 @@
 
 using namespace std;
 
-InstructionFormatType Instruction::format()
+InstructionFormatType Instruction::format() const
 {
-	return UNKNOWN;
+	return UNKNOWN; // TODO
 }
 
-void Instruction::print()
+void Instruction::print() const
 {
 	cout << "Instr: " << instr ;
 

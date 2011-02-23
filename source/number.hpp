@@ -9,12 +9,18 @@
  */
 word hex_to_dec(std::string hex);
 
+/**
+ * Return a binary number string.
+ *   - zerofill, pads as a 32 bit integer
+ *   - splitByte, adds spaces every byte
+ */
+std::string dec_to_bin(unsigned int dec, 
+					   bool zerofill = true, 
+					   bool splitByte = true);
+
 // TODO:
 // string dec_to_hex(word dec);
 // string dec_to_hex(int dec);
 
-//XXX: TEMP
-std::string dec2binA(unsigned d);
-std::string dec2binB(unsigned dec, bool zerofill = true, bool splitByte = true);
 
 #endif

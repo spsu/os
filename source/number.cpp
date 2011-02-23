@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>
-#include <algorithm> // XXX: TEMPORARY
+#include <algorithm> // reverse()
 
 #include "number.hpp"
 
@@ -13,37 +13,45 @@ word hex_to_dec(string hexStr)
 	return ret;
 }
 
-// Based on the concise algorithm found at
+// Based on a simple algorithm found at:
 // http://www.cplusplus.com/forum/general/10898
-string dec2binA(unsigned n)
+string dec_to_bin(unsigned int dec, bool zerofill, bool splitBytes)
 {
-    string res;
+	string ret = "";
 
-    while (n) {
-        res.push_back((n & 1) + '0');
-        n >>= 1;
-    }
+	if(zerofill) {
+		unsigned int i = 31; // Zerofill assumes 32 bits
+		ret = string(32, '0');
+		while(dec) {
+			ret[i] = (dec & 1) + '0';
+			dec >>= 1;
+			i--;
+		}
+	}
+	else {
+		while(dec) {
+			 ret.push_back((dec & 1) + '0');
+			 dec >>= 1;
+		}
+		if (ret.empty())
+			ret = "0";
+		else
+			reverse(ret.begin(), ret.end());
+	}
 
-    if (res.empty())
-        res = "0";
-    else
-        reverse(res.begin(), res.end());
- 
-   return res;
-}
+	if(!splitBytes) {
+		return ret;
+	}
 
+	// Add spaces every byte.
+	unsigned int sz = ret.size();
+	unsigned int numBytes = sz / 8;
 
-// Based on the concise algorithm found at
-// http://www.cplusplus.com/forum/general/10898
-string dec2binB(unsigned dec, bool zerofill, bool splitByte)
-{
-	string ret = string(32, '0'); // Zerofill.
-	unsigned int i = 31;
-
-	while (dec) {
-		ret[i] = (dec & 1) + '0';
-		dec >>= 1;
-		i--;
+	for(unsigned int i = 0; i < numBytes; i++) {
+		int pos = sz - ((i+1)*8);
+		if(pos <= 0) 
+			break;
+		ret.insert(pos, " ");	
 	}
 
 	return ret;

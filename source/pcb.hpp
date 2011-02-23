@@ -32,9 +32,8 @@ class Pcb
 		void printCode(const Memory& mem) const;
 		//void printData(const Memory& mem);
 
-	private:
 		/**
-		 * Data Members
+		 * PUBLIC Data Members
 		 */
 		int priority;
 

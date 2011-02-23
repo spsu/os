@@ -15,6 +15,9 @@ enum InstructionFormatType
 	UNKNOWN
 };
 
+/**
+ * This class provides instruction decoding.
+ */
 class Instruction
 {
 	public:
@@ -30,12 +33,16 @@ class Instruction
 		/**
 		 * Get the type of format.
 		 */
-		InstructionFormatType format();
+		InstructionFormatType format() const;
 
 		/**
 		 * For Debug
 		 */
-		void print();
+		void print() const;
+		
+		// TODO: Return as "bytes", ie: 00101101 10111100 0100001 11010001
+		// TODO: Binary conversion
+		//string binString() const; 
 
 	private:
 		/**
