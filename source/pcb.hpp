@@ -29,7 +29,7 @@ class Pcb
 		 * Debug methods
 		 */
 		std::string toString() const;
-		void printCode(const Memory& mem) const;
+		void printProg(const Memory& mem) const;
 		//void printData(const Memory& mem);
 
 		/**

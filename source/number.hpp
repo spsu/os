@@ -21,7 +21,7 @@ word hex_to_dec(std::string hex);
 /**
  * Return a binary number string.
  *   - zerofill, pads as a 32 bit integer
- *   - splitByte, adds spaces every byte
+ *   - splitByte, adds spaces every byte (for readability)
  */
 std::string dec_to_bin(unsigned int dec, 
 					   bool zerofill = true, 

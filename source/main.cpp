@@ -30,18 +30,18 @@ int main(int argc, char *argv[])
 		delete instr;	
 	}
 
-	/*
+	
 	for(unsigned int i = 0; i < pcbList->size(); i++)
 	{
 		cout << "================\n";
 		cout << pcbList->at(i)->toString() << endl;
-		pcbList->at(i)->printCode(*mem);
+		pcbList->at(i)->printProg(*mem);
 		cout << endl;
-	}*/
+	}
 
-	cout << pcbList->at(1)->toString() << endl;
-	pcbList->at(1)->printCode(*mem);
-	cout << endl;
+	/*cout << pcbList->at(1)->toString() << endl;
+	pcbList->at(1)->printProg(*mem);
+	cout << endl;*/
 
 	//mem->print();
 

@@ -1,29 +1,78 @@
 #include <iostream>
+#include <sstream>
 #include "instruction.hpp"
+#include "number.hpp"
 
 using namespace std;
 
 // Initialize static const map of opcodes
-const map<unsigned int, Opcode> Instruction::OPCODE_MAP = initOpcodeMap();
+const map<int, Opcode> Instruction::OPCODE_MAP = initOpcodeMap();
+
+Instruction::Instruction(word instruction)
+	: instr(instruction),
+	binaryInstr("")
+{
+	// zerofill, but do not insert spaces.
+	binaryInstr = dec_to_bin(instruction, true, false);
+}
 
 InstructionFormat Instruction::format() const
 {
-	return UNKNOWN; // TODO
+	switch(bin_to_dec(binaryInstr.substr(0, 2))) {
+		case 0:
+			return FORMAT_ARITHMETIC;	
+		case 1:
+			return FORMAT_COND_BRANCH_AND_IMM;
+		case 2:
+			return FORMAT_UNCOND_JUMP;	
+		case 3:
+			return FORMAT_IO;
+	}
+	return FORMAT_UNKNOWN;
 }
 
-void Instruction::print() const
+Opcode Instruction::opcode() const
 {
-	cout << "Instr: " << instr ;
+	map<int, Opcode>::const_iterator it;
 
-	unsigned int form = instr >> 30;
+	it = OPCODE_MAP.find( bin_to_dec( binaryInstr.substr(2, 6) ) );
 
-	cout << ", Form: " << form << ", ";
+	if(it == OPCODE_MAP.end()) {
+		return INSTR_UNKNOWN;
+	}
+	return it->second;
+}
+
+string Instruction::toString() const
+{
+	stringstream s;
+
+	// TODO: Ugh, messy...
+	static map<InstructionFormat, string> f;
+	f[FORMAT_ARITHMETIC] = "ari";
+	f[FORMAT_COND_BRANCH_AND_IMM] = "cd/im";
+	f[FORMAT_UNCOND_JUMP] = "jmp";
+	f[FORMAT_IO] = "i/o";
+	f[FORMAT_UNKNOWN] = "ukn";
+
+	// TODO: Output will vary based on the type of instruction. 
+	// Perhaps we should output binary first for this reason.
+	
+	s << "Instr <";
+	s << dec_to_bin(instr, true, true) << "; "; // zerofilled w/ spaces 
+	s << "f: " << f[format()] << "\t";
+	s << "op: " << opcode() << "\t";
+	s << "op: ___\tregsOrVals: x, y, z"; // XXX/TODO: Idea only
+	//s << "op: " << opcode() << ", "; 
+	s << ">";
+
+	return s.str();
 }
 
 // Static initilization of map
-map<unsigned int, Opcode> Instruction::initOpcodeMap() 
+const map<int, Opcode> Instruction::initOpcodeMap()
 {
-	map<unsigned int, Opcode> m;
+	map<int, Opcode> m;
 	m[0x00] = INSTR_RD;
 	m[0x01] = INSTR_WR;
 	m[0x02] = INSTR_ST;

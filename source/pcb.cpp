@@ -12,14 +12,14 @@ string Pcb::toString() const
 
 	s << "PCB <";
 	s << "pri: " << priority << ", ";
-	s << "start: " << diskInstructionsStart << ", ";
-	s << "len: " << diskInstructionsLimit;
+	s << "prog@: " << diskInstructionsStart << ", "; // TODO: dec_to_hex
+	s << "len: " << diskInstructionsLimit; // TODO: dec_to_hex
 	s << ">";
 
 	return s.str();
 }
 
-void Pcb::printCode(const Memory& mem) const
+void Pcb::printProg(const Memory& mem) const
 {
 	unsigned int start = diskInstructionsStart;
 	unsigned int end = start + diskInstructionsLimit;
@@ -27,7 +27,7 @@ void Pcb::printCode(const Memory& mem) const
 	for(unsigned int i = start; i < end; i++)
 	{
 		Instruction instr(mem.get(i));
-		instr.print(); // TODO: toString instead!
+		cout << instr.toString();
 		cout << endl;
 	}
 }

@@ -11,11 +11,11 @@ using namespace std;
  */
 enum InstructionFormat
 {
-	ARITHMETIC,
-	COND_BRANCH_AND_IMM,
-	UNCOND_JUMP,
-	IO,
-	UNKNOWN
+	FORMAT_ARITHMETIC,
+	FORMAT_COND_BRANCH_AND_IMM,
+	FORMAT_UNCOND_JUMP,
+	FORMAT_IO,
+	FORMAT_UNKNOWN
 };
 
 /**
@@ -49,7 +49,8 @@ enum Opcode
 	INSTR_BEZ,	// 17	I	If D??-reg == 0, Branch to addr
 	INSTR_BNZ,	// 18	I	If B-reg != 0, Branch to addr
 	INSTR_BGZ,	// 19	I	If B-reg > 0, Branch to addr
-	INSTR_BLZ	// 1A?	I	If B-reg < 0, Branch to addr
+	INSTR_BLZ,	// 1A?	I	If B-reg < 0, Branch to addr
+	INSTR_UNKNOWN	// SPECIAL CASE
 };
 
 /**
@@ -59,13 +60,17 @@ class Instruction
 {
 	public:
 		/**
-		 * CTORs.
+		 * Default CTOR.
+		 * (Useless)
 		 */
 		Instruction()
-			: instr(0) {};
+			: instr(0),
+			binaryInstr("") {};
 
-		Instruction(word instruction)
-			: instr(instruction) {};
+		/**
+		 * CTOR: Specify instruction
+		 */
+		Instruction(word instruction);
 
 		/**
 		 * Get the type of format.
@@ -73,9 +78,14 @@ class Instruction
 		InstructionFormat format() const;
 
 		/**
+		 * Get the opcode.
+		 */
+		Opcode opcode() const;
+
+		/**
 		 * For Debug
 		 */
-		void print() const;
+		string toString() const;
 		
 		// TODO: Return as "bytes", ie: 00101101 10111100 0100001 11010001
 		// TODO: Binary conversion
@@ -88,14 +98,19 @@ class Instruction
 		word instr;
 
 		/**
+		 * The instruction as a binary string.
+		 */
+		string binaryInstr;
+
+		/**
 		 * Map of Opcode: Instruction
 		 */
-		static const map<unsigned int, Opcode> OPCODE_MAP;
+		static const map<int, Opcode> OPCODE_MAP;
 
 		/**
 		 * Function to initialize map
 		 */
-		static map<unsigned int, Opcode> initOpcodeMap();
+		static const map<int, Opcode> initOpcodeMap();
 };
 
 #endif

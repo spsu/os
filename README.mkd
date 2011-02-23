@@ -1,4 +1,4 @@
-_**Work in progress...**_
+_*Work in progress...*_
 
 OS
 ====
@@ -6,5 +6,4 @@ OS
 A simple mock operating system.
 Future investigation: a compiler for the ISA. 
 
-_Requires a modern C++0x compatible compiler._
-
+_Requires Boost regex; will require pthreads._
