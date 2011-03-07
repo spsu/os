@@ -42,6 +42,10 @@ class Pcb
 		int diskInstructionsLimit;
 		int diskDataStart;
 		int diskDataLimit;
+
+		// TODO: 
+		// Store registers;
+		// word pc;
 };
 
 #endif

@@ -1,15 +1,14 @@
 #ifndef BT_OS_MEMORY
 #define BT_OS_MEMORY
 
-#include <vector>
-#include "types.hpp"
-
-using namespace std;
+#include "store.hpp"
 
 /**
  * Memory class
+ *    Same as 'Store', but with mutexes.
+ *    TODO: mutexes
  */
-class Memory
+class Memory : public Store
 {
 	public:
 		/**
@@ -17,43 +16,14 @@ class Memory
 		 * 1028 words.
 		 */
 		Memory()
-			: words(1028, 0) {};
+			: Store() {};
 
 		/**
 		 * CTOR
 		 * Any number of words.
 		 */
 		Memory(int numWords)
-			: words(numWords, 0) {};
-
-		/**
-		 * Get the size of memory.
-		 */
-		unsigned int size() const { return words.size(); };
-
-		/**
-		 * Get the contents of the memory.
-		 * Absolute addressing.
-		 */
-		word get(unsigned int offset) const;
-
-		/**
-		 * Set the contents of the memory.
-		 * Absolute addressing.
-		 */
-		void set(unsigned int offset, word data);
-
-		/**
-		 * Print memory
-		 * XXX: For debug.
-		 */
-		void print() const;
-
-	private:
-		/**
-		 * Memory space.
-		 */
-		vector<word> words;
+			: Store(numWords) {};
 };
 
 #endif

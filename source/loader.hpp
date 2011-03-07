@@ -7,7 +7,7 @@
 using namespace std;
 
 class Memory;
-struct Pcb;
+class Pcb;
 
 typedef vector<Pcb*> PcbList;
 

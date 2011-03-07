@@ -50,7 +50,7 @@ Opcode Instruction::opcode() const
 
 	it = OPCODE_MAP.find(bin_to_dec(binaryInstr.substr(2, 6)));
 	if(it == OPCODE_MAP.end()) {
-		return INSTR_UNKNOWN;
+		return OPCODE_UNKNOWN;
 	}
 	return it->second.get<0>();
 }
@@ -89,33 +89,33 @@ const OpcodeMap Instruction::initOpcodeMap()
 	OpcodeMap m;
 
 	// XXX: Spaces in strings are for formatting
-	m[0x00] = make_tuple(INSTR_RD, "rd  ");
-	m[0x01] = make_tuple(INSTR_WR, "wr  ");
-	m[0x02] = make_tuple(INSTR_ST, "st  "); 
-	m[0x03] = make_tuple(INSTR_LW, "lw  ");
-	m[0x04] = make_tuple(INSTR_MOV, "mov ");
-	m[0x05] = make_tuple(INSTR_ADD, "add ");
-	m[0x06] = make_tuple(INSTR_SUB, "sub ");
-	m[0x07] = make_tuple(INSTR_MUL, "mul ");
-	m[0x08] = make_tuple(INSTR_DIV, "div ");
-	m[0x09] = make_tuple(INSTR_AND, "AND ");
-	m[0x0A] = make_tuple(INSTR_OR, "OR  ");
-	m[0x0B] = make_tuple(INSTR_MOVI, "movi");
-	m[0x0C] = make_tuple(INSTR_ADDI, "addi");
-	m[0x0D] = make_tuple(INSTR_MULI, "muli");
-	m[0x0E] = make_tuple(INSTR_DIVI, "divi");
-	m[0x0F] = make_tuple(INSTR_LDI, "ldi ");
-	m[0x10] = make_tuple(INSTR_SLT, "slt ");
-	m[0x11] = make_tuple(INSTR_SLTI, "slti");
-	m[0x12] = make_tuple(INSTR_HLT, "HLT ");
-	m[0x13] = make_tuple(INSTR_NOP, "NOP ");
-	m[0x14] = make_tuple(INSTR_JMP, "jmp ");
-	m[0x15] = make_tuple(INSTR_BEQ, "beq ");
-	m[0x16] = make_tuple(INSTR_BNE, "bne ");
-	m[0x17] = make_tuple(INSTR_BEZ, "bez ");
-	m[0x18] = make_tuple(INSTR_BNZ, "bnz ");
-	m[0x19] = make_tuple(INSTR_BGZ, "bgz ");
-	m[0x1A] = make_tuple(INSTR_BLZ, "blz "); // XXX: Is the order right??? 
+	m[0x00] = make_tuple(OPCODE_RD, "rd  ");
+	m[0x01] = make_tuple(OPCODE_WR, "wr  ");
+	m[0x02] = make_tuple(OPCODE_ST, "st  "); 
+	m[0x03] = make_tuple(OPCODE_LW, "lw  ");
+	m[0x04] = make_tuple(OPCODE_MOV, "mov ");
+	m[0x05] = make_tuple(OPCODE_ADD, "add ");
+	m[0x06] = make_tuple(OPCODE_SUB, "sub ");
+	m[0x07] = make_tuple(OPCODE_MUL, "mul ");
+	m[0x08] = make_tuple(OPCODE_DIV, "div ");
+	m[0x09] = make_tuple(OPCODE_AND, "AND ");
+	m[0x0A] = make_tuple(OPCODE_OR, "OR  ");
+	m[0x0B] = make_tuple(OPCODE_MOVI, "movi");
+	m[0x0C] = make_tuple(OPCODE_ADDI, "addi");
+	m[0x0D] = make_tuple(OPCODE_MULI, "muli");
+	m[0x0E] = make_tuple(OPCODE_DIVI, "divi");
+	m[0x0F] = make_tuple(OPCODE_LDI, "ldi ");
+	m[0x10] = make_tuple(OPCODE_SLT, "slt ");
+	m[0x11] = make_tuple(OPCODE_SLTI, "slti");
+	m[0x12] = make_tuple(OPCODE_HLT, "HLT ");
+	m[0x13] = make_tuple(OPCODE_NOP, "NOP ");
+	m[0x14] = make_tuple(OPCODE_JMP, "jmp ");
+	m[0x15] = make_tuple(OPCODE_BEQ, "beq ");
+	m[0x16] = make_tuple(OPCODE_BNE, "bne ");
+	m[0x17] = make_tuple(OPCODE_BEZ, "bez ");
+	m[0x18] = make_tuple(OPCODE_BNZ, "bnz ");
+	m[0x19] = make_tuple(OPCODE_BGZ, "bgz ");
+	m[0x1A] = make_tuple(OPCODE_BLZ, "blz "); // XXX: Is the order right??? 
 
 	return m;
 }

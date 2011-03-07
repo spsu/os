@@ -24,38 +24,37 @@ typedef map<int, tuple<Format, string>> FormatMap;
 
 /**
  * Opcodes
- * TODO: Rename INSTR_* -> OPCODE_RD, etc.
  */
 enum Opcode
 {
-	INSTR_RD,	// 00	I/O	Read
-	INSTR_WR,	// 01	I/O Write
-	INSTR_ST,	// 02	I	Store reg contents into an addr 
-	INSTR_LW,	// 03	I	Load addr contents into a reg
-	INSTR_MOV,	// 04	R	Transfer reg contents to another reg
-	INSTR_ADD,	// 05	R	Add two S-regs and store in D-reg
-	INSTR_SUB,	// 06	R	Subtract two S-regs and store in D-reg
-	INSTR_MUL,	// 07	R	Multiply two S-regs and store in D-reg
-	INSTR_DIV,	// 08	R	Divide two S-regs and store in D-reg
-	INSTR_AND,	// 09	R	AND two S-regs and store into D-reg
-	INSTR_OR,	// 0A	R	OR two S-regs and store into D-reg
-	INSTR_MOVI,	// 0B	I	Transfer addr/data direct to reg			***
-	INSTR_ADDI,	// 0C	I	Add data direct to reg contents
-	INSTR_MULI,	// 0D	I	Multiply data direct to reg contents
-	INSTR_DIVI,	// OE	I	Divide data direct to reg contents
-	INSTR_LDI,	// 0F	I	Load data/addr direct to reg contents		***
-	INSTR_SLT,	// 10	R	If S-reg1 < S-reg2, D-reg=1 else D-reg=0
-	INSTR_SLTI,	// 11	I	If S-reg1 < data, D-reg=1 else D-reg=0	
-	INSTR_HLT,	// 12	I	Logical end of program!
-	INSTR_NOP,	// 13	-	No Op; move to next instr.
-	INSTR_JMP,	// 14	J	Jump to addr	
-	INSTR_BEQ,	// 15	I	If B-reg == D-reg, Branch to addr
-	INSTR_BNE,	// 16	I	If B-reg != D-reg, Branch to addr
-	INSTR_BEZ,	// 17	I	If D??-reg == 0, Branch to addr
-	INSTR_BNZ,	// 18	I	If B-reg != 0, Branch to addr
-	INSTR_BGZ,	// 19	I	If B-reg > 0, Branch to addr
-	INSTR_BLZ,	// 1A?	I	If B-reg < 0, Branch to addr
-	INSTR_UNKNOWN	// SPECIAL CASE
+	OPCODE_RD,	// 00	I/O	Read
+	OPCODE_WR,	// 01	I/O Write
+	OPCODE_ST,	// 02	I	Store reg contents into an addr 
+	OPCODE_LW,	// 03	I	Load addr contents into a reg
+	OPCODE_MOV,	// 04	R	Transfer reg contents to another reg
+	OPCODE_ADD,	// 05	R	Add two S-regs and store in D-reg
+	OPCODE_SUB,	// 06	R	Subtract two S-regs and store in D-reg
+	OPCODE_MUL,	// 07	R	Multiply two S-regs and store in D-reg
+	OPCODE_DIV,	// 08	R	Divide two S-regs and store in D-reg
+	OPCODE_AND,	// 09	R	AND two S-regs and store into D-reg
+	OPCODE_OR,	// 0A	R	OR two S-regs and store into D-reg
+	OPCODE_MOVI,// 0B	I	Transfer addr/data direct to reg			***
+	OPCODE_ADDI,// 0C	I	Add data direct to reg contents
+	OPCODE_MULI,// 0D	I	Multiply data direct to reg contents
+	OPCODE_DIVI,// OE	I	Divide data direct to reg contents
+	OPCODE_LDI,	// 0F	I	Load data/addr direct to reg contents		***
+	OPCODE_SLT,	// 10	R	If S-reg1 < S-reg2, D-reg=1 else D-reg=0
+	OPCODE_SLTI,// 11	I	If S-reg1 < data, D-reg=1 else D-reg=0	
+	OPCODE_HLT,	// 12	I	Logical end of program!
+	OPCODE_NOP,	// 13	-	No Op; move to next instr.
+	OPCODE_JMP,	// 14	J	Jump to addr	
+	OPCODE_BEQ,	// 15	I	If B-reg == D-reg, Branch to addr
+	OPCODE_BNE,	// 16	I	If B-reg != D-reg, Branch to addr
+	OPCODE_BEZ,	// 17	I	If D??-reg == 0, Branch to addr
+	OPCODE_BNZ,	// 18	I	If B-reg != 0, Branch to addr
+	OPCODE_BGZ,	// 19	I	If B-reg > 0, Branch to addr
+	OPCODE_BLZ,	// 1A?	I	If B-reg < 0, Branch to addr
+	OPCODE_UNKNOWN	// SPECIAL CASE
 };
 
 typedef map<int, tuple<Opcode, string>> OpcodeMap;

@@ -56,10 +56,13 @@ main: source/main.cpp required
 ### ALL LIBS ##########################
 required: \
 	build/loader.o \
+	build/store.o \
 	build/memory.o \
 	build/number.o \
 	build/instruction.o \
-	build/pcb.o
+	build/dispatcher.o \
+	build/pcb.o \
+	build/cpu.o
 		@$(CD) .
 
 
@@ -69,6 +72,10 @@ required: \
 build/loader.o: source/loader.hpp source/loader.cpp
 	@echo "[compile] loader"
 	@$(CD) ./build && $(C) $(INC) -c ../source/loader.cpp
+
+build/store.o: source/store.hpp source/store.cpp
+	@echo "[compile] store"
+	@$(CD) ./build && $(C) $(INC) -c ../source/store.cpp
 
 build/memory.o: source/memory.hpp source/memory.cpp
 	@echo "[compile] memory"
@@ -82,7 +89,15 @@ build/instruction.o: source/instruction.hpp source/instruction.cpp
 	@echo "[compile] instruction"
 	@$(CD) ./build && $(C) $(INC) -c ../source/instruction.cpp
 
+build/dispatcher.o: source/dispatcher.hpp source/dispatcher.cpp
+	@echo "[compile] dispatcher"
+	@$(CD) ./build && $(C) $(INC) -c ../source/dispatcher.cpp
+
 build/pcb.o: source/pcb.hpp source/pcb.cpp
 	@echo "[compile] pcb"
 	@$(CD) ./build && $(C) $(INC) -c ../source/pcb.cpp
+
+build/cpu.o: source/cpu.hpp source/cpu.cpp
+	@echo "[compile] cpu"
+	@$(CD) ./build && $(C) $(INC) -c ../source/cpu.cpp
 
