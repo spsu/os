@@ -7,6 +7,8 @@ using namespace std;
 
 // Initialize static const map of opcodes
 const map<int, Opcode> Instruction::OPCODE_MAP = initOpcodeMap();
+const map<int, InstructionFormat> Instruction::INSTRUCTION_FORMAT_MAP
+		= initInstructionFormatMap();
 
 Instruction::Instruction(word instruction)
 	: instr(instruction),
@@ -18,7 +20,8 @@ Instruction::Instruction(word instruction)
 
 InstructionFormat Instruction::format() const
 {
-	switch(bin_to_dec(binaryInstr.substr(0, 2))) {
+	// XXX: The following code works.
+	/*switch(bin_to_dec(binaryInstr.substr(0, 2))) {
 		case 0:
 			return FORMAT_ARITHMETIC;	
 		case 1:
@@ -29,13 +32,22 @@ InstructionFormat Instruction::format() const
 			return FORMAT_IO;
 	}
 	return FORMAT_UNKNOWN;
+	*/
+	map<int, InstructionFormat>::const_iterator it;
+
+	it = INSTRUCTION_FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
+
+	if(it == INSTRUCTION_FORMAT_MAP.end()) {
+		return FORMAT_UNKNOWN;
+	}
+	return it->second;
 }
 
 Opcode Instruction::opcode() const
 {
 	map<int, Opcode>::const_iterator it;
 
-	it = OPCODE_MAP.find( bin_to_dec( binaryInstr.substr(2, 6) ) );
+	it = OPCODE_MAP.find(bin_to_dec(binaryInstr.substr(2, 6)));
 
 	if(it == OPCODE_MAP.end()) {
 		return INSTR_UNKNOWN;
@@ -49,11 +61,11 @@ string Instruction::toString() const
 
 	// TODO: Ugh, messy...
 	static map<InstructionFormat, string> f;
-	f[FORMAT_ARITHMETIC] = "ari";
-	f[FORMAT_COND_BRANCH_AND_IMM] = "cd/im";
-	f[FORMAT_UNCOND_JUMP] = "jmp";
+	f[FORMAT_ARITHMETIC] = "arith";
+	f[FORMAT_COND_BRANCH_AND_IMM] = "cond/imm";
+	f[FORMAT_UNCOND_JUMP] = "jump";
 	f[FORMAT_IO] = "i/o";
-	f[FORMAT_UNKNOWN] = "ukn";
+	f[FORMAT_UNKNOWN] = "unkn";
 
 	// TODO: Output will vary based on the type of instruction. 
 	// Perhaps we should output binary first for this reason.
@@ -99,6 +111,17 @@ const map<int, Opcode> Instruction::initOpcodeMap()
 	m[0x17] = INSTR_BEZ;
 	m[0x18] = INSTR_BNZ;
 	m[0x19] = INSTR_BGZ;
-	m[0x1A] = INSTR_BLZ; // XXX: ??? 
+	m[0x1A] = INSTR_BLZ; // XXX: Is the order right??? 
 	return m;
 }
+
+const map<int, InstructionFormat> Instruction::initInstructionFormatMap()
+{
+	map<int, InstructionFormat> m;
+	m[0x0] = FORMAT_ARITHMETIC;	
+	m[0x1] = FORMAT_COND_BRANCH_AND_IMM;
+	m[0x2] = FORMAT_UNCOND_JUMP;	
+	m[0x3] = FORMAT_IO;
+	return m;
+}
+

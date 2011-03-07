@@ -20,6 +20,7 @@ enum InstructionFormat
 
 /**
  * Opcodes
+ * TODO: Rename INSTR_* -> OPCODE_RD, etc.
  */
 enum Opcode
 {
@@ -106,11 +107,13 @@ class Instruction
 		 * Map of Opcode: Instruction
 		 */
 		static const map<int, Opcode> OPCODE_MAP;
+		static const map<int, InstructionFormat> INSTRUCTION_FORMAT_MAP;
 
 		/**
 		 * Function to initialize map
 		 */
 		static const map<int, Opcode> initOpcodeMap();
+		static const map<int, InstructionFormat> initInstructionFormatMap();
 };
 
 #endif
