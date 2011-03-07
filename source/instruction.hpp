@@ -2,9 +2,11 @@
 #define BT_OS_INSTRUCTION
 
 #include <map>
+#include <boost/tuple/tuple.hpp>
 #include "types.hpp"
 
 using namespace std;
+using namespace boost;
 
 /**
  * Types of Instruction Format.
@@ -17,6 +19,8 @@ enum InstructionFormat
 	FORMAT_IO,
 	FORMAT_UNKNOWN
 };
+
+typedef map<int, tuple<InstructionFormat, string>> InstructionFormatMap;
 
 /**
  * Opcodes
@@ -54,6 +58,8 @@ enum Opcode
 	INSTR_UNKNOWN	// SPECIAL CASE
 };
 
+typedef map<int, tuple<Opcode, string>> OpcodeMap;
+
 /**
  * This class provides instruction decoding.
  */
@@ -77,11 +83,13 @@ class Instruction
 		 * Get the type of format.
 		 */
 		InstructionFormat format() const;
+		string formatStr() const;
 
 		/**
 		 * Get the opcode.
 		 */
 		Opcode opcode() const;
+		string opcodeStr() const;
 
 		/**
 		 * For Debug
@@ -104,16 +112,17 @@ class Instruction
 		string binaryInstr;
 
 		/**
-		 * Map of Opcode: Instruction
+		 * Opcode and Format maps
+		 * Maps <int> to tuple<Opcode|Format, string abbreviation>
 		 */
-		static const map<int, Opcode> OPCODE_MAP;
-		static const map<int, InstructionFormat> INSTRUCTION_FORMAT_MAP;
+		static const OpcodeMap OPCODE_MAP;
+		static const InstructionFormatMap FORMAT_MAP;
 
 		/**
 		 * Function to initialize map
 		 */
-		static const map<int, Opcode> initOpcodeMap();
-		static const map<int, InstructionFormat> initInstructionFormatMap();
+		static const OpcodeMap initOpcodeMap();
+		static const InstructionFormatMap initFormatMap();
 };
 
 #endif

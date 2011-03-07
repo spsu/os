@@ -4,11 +4,11 @@
 #include "number.hpp"
 
 using namespace std;
+using namespace boost;
 
-// Initialize static const map of opcodes
-const map<int, Opcode> Instruction::OPCODE_MAP = initOpcodeMap();
-const map<int, InstructionFormat> Instruction::INSTRUCTION_FORMAT_MAP
-		= initInstructionFormatMap();
+// Initialize static const maps 
+const OpcodeMap Instruction::OPCODE_MAP = initOpcodeMap();
+const InstructionFormatMap Instruction::FORMAT_MAP = initFormatMap();
 
 Instruction::Instruction(word instruction)
 	: instr(instruction),
@@ -20,108 +20,115 @@ Instruction::Instruction(word instruction)
 
 InstructionFormat Instruction::format() const
 {
-	// XXX: The following code works.
-	/*switch(bin_to_dec(binaryInstr.substr(0, 2))) {
-		case 0:
-			return FORMAT_ARITHMETIC;	
-		case 1:
-			return FORMAT_COND_BRANCH_AND_IMM;
-		case 2:
-			return FORMAT_UNCOND_JUMP;	
-		case 3:
-			return FORMAT_IO;
-	}
-	return FORMAT_UNKNOWN;
-	*/
-	map<int, InstructionFormat>::const_iterator it;
+	InstructionFormatMap::const_iterator it;
 
-	it = INSTRUCTION_FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
-
-	if(it == INSTRUCTION_FORMAT_MAP.end()) {
+	it = FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
+	
+	// TODO: Confusing to have FORMAT_MAP and FORMAT_* names
+	if(it == FORMAT_MAP.end()) { 
 		return FORMAT_UNKNOWN;
 	}
-	return it->second;
+	return it->second.get<0>();
+}
+
+string Instruction::formatStr() const
+{
+	InstructionFormatMap::const_iterator it;
+
+	it = FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
+	
+	// TODO: Confusing to have FORMAT_MAP and FORMAT_* names
+	if(it == FORMAT_MAP.end()) { 
+		return "Unknown";
+	}
+	return it->second.get<1>();
 }
 
 Opcode Instruction::opcode() const
 {
-	map<int, Opcode>::const_iterator it;
+	OpcodeMap::const_iterator it;
 
 	it = OPCODE_MAP.find(bin_to_dec(binaryInstr.substr(2, 6)));
-
 	if(it == OPCODE_MAP.end()) {
 		return INSTR_UNKNOWN;
 	}
-	return it->second;
+	return it->second.get<0>();
+}
+
+string Instruction::opcodeStr() const
+{
+	OpcodeMap::const_iterator it;
+
+	it = OPCODE_MAP.find(bin_to_dec(binaryInstr.substr(2, 6)));
+	if(it == OPCODE_MAP.end()) {
+		return "Unknown";
+	}
+	return it->second.get<1>();
 }
 
 string Instruction::toString() const
 {
 	stringstream s;
 
-	// TODO: Ugh, messy...
-	static map<InstructionFormat, string> f;
-	f[FORMAT_ARITHMETIC] = "arith";
-	f[FORMAT_COND_BRANCH_AND_IMM] = "cond/imm";
-	f[FORMAT_UNCOND_JUMP] = "jump";
-	f[FORMAT_IO] = "i/o";
-	f[FORMAT_UNKNOWN] = "unkn";
-
 	// TODO: Output will vary based on the type of instruction. 
 	// Perhaps we should output binary first for this reason.
 	
 	s << "Instr <";
 	s << dec_to_bin(instr, true, true) << "; "; // zerofilled w/ spaces 
-	s << "f: " << f[format()] << "\t";
-	s << "op: " << opcode() << "\t";
-	s << "op: ___\tregsOrVals: x, y, z"; // XXX/TODO: Idea only
-	//s << "op: " << opcode() << ", "; 
+	s << "f: " << formatStr() << " \t";
+	s << "op: " << opcodeStr() << " ";
+	// TODO: Regs/Values
 	s << ">";
 
 	return s.str();
 }
 
 // Static initilization of map
-const map<int, Opcode> Instruction::initOpcodeMap()
+const OpcodeMap Instruction::initOpcodeMap()
 {
-	map<int, Opcode> m;
-	m[0x00] = INSTR_RD;
-	m[0x01] = INSTR_WR;
-	m[0x02] = INSTR_ST;
-	m[0x03] = INSTR_LW;
-	m[0x04] = INSTR_MOV;
-	m[0x05] = INSTR_ADD;
-	m[0x06] = INSTR_SUB;
-	m[0x07] = INSTR_MUL;
-	m[0x08] = INSTR_DIV;
-	m[0x09] = INSTR_AND;
-	m[0x0A] = INSTR_OR;
-	m[0x0B] = INSTR_MOVI;
-	m[0x0C] = INSTR_ADDI;
-	m[0x0D] = INSTR_MULI;
-	m[0x0E] = INSTR_DIVI;
-	m[0x0F] = INSTR_LDI;
-	m[0x10] = INSTR_SLT;
-	m[0x11] = INSTR_SLTI;
-	m[0x12] = INSTR_HLT;
-	m[0x13] = INSTR_NOP;
-	m[0x14] = INSTR_JMP;
-	m[0x15] = INSTR_BEQ;
-	m[0x16] = INSTR_BNE;
-	m[0x17] = INSTR_BEZ;
-	m[0x18] = INSTR_BNZ;
-	m[0x19] = INSTR_BGZ;
-	m[0x1A] = INSTR_BLZ; // XXX: Is the order right??? 
+	OpcodeMap m;
+
+	// XXX: Spaces in strings are for formatting
+	m[0x00] = make_tuple(INSTR_RD, "rd  ");
+	m[0x01] = make_tuple(INSTR_WR, "wr  ");
+	m[0x02] = make_tuple(INSTR_ST, "st  "); 
+	m[0x03] = make_tuple(INSTR_LW, "lw  ");
+	m[0x04] = make_tuple(INSTR_MOV, "mov ");
+	m[0x05] = make_tuple(INSTR_ADD, "add ");
+	m[0x06] = make_tuple(INSTR_SUB, "sub ");
+	m[0x07] = make_tuple(INSTR_MUL, "mul ");
+	m[0x08] = make_tuple(INSTR_DIV, "div ");
+	m[0x09] = make_tuple(INSTR_AND, "AND ");
+	m[0x0A] = make_tuple(INSTR_OR, "OR  ");
+	m[0x0B] = make_tuple(INSTR_MOVI, "movi");
+	m[0x0C] = make_tuple(INSTR_ADDI, "addi");
+	m[0x0D] = make_tuple(INSTR_MULI, "muli");
+	m[0x0E] = make_tuple(INSTR_DIVI, "divi");
+	m[0x0F] = make_tuple(INSTR_LDI, "ldi ");
+	m[0x10] = make_tuple(INSTR_SLT, "slt ");
+	m[0x11] = make_tuple(INSTR_SLTI, "slti");
+	m[0x12] = make_tuple(INSTR_HLT, "HLT ");
+	m[0x13] = make_tuple(INSTR_NOP, "NOP ");
+	m[0x14] = make_tuple(INSTR_JMP, "jmp ");
+	m[0x15] = make_tuple(INSTR_BEQ, "beq ");
+	m[0x16] = make_tuple(INSTR_BNE, "bne ");
+	m[0x17] = make_tuple(INSTR_BEZ, "bez ");
+	m[0x18] = make_tuple(INSTR_BNZ, "bnz ");
+	m[0x19] = make_tuple(INSTR_BGZ, "bgz ");
+	m[0x1A] = make_tuple(INSTR_BLZ, "blz "); // XXX: Is the order right??? 
+
 	return m;
 }
 
-const map<int, InstructionFormat> Instruction::initInstructionFormatMap()
+const InstructionFormatMap Instruction::initFormatMap()
 {
-	map<int, InstructionFormat> m;
-	m[0x0] = FORMAT_ARITHMETIC;	
-	m[0x1] = FORMAT_COND_BRANCH_AND_IMM;
-	m[0x2] = FORMAT_UNCOND_JUMP;	
-	m[0x3] = FORMAT_IO;
+	InstructionFormatMap m;
+
+	m[0x0] = make_tuple(FORMAT_ARITHMETIC, "arith");
+	m[0x1] = make_tuple(FORMAT_COND_BRANCH_AND_IMM, "cnd/imm");
+	m[0x2] = make_tuple(FORMAT_UNCOND_JUMP, "jump"); 
+	m[0x3] = make_tuple(FORMAT_IO, "i/o "); // XXX: Space is for formatting
+
 	return m;
 }
 
