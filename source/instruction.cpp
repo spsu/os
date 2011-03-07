@@ -8,7 +8,7 @@ using namespace boost;
 
 // Initialize static const maps 
 const OpcodeMap Instruction::OPCODE_MAP = initOpcodeMap();
-const InstructionFormatMap Instruction::FORMAT_MAP = initFormatMap();
+const FormatMap Instruction::FORMAT_MAP = initFormatMap();
 
 Instruction::Instruction(word instruction)
 	: instr(instruction),
@@ -18,9 +18,9 @@ Instruction::Instruction(word instruction)
 	binaryInstr = dec_to_bin(instruction, true, false);
 }
 
-InstructionFormat Instruction::format() const
+Format Instruction::format() const
 {
-	InstructionFormatMap::const_iterator it;
+	FormatMap::const_iterator it;
 
 	it = FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
 	
@@ -33,7 +33,7 @@ InstructionFormat Instruction::format() const
 
 string Instruction::formatStr() const
 {
-	InstructionFormatMap::const_iterator it;
+	FormatMap::const_iterator it;
 
 	it = FORMAT_MAP.find(bin_to_dec(binaryInstr.substr(0, 2)));
 	
@@ -120,9 +120,9 @@ const OpcodeMap Instruction::initOpcodeMap()
 	return m;
 }
 
-const InstructionFormatMap Instruction::initFormatMap()
+const FormatMap Instruction::initFormatMap()
 {
-	InstructionFormatMap m;
+	FormatMap m;
 
 	m[0x0] = make_tuple(FORMAT_ARITHMETIC, "arith");
 	m[0x1] = make_tuple(FORMAT_COND_BRANCH_AND_IMM, "cnd/imm");

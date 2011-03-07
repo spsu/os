@@ -11,7 +11,7 @@ using namespace boost;
 /**
  * Types of Instruction Format.
  */
-enum InstructionFormat
+enum Format
 {
 	FORMAT_ARITHMETIC,
 	FORMAT_COND_BRANCH_AND_IMM,
@@ -20,7 +20,7 @@ enum InstructionFormat
 	FORMAT_UNKNOWN
 };
 
-typedef map<int, tuple<InstructionFormat, string>> InstructionFormatMap;
+typedef map<int, tuple<Format, string>> FormatMap;
 
 /**
  * Opcodes
@@ -82,7 +82,7 @@ class Instruction
 		/**
 		 * Get the type of format.
 		 */
-		InstructionFormat format() const;
+		Format format() const;
 		string formatStr() const;
 
 		/**
@@ -116,13 +116,13 @@ class Instruction
 		 * Maps <int> to tuple<Opcode|Format, string abbreviation>
 		 */
 		static const OpcodeMap OPCODE_MAP;
-		static const InstructionFormatMap FORMAT_MAP;
+		static const FormatMap FORMAT_MAP;
 
 		/**
 		 * Function to initialize map
 		 */
 		static const OpcodeMap initOpcodeMap();
-		static const InstructionFormatMap initFormatMap();
+		static const FormatMap initFormatMap();
 };
 
 #endif
