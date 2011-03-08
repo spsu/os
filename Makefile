@@ -60,6 +60,7 @@ required: \
 	build/memory.o \
 	build/number.o \
 	build/instruction.o \
+	build/scheduler.o \
 	build/dispatcher.o \
 	build/pcb.o \
 	build/cpu.o
@@ -88,6 +89,10 @@ build/number.o: source/number.hpp source/number.cpp
 build/instruction.o: source/instruction.hpp source/instruction.cpp
 	@echo "[compile] instruction"
 	@$(CD) ./build && $(C) $(INC) -c ../source/instruction.cpp
+
+build/scheduler.o: source/scheduler.hpp source/scheduler.cpp
+	@echo "[compile] scheduler"
+	@$(CD) ./build && $(C) $(INC) -c ../source/scheduler.cpp
 
 build/dispatcher.o: source/dispatcher.hpp source/dispatcher.cpp
 	@echo "[compile] dispatcher"

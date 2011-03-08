@@ -2,6 +2,7 @@
 #define BT_OS_PCB
 
 #include <string>
+#include <queue>
 #include "types.hpp"
 #include "store.hpp"
 
@@ -10,9 +11,17 @@
  */
 
 class Memory;
+class Pcb;
+
+typedef std::queue<Pcb*> PcbQueue;
 
 class Pcb 
 {
+	/**
+	 * CPU has access to all of PCB's members.
+	 */
+	friend class Cpu;
+
 	public:
 		/**
 		 * Default CTOR.
@@ -28,6 +37,12 @@ class Pcb
 		 * Process debugging
 		 */
 		void printProg(const Memory& mem) const;
+
+		/**
+		 * Whether the job has finished.
+		 * Set to true when HLT instruction run.
+		 */
+		bool isFinished() { return finished; };
 
 		// XXX: Data members are *public*
 		
@@ -52,6 +67,13 @@ class Pcb
 		 */
 		word pc;
 		Store registers;
+
+	private:
+		/**
+		 * Whether the job has finished.
+		 * Set to true when HLT instruction run.
+		 */
+		bool finished;
 };
 
 #endif

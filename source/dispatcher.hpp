@@ -1,8 +1,9 @@
 #ifndef BT_OS_DISPATCHER
 #define BT_OS_DISPATCHER
 
+#include "pcb.hpp" // TODO: Get rid of this.
+
 class Cpu;
-class Pcb;
 
 /**
  * TODO/XXX: Keep in mind that I need an m-dispatcher!
@@ -17,7 +18,10 @@ class Dispatcher
 		Dispatcher(Cpu* c)
 			: cpu(c) {};
 
-		void dispatch(Pcb* p);
+		/**
+		 * Dispatch a process from the Ready Queue. 
+		 */
+		void dispatch(PcbQueue* rq);
 
 		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
 

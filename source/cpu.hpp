@@ -3,8 +3,11 @@
 
 #include "store.hpp"
 
+class Pcb;
+
 class Cpu 
 {
+	// XXX: Dispatcher gets to see CPU internals.
 	friend class Dispatcher;
 
 	public:
@@ -40,6 +43,11 @@ class Cpu
 		 *   TODO: Documentation.
 		 */
 		word pc;
+
+		/**
+		 * PCB of the current process running on the CPU.
+		 */
+		Pcb* process;
 };
 
 #endif
