@@ -15,13 +15,13 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	// Save old state
 	oldProc = cpu->process;
 	if(!oldProc->isFinished()) {
-		oldProc->registers = cpu->registers;
+		oldProc->regs = cpu->regs;
 		oldProc->pc = cpu->pc;
 		rq->push(oldProc);
 	}
 
 	// Clear CPU
-	cpu->registers.reset();
+	cpu->regs.reset();
 	cpu->cache.reset();
 	cpu->pc = 0;
 	cpu->process = 0;
@@ -30,7 +30,7 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	newProc = rq->front();
 	rq->pop();
 
-	cpu->registers = newProc->registers;
+	cpu->regs = newProc->regs;
 	cpu->pc = newProc->pc;
 	cpu->process = newProc;
 }

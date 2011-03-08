@@ -47,6 +47,11 @@ class Store
 		void set(unsigned int offset, word data);
 
 		/**
+		 * Array access operator.
+		 */
+		word& operator[](unsigned int offset);
+
+		/**
 		 * Empty the entire memory store.
 		 * TODO: Disable functionality from working in Memory.
 		 */

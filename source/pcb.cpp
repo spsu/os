@@ -16,7 +16,7 @@ Pcb::Pcb() :
 	dataOutLength(0),
 	dataTempLength(0),
 	pc(0),
-	registers(16),
+	regs(16),
 	finished(false)
 {
 	// Nothing

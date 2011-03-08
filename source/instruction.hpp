@@ -91,6 +91,33 @@ class Instruction
 		string opcodeStr() const;
 
 		/**
+		 * Get bits indicating various registers. 
+		 * Only return meaningful data in the correct semantic context, 
+		 * ie. must be used with the correct instruction format.
+		 */
+		int sReg1() const; // Arithmetic format (source register)
+		int sReg2() const; // Arithmetic format (source register)
+		int bReg() const;  // Conditional/Immediate format (base register)
+		int reg1() const;  // IO format
+		int reg2() const;  // IO format
+
+		/**
+		 * Get the 4-bit destination register.
+		 * 	- bits 17-20 are used in Arithmetic format instructions.
+		 * 	- bits 13-16 are used in Conditional/Immediate format.
+		 * 	- returns -1 for other formats
+		 */
+		int dReg() const;
+
+		/**
+		 * Return the last 16 or 24 bits of the instruction.
+		 * 	- 16 bits are returned in Conditional and I/O formats.
+		 * 	- 24 bits are returned in Jump format
+		 * 	- returns -1 for other formats
+		 */
+		int address() const;
+		
+		/**
 		 * For Debug
 		 */
 		string toString() const;

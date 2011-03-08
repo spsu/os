@@ -66,7 +66,7 @@ class Pcb
 		 * CPU save state
 		 */
 		word pc;
-		Store registers;
+		Store regs;
 
 	private:
 		/**

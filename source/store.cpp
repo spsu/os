@@ -15,6 +15,12 @@ void Store::set(unsigned int offset, word data)
 	words[offset] = data;
 }
 
+word& Store::operator[](unsigned int offset) 
+{
+	// TODO: Bounds checking
+	return words[offset];	
+}
+
 void Store::reset()
 {
 	words = vector<word>(words.size(), 0); // Reset memory.

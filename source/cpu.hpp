@@ -29,7 +29,7 @@ class Cpu
 		 * 	  - 1st is accumulator
 		 * 	  - 2nd is zero register
 		 */
-		Store registers;
+		Store regs;
 
 		/**
 		 * Cache

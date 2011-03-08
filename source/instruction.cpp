@@ -66,6 +66,77 @@ string Instruction::opcodeStr() const
 	return it->second.get<1>();
 }
 
+int Instruction::sReg1() const
+{
+	if(format() != FORMAT_ARITHMETIC) {
+		return -1;
+	}
+	return bin_to_dec(binaryInstr.substr(8, 4));
+}
+
+int Instruction::sReg2() const
+{
+	if(format() != FORMAT_ARITHMETIC) {
+		return -1;
+	}
+	return bin_to_dec(binaryInstr.substr(12, 4));
+}
+
+int Instruction::bReg() const
+{
+	if(format() != FORMAT_COND_BRANCH_AND_IMM) {
+		return -1;
+	}
+	return bin_to_dec(binaryInstr.substr(8, 4));
+}
+
+int Instruction::reg1() const
+{
+	if(format() != FORMAT_IO) {
+		return -1;
+	}
+	return bin_to_dec(binaryInstr.substr(8, 4));
+}
+
+int Instruction::reg2() const
+{
+	if(format() != FORMAT_IO) {
+		return -1;
+	}
+	return bin_to_dec(binaryInstr.substr(12, 4));
+}
+
+int Instruction::dReg() const
+{
+	switch(format()) {
+		case FORMAT_ARITHMETIC:
+			return bin_to_dec(binaryInstr.substr(16, 4));
+
+		case FORMAT_COND_BRANCH_AND_IMM:
+			return bin_to_dec(binaryInstr.substr(12, 4));
+
+		default:
+			break;
+	}
+	return -1;
+}
+
+int Instruction::address() const
+{
+	switch(format()) {
+		case FORMAT_COND_BRANCH_AND_IMM:
+		case FORMAT_IO:
+			return bin_to_dec(binaryInstr.substr(16, 16));
+
+		case FORMAT_UNCOND_JUMP:
+			return bin_to_dec(binaryInstr.substr(8, 24));
+
+		default:
+			break;
+	}
+	return -1;
+}
+
 string Instruction::toString() const
 {
 	stringstream s;
@@ -115,7 +186,7 @@ const OpcodeMap Instruction::initOpcodeMap()
 	m[0x17] = make_tuple(OPCODE_BEZ, "bez ");
 	m[0x18] = make_tuple(OPCODE_BNZ, "bnz ");
 	m[0x19] = make_tuple(OPCODE_BGZ, "bgz ");
-	m[0x1A] = make_tuple(OPCODE_BLZ, "blz "); // XXX: Is the order right??? 
+	m[0x1A] = make_tuple(OPCODE_BLZ, "blz "); // Not a mistake! 
 
 	return m;
 }
@@ -127,7 +198,7 @@ const FormatMap Instruction::initFormatMap()
 	m[0x0] = make_tuple(FORMAT_ARITHMETIC, "arith");
 	m[0x1] = make_tuple(FORMAT_COND_BRANCH_AND_IMM, "cnd/imm");
 	m[0x2] = make_tuple(FORMAT_UNCOND_JUMP, "jump"); 
-	m[0x3] = make_tuple(FORMAT_IO, "i/o "); // XXX: Space is for formatting
+	m[0x3] = make_tuple(FORMAT_IO, "i/o "); // Space is for formatting
 
 	return m;
 }
