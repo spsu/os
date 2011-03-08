@@ -20,9 +20,13 @@ int main(int argc, char *argv[])
 
 	pcbList = loader->loadDisk(mem); // TODO: Poor form
 
-	cout << mem->toString();
+	for(unsigned int i = 0; i < pcbList->size(); i++)
+	{
+		cout << pcbList->at(i)->toString() << endl;
+	}
 
 	return 0;
+
 
 	// XXX: Instruction decode test
 	/*for(unsigned int i = 0; i < mem->size(); i++)

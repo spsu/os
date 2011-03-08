@@ -5,7 +5,7 @@
 // TODO
 void Dispatcher::dispatch(Pcb* pcb)
 {
-	cpu->registers.empty();
-	cpu->cache.empty();
+	cpu->registers.reset();
+	cpu->cache.reset();
 	cpu->pc = 0;
 }

@@ -37,22 +37,31 @@ PcbList* Loader::loadDisk(Memory* memory)
 
 		if(regex_search(line, result, regex_job_header))
 		{
+			// Extract job details
 			curPcb = new Pcb();
-			pcbList->push_back(curPcb);
 
-			curPcb->diskInstructionsStart = memPos;
-
+			curPcb->jobStart = memPos;
 			curPcb->priority = hex_to_dec(result[3]);
-			curPcb->diskInstructionsLimit = hex_to_dec(result[2]);
+			curPcb->jobLength = hex_to_dec(result[2]);
+
+			pcbList->push_back(curPcb);
 		}
 		else if(regex_search(line, result, regex_data_header))
 		{
-			curPcb->diskDataStart = memPos;
-			// TODO: Input, Output, and Temp??
+			// Extract data details
+			int in = hex_to_dec(result[1]);
+			int out = hex_to_dec(result[2]);
+			int temp = hex_to_dec(result[3]);
+
+			curPcb->dataStart = memPos;
+			curPcb->dataInLength = in;
+			curPcb->dataOutLength = out;
+			curPcb->dataTempLength = temp;
+			curPcb->dataLength = in + out + temp;
 		}
 		else if(regex_search(line, result, regex_memory_contents))
 		{
-			// Load data to the memory space
+			// Load job instructions or data to the memory space
 			memory->set(memPos, hex_to_dec(result[1]));
 			memPos++;
 		}

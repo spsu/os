@@ -31,8 +31,7 @@ class Cpu
 		/**
 		 * Cache
 		 *   Stores the program text section locally.
-		 *   TODO: Figure out a good size for this. 
-		 *   	   Size of largest program is good. 
+		 *   Length of 28 will accomodate all processes. 
 		 */
 		Store cache;
 

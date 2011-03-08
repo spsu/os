@@ -11,6 +11,10 @@ class Pcb;
 
 typedef vector<Pcb*> PcbList;
 
+/**
+ * Loader functions to load jobs and data into the 
+ * simulated "Disk" memory. 
+ */
 class Loader 
 {
 	public:

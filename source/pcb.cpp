@@ -6,14 +6,31 @@
 
 using namespace std;
 
+Pcb::Pcb() :
+	priority(0),
+	jobStart(0),
+	jobLength(0),
+	dataStart(0),
+	dataLength(0),
+	dataInLength(0),
+	dataOutLength(0),
+	dataTempLength(0),
+	pc(0),
+	registers(16)
+{
+	// Nothing
+}
+
 string Pcb::toString() const
 {
 	stringstream s;
 
 	s << "PCB <";
 	s << "pri: " << priority << ", ";
-	s << "prog@: " << diskInstructionsStart << ", "; // TODO: dec_to_hex
-	s << "len: " << diskInstructionsLimit; // TODO: dec_to_hex
+	s << "len: " << jobLength << ", " << dataLength;
+	//s << " [" << dataInLength << "/" << dataOutLength << "/" << dataTempLength << "]";
+	s << ", ";
+	s << "start: " << jobStart << ", " << dataStart;
 	s << ">";
 
 	return s.str();
@@ -21,8 +38,8 @@ string Pcb::toString() const
 
 void Pcb::printProg(const Memory& mem) const
 {
-	unsigned int start = diskInstructionsStart;
-	unsigned int end = start + diskInstructionsLimit;
+	unsigned int start = jobStart;
+	unsigned int end = start + jobLength;
 
 	for(unsigned int i = start; i < end; i++)
 	{

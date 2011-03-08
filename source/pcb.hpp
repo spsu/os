@@ -2,6 +2,8 @@
 #define BT_OS_PCB
 
 #include <string>
+#include "types.hpp"
+#include "store.hpp"
 
 /**
  * TODO: Documentation.
@@ -12,40 +14,44 @@ class Memory;
 class Pcb 
 {
 	public:
-
-		// TODO: CTORs
-
 		/**
 		 * Default CTOR.
 		 */
-		Pcb()
-			: priority(0),
-			diskInstructionsStart(0),
-			diskInstructionsLimit(0),
-			diskDataStart(0),
-			diskDataLimit(0) {};
+		Pcb();
 
 		/**
-		 * Debug methods
+		 * String representation of PCB 
 		 */
 		std::string toString() const;
-		void printProg(const Memory& mem) const;
-		//void printData(const Memory& mem);
 
 		/**
-		 * PUBLIC Data Members
+		 * Process debugging
+		 */
+		void printProg(const Memory& mem) const;
+
+		// XXX: Data members are *public*
+		
+		/**
+		 * Job priority
 		 */
 		int priority;
 
-		// TODO: These are a WIP 
-		int diskInstructionsStart;
-		int diskInstructionsLimit;
-		int diskDataStart;
-		int diskDataLimit;
+		/**
+		 * Memory map
+		 */
+		int jobStart;
+		int jobLength;
+		int dataStart;
+		int dataLength;
+		int dataInLength;
+		int dataOutLength;
+		int dataTempLength;
 
-		// TODO: 
-		// Store registers;
-		// word pc;
+		/**
+		 * CPU save state
+		 */
+		word pc;
+		Store registers;
 };
 
 #endif

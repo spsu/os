@@ -3,7 +3,7 @@
 
 Cpu::Cpu() :
 	registers(16),
-	cache(100) // TODO: Figure out a good size for this
+	cache(28)
 {
 	cout << "Registers size: " << registers.size() << endl;
 }
