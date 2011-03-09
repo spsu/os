@@ -41,10 +41,20 @@ class Store
 		word get(unsigned int offset) const;
 
 		/**
+		 * Access a single byte at a time.
+		 */
+		unsigned int getByte(unsigned int offset) const;
+
+		/**
 		 * Set the contents of the memory store.
 		 * Absolute addressing.
 		 */
 		void set(unsigned int offset, word data);
+
+		/**
+		 * Set a single byte of data.
+		 */
+		void setByte(unsigned int offset, int data);
 
 		/**
 		 * Array access operator.

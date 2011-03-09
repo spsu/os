@@ -2,6 +2,7 @@
 #include <sstream>
 #include "store.hpp"
 #include "types.hpp"
+#include "number.hpp"
 
 word Store::get(unsigned int offset) const
 {
@@ -9,10 +10,37 @@ word Store::get(unsigned int offset) const
 	return words[offset];
 }
 
+unsigned int Store::getByte(unsigned int offset) const
+{
+	string bin = "";
+
+	bin = dec_to_bin(words[offset/4]);
+	bin = bin.substr((offset % 4) * 8, 8);
+
+	return bin_to_dec(bin);
+}
+
 void Store::set(unsigned int offset, word data)
 {
 	// TODO: Bounds checking
 	words[offset] = data;
+}
+
+void Store::setByte(unsigned int offset, int data)
+{
+	string bin = "";
+	string repl = "";
+
+	// No zerofill (or padding) -- add it here. 
+	repl = dec_to_bin(data, false, false);
+	while(repl.size() < 8) {
+		repl.insert(0, "0");
+	}
+
+	bin = dec_to_bin(words[offset/4]);
+	bin = bin.replace((offset % 4) * 8, 8, repl); 
+
+	words[offset/4] = bin_to_dec(bin);
 }
 
 word& Store::operator[](unsigned int offset) 
