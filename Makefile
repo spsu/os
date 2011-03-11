@@ -31,8 +31,8 @@ clean:
 
 .PHONY: stats
 stats:
-	@wc -l -w -c -L */*.*pp */*/*.*pp */*/*/*.*pp */*/*/*/*.*pp
-	@echo " Lines\tWords\tBytes\tLine\t"
+	@echo " Lines\tWords\tBytes\t"
+	@wc -l -w -c */*.*pp 
 
 
 # ==============
