@@ -4,6 +4,7 @@
 #include "pcb.hpp" // TODO: Get rid of this.
 
 class Cpu;
+class Memory;
 
 /**
  * TODO/XXX: Keep in mind that I need an m-dispatcher!
@@ -19,9 +20,18 @@ class Dispatcher
 			: cpu(c) {};
 
 		/**
-		 * Dispatch a process from the Ready Queue. 
+		 * Dispatch the next process in the Ready Queue. 
+		 * If the current process has not completed, shelve it for later. 
+		 * (TODO: Wait queue, IO queue, etc.)
 		 */
 		void dispatch(PcbQueue* rq);
+
+		/**
+		 * Dispatch Pcb -- Test Method
+		 * Sets the process represented by the PCB for execution. 
+		 * XXX: This is for debugging only.  
+		 */
+		void dispatchPcb(Pcb* pcb, Memory* mem);
 
 		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
 

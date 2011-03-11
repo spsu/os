@@ -121,7 +121,8 @@ class Instruction
 		 * For Debug
 		 */
 		string toString() const;
-		
+		string argStr() const;
+
 		// TODO: Return as "bytes", ie: 00101101 10111100 0100001 11010001
 		// TODO: Binary conversion
 		//string binString() const; 

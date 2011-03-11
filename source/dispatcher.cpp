@@ -1,6 +1,9 @@
 #include "dispatcher.hpp"
 #include "cpu.hpp"
 #include "pcb.hpp"
+#include "memory.hpp"
+#include "instruction.hpp"
+#include <iostream>
 
 // TODO
 void Dispatcher::dispatch(PcbQueue* rq)
@@ -33,5 +36,32 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	cpu->regs = newProc->regs;
 	cpu->pc = newProc->pc;
 	cpu->process = newProc;
+
+	// TODO TODO TODO
+}
+
+void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
+{
+	// Clear CPU
+	cpu->regs.reset();
+	cpu->cache.reset();
+	cpu->pc = 0;
+	cpu->process = 0;
+
+	cpu->regs = pcb->regs;
+	cpu->pc = pcb->pc;
+	cpu->process = pcb; // XXX/TODO: CPU should call this 'pcb'
+
+	//cout << "INSTRUCTION CACHE SET: " << endl; // XXX: DEBUG
+
+	for(unsigned int i = 0; i < pcb->jobLength; i++) {
+		cpu->cache.set(i, mem->get(pcb->jobStart + i));
+
+		//Instruction in = Instruction(cpu->cache.get(i)); // XXX: DEBUG
+		//cout << in.toString() << endl; // XXX: DEBUG
+	}
+
+	cpu->printRegs();
+
 }
 

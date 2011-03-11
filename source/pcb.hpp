@@ -49,18 +49,18 @@ class Pcb
 		/**
 		 * Job priority
 		 */
-		int priority;
+		unsigned int priority;
 
 		/**
 		 * Memory map
 		 */
-		int jobStart;
-		int jobLength;
-		int dataStart;
-		int dataLength;
-		int dataInLength;
-		int dataOutLength;
-		int dataTempLength;
+		unsigned int jobStart;
+		unsigned int jobLength;
+		unsigned int dataStart;
+		unsigned int dataLength;
+		unsigned int dataInLength;
+		unsigned int dataOutLength;
+		unsigned int dataTempLength;
 
 		/**
 		 * CPU save state

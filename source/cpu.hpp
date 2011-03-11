@@ -4,6 +4,7 @@
 #include "store.hpp"
 
 class Pcb;
+class Memory;
 
 class Cpu 
 {
@@ -13,16 +14,34 @@ class Cpu
 	public:
 		/**
 		 * CTOR.
+		 * Needs access to RAM. 
 		 */
-		Cpu();
+		Cpu(Memory* r);
 
 		/**
-		 * Execute loop.
+		 * Execute one instruction. 
 		 * TODO
 		 */
 		void execute();
 
+		/**
+		 * Returns true if the execution of the current 
+		 * process is complete. (ie. HLT reached.)
+		 */
+		bool isComplete() const;
+
+		/**
+		 * Debug methods
+		 */
+		void printRegs() const;
+
 	private:
+		/**
+		 * Program counter.
+		 *   TODO: Documentation.
+		 */
+		int pc;
+
 		/**
 		 * Registers (16 total).
 		 * 	 All registers are general purpose, except:
@@ -39,15 +58,15 @@ class Cpu
 		Store cache;
 
 		/**
-		 * Program counter.
-		 *   TODO: Documentation.
-		 */
-		word pc;
-
-		/**
 		 * PCB of the current process running on the CPU.
 		 */
 		Pcb* process;
+
+		/**
+		 * RAM
+		 *   TODO: Need DMA instead
+		 */
+		Memory* ram;
 };
 
 #endif

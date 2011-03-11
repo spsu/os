@@ -146,10 +146,60 @@ string Instruction::toString() const
 	
 	s << "Instr <";
 	s << dec_to_bin(instr, true, true) << "; "; // zerofilled w/ spaces 
-	s << "f: " << formatStr() << " \t";
+	//s << "f: " << formatStr() << " \t";
 	s << "op: " << opcodeStr() << " ";
+	s << "(" << formatStr() << ") \t";
+	s << "";
+	s << argStr();
 	// TODO: Regs/Values
 	s << ">";
+
+	return s.str();
+}
+
+/**
+ * Returns args as a string. 
+ * Helps with debugging.
+ */
+string Instruction::argStr() const
+{
+	stringstream s;
+
+	switch(format()) {
+		case FORMAT_ARITHMETIC:
+			s << "s: " << sReg1();
+			s << ", ";
+			s << "s: " << sReg2(); 
+			s << ", ";
+			s << "d: " << dReg();
+			s << ", ";
+			s << "addr: " << address();
+			break;
+
+		case FORMAT_COND_BRANCH_AND_IMM:
+			s << "b: " << bReg();
+			s << ", ";
+			s << "d: " << dReg();
+			s << ", ";
+			s << "addr: " << address();
+			break;
+
+		case FORMAT_UNCOND_JUMP:
+			s << "addr: " << address();
+			break;
+
+		case FORMAT_IO:
+			s << "r: " << reg1();
+			s << ", ";
+			s << "r: " << reg2();
+			s << ", ";
+			s << "addr: " << address();
+			break;
+
+		default:
+			s << "";
+			break;
+	}
 
 	return s.str();
 }
@@ -195,10 +245,10 @@ const FormatMap Instruction::initFormatMap()
 {
 	FormatMap m;
 
-	m[0x0] = make_tuple(FORMAT_ARITHMETIC, "arith");
-	m[0x1] = make_tuple(FORMAT_COND_BRANCH_AND_IMM, "cnd/imm");
-	m[0x2] = make_tuple(FORMAT_UNCOND_JUMP, "jump"); 
-	m[0x3] = make_tuple(FORMAT_IO, "i/o "); // Space is for formatting
+	m[0x0] = make_tuple(FORMAT_ARITHMETIC, "ath");
+	m[0x1] = make_tuple(FORMAT_COND_BRANCH_AND_IMM, "c/i");
+	m[0x2] = make_tuple(FORMAT_UNCOND_JUMP, "jmp"); 
+	m[0x3] = make_tuple(FORMAT_IO, "i/o");
 
 	return m;
 }
