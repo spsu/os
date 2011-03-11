@@ -19,10 +19,14 @@ void Cpu::execute() // XXX: One execution cycle
 {
 	Instruction i;
 
-	i = Instruction(cache[effectiveAddress(pc, false)]);
+	i = Instruction(cache[pc]);
 
 	// TODO TODO TODO: Verify every instruction works properly.
 
+	// XXX TODO: DEBUG
+	//cout << "PC(" << pc << ") ";
+	//cout << i.toString() << endl;
+	
 	switch(i.opcode()) 
 	{
 		// Read contents of input buffer into accumulator [IO]
@@ -191,6 +195,11 @@ void Cpu::execute() // XXX: One execution cycle
 			cout << "Unknown instruction in Cpu::execute()." << endl;
 			break;
 	}
+
+	// XXX/TODO DEBUG
+	//printRegs();
+	//cout << endl;
+
 	pc++;
 }
 
@@ -202,7 +211,8 @@ bool Cpu::isComplete() const
 void Cpu::printRegs() const
 {
 	for(unsigned int i = 0; i < regs.size(); i++) {
-		cout << "Reg[" << i << "] = " << regs.get(i) << endl;
+		//cout << "Reg[" << i << "] = " << regs.get(i) << endl;
+		cout << "R[" << i << "] = " << regs.get(i) << ",  ";
 	}
 	cout << "PC = " << pc << endl;
 }
@@ -218,7 +228,7 @@ unsigned int Cpu::effectiveAddress(unsigned int logical,
 	if(convert) {
 		// Dividing converts from per-byte addressing 
 		// into per-word addressing.
-		return (process->jobStart + logical) / 4;
+		return logical / 4 + process->jobStart;
 	}
 	return process->jobStart + logical;
 }

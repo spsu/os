@@ -50,9 +50,23 @@ void Pcb::printProg(const Memory& mem) const
 	}
 }
 
-/*void Pcb::printData()
+void Pcb::printData(const Memory & mem) const
 {
-	// TODO
-	cout << "TODO: Pcb::printData()\n";
-}*/
+	unsigned int end = dataStart + dataLength;
+	unsigned int inEnd = dataStart + dataInLength;
+	unsigned int outEnd = inEnd + dataOutLength;
+
+	cout << "In >>> ";
+
+	for(unsigned int i = dataStart; i < end; i++) {
+		if(i == inEnd) {
+			cout << "Out >>> ";
+		}
+		else if(i == outEnd) {
+			cout << "Temp >>> ";
+		}
+		cout << mem.get(i) << ", \t";
+	}
+	cout << endl;
+}
 

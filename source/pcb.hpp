@@ -34,15 +34,16 @@ class Pcb
 		std::string toString() const;
 
 		/**
-		 * Process debugging
-		 */
-		void printProg(const Memory& mem) const;
-
-		/**
 		 * Whether the job has finished.
 		 * Set to true when HLT instruction run.
 		 */
 		bool isFinished() { return finished; };
+
+		/**
+		 * Debugging Methods
+		 */
+		void printProg(const Memory& mem) const;
+		void printData(const Memory& mem) const;
 
 		// XXX: Data members are *public*
 		

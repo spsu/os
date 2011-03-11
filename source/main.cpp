@@ -10,6 +10,17 @@
 
 using namespace std;
 
+/**
+ * Debug func
+ */
+void print_pcbs(PcbList& pcbs) {
+	for(unsigned int i = 0; i < pcbs.size(); i++)
+		cout << pcbs.at(i)->toString() << endl;
+}
+
+/**
+ * Main func
+ */
 int main(int argc, char *argv[])
 {
 	Loader* loader = 0;
@@ -25,50 +36,38 @@ int main(int argc, char *argv[])
 	cpu = new Cpu(mem);
 	disp = new Dispatcher(cpu);
 
-	/*for(unsigned int i = 0; i < pcbList->size(); i++)
-	{
-		cout << pcbList->at(i)->toString() << endl;
-	}*/
+	pcbList = loader->loadDisk(mem); // TODO: Poor form	
+	//print_pcbs(*pcbList);
 
-	pcbList = loader->loadDisk(mem); // TODO: Poor form
-	pcb = pcbList->at(0);
-
+	pcb = pcbList->at(2);
+	
 	cout << "=============================================" << endl;
-
+	pcb->printProg(*mem);
+	cout << "=============================================" << endl;
 
 	disp->dispatchPcb(pcb, mem);
 
-	cout << "Output before run: ";
-
+	cout << "Data memory before run: ";
 	cout << "\n------------------\n";
-	for(unsigned int i = 0; i < pcb->dataLength; i++) {
-		unsigned int pos = pcb->dataStart + i;
-		//cout << "[" << pos << "]: " << mem->get( pos ) << ",  ";
-		cout << mem->get( pos ) << ", \t";
-	}
+	pcb->printData(*mem);
 	cout << "\n------------------\n";
 	cout << endl;
 
-	cpu->printRegs();
 	while(!cpu->isComplete()) {
 		cpu->execute();
 	}
+
+	cout << "Data memory after run: ";
 	cout << "\n------------------\n";
+	pcb->printData(*mem);
+	cout << "\n------------------\n";
+	
 	cpu->printRegs();
-
-	//cpu->printRegs();
-
-	cout << "\n------------------\n";
-	for(unsigned int i = 0; i < pcb->dataLength; i++) {
-		unsigned int pos = pcb->dataStart + i;
-		//cout << "[" << pos << "]: " << mem->get( pos ) << ",  ";
-		cout << mem->get( pos ) << ", \t";
-	}
-	cout << "\n------------------\n";
 	cout << endl;
+
 	return 0;	
 	
-	cout << "Output AFTER run: ";
+	cout << "Data memory AFTER run: ";
 	cout << mem->get(43) << endl;
 	cout << dec_to_bin(mem->get(43)) << endl;	// PROGRAM OUTPUT LOCATION
 
