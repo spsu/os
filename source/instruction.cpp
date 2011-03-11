@@ -145,10 +145,10 @@ string Instruction::toString() const
 	// Perhaps we should output binary first for this reason.
 	
 	s << "Instr <";
-	s << dec_to_bin(instr, true, true) << "; "; // zerofilled w/ spaces 
+	s << dec_to_bin(instr, true, true) << "  "; // zerofilled w/ spaces 
 	//s << "f: " << formatStr() << " \t";
-	s << "op: " << opcodeStr() << " ";
-	s << "(" << formatStr() << ") \t";
+	s << opcodeStr() << " ";
+	s << "(" << formatStr() << ")  ";
 	s << "";
 	s << argStr();
 	// TODO: Regs/Values

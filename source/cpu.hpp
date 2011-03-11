@@ -37,6 +37,23 @@ class Cpu
 
 	private:
 		/**
+		 * Effective Addressing (A PCB must be in use)
+		 *
+		 * Takes a logical address and returns the corresponding
+		 * physical address for the currently executing process.
+		 *
+		 *     * logical -- the logical address
+		 *     * convert -- translate byte-indexing into word indexing
+		 *
+		 *   TODO: If this services more than the CPU, it should be
+		 *   moved. 
+		 *   TODO: Base reg / index reg, direct/indirect addr ??
+		 */
+		unsigned int effectiveAddress(unsigned int logical, 
+				bool convert = true) const;
+
+		/**
+		 * Effective Address 
 		 * Program counter.
 		 *   TODO: Documentation.
 		 */
@@ -67,6 +84,7 @@ class Cpu
 		 *   TODO: Need DMA instead
 		 */
 		Memory* ram;
+
 };
 
 #endif

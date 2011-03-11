@@ -11,67 +11,50 @@ Cpu::Cpu(Memory* r) :
 	process(0), // TODO: Rename 'pcb'
 	ram(r)
 {
-	// XXX: Blank for now
+	// Empty CTOR
+	// TODO: Inline it? 
 }
 
 void Cpu::execute() // XXX: One execution cycle
 {
 	Instruction i;
-	int r = 0;
-	int val = 0;
 
-	i = Instruction(cache[pc]);
+	i = Instruction(cache[effectiveAddress(pc, false)]);
 
-	// XXX XXX XXX XXX
-	// Instruction set uses byte addressing.
-	// 		* Memory get/set locations
-	// 		* Branching (pc = data)
-	// I'm using word addressing. 
-	// I really don't like this mismatch. 
-	// XXX XXX XXX XXX
-	
+	// TODO TODO TODO: Verify every instruction works properly.
+
 	switch(i.opcode()) 
 	{
 		// Read contents of input buffer into accumulator [IO]
-		// TODO: Need indirect addressing
-		// TODO: Need DMA channel
 		case OPCODE_RD:
-			r = i.reg2(); // XXX: Should I check address != 0 instead?
-			if(r) {
-				val = ram->get(regs[r] / 4);
-			}
-			else {
-				val = ram->get(i.address() / 4);
-			}
-			regs[i.reg1()] = val;
+			regs[i.reg1()] = ram->get(effectiveAddress(
+										(i.reg2()) ?
+											regs[i.reg2()] :
+											i.address()));
 			break;
 
 		// Writes contents of accumulator into output buffer [IO]
-		// TODO: Need indirect addressing
-		// TODO: Need DMA channel
 		case OPCODE_WR:
-			ram->set(i.address() / 4, regs[i.reg1()]);
+			ram->set(effectiveAddress(
+						(i.reg2())?
+							regs[i.reg2()] : 
+							i.address()), 
+					regs[i.reg1()]);
 			break;
 
 		// Stores content of a register into an address [I]
-		// TODO: Need indirect addressing
-		// TODO: Need DMA channel
 		case OPCODE_ST:
-			ram->set(regs[i.dReg()] / 4, regs[i.bReg()]);	
+			ram->set(effectiveAddress(regs[i.dReg()]), regs[i.bReg()]);
 			break;
 
 		// Loads the content of an address into a register [I]
-		// XXX: How is this different than RD?
-		// TODO: Need indirect addressing
-		// TODO: Need DMA channel
 		case OPCODE_LW:
-			regs[i.dReg()] = ram->get(regs[i.bReg()] / 4);
+			regs[i.dReg()] = ram->get(effectiveAddress(regs[i.bReg()]));
 			break;
 
 		// Transfer contents of one register into another [R]
-		// TODO TODO TODO TODO TODO TODO NOT DONE
 		case OPCODE_MOV:
-			cout << "TODO: MOV" << endl;
+			regs[i.sReg1()] = regs[i.sReg2()];
 			break;
 
 		// Add content of two S-regs into D-reg [R]
@@ -135,8 +118,9 @@ void Cpu::execute() // XXX: One execution cycle
 			break;
 
 		// Set less than immediate; (sReg1 < addr/data) : dReg = 1 : 0 [I]
+		// XXX/TODO: Correct?
 		case OPCODE_SLTI:
-			regs[i.dReg()] = (regs[i.bReg()] < (unsigned int)i.address())? 1 : 0; // XXX/TODO: Correct?
+			regs[i.dReg()] = (regs[i.bReg()] < (unsigned int)i.address())? 1 : 0;
 			break;
 
 		// Halt, logical end of program
@@ -221,5 +205,21 @@ void Cpu::printRegs() const
 		cout << "Reg[" << i << "] = " << regs.get(i) << endl;
 	}
 	cout << "PC = " << pc << endl;
+}
+
+unsigned int Cpu::effectiveAddress(unsigned int logical, 
+		bool convert) const
+{
+	if (!process) {
+		cout << "Cannot use Effective Address with no process!\n";
+		return -1;
+	}
+	
+	if(convert) {
+		// Dividing converts from per-byte addressing 
+		// into per-word addressing.
+		return (process->jobStart + logical) / 4;
+	}
+	return process->jobStart + logical;
 }
 

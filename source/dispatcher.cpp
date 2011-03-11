@@ -52,16 +52,11 @@ void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
 	cpu->pc = pcb->pc;
 	cpu->process = pcb; // XXX/TODO: CPU should call this 'pcb'
 
-	//cout << "INSTRUCTION CACHE SET: " << endl; // XXX: DEBUG
-
 	for(unsigned int i = 0; i < pcb->jobLength; i++) {
 		cpu->cache.set(i, mem->get(pcb->jobStart + i));
 
 		//Instruction in = Instruction(cpu->cache.get(i)); // XXX: DEBUG
 		//cout << in.toString() << endl; // XXX: DEBUG
 	}
-
-	cpu->printRegs();
-
 }
 
