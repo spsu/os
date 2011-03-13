@@ -20,6 +20,8 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	if(!oldProc->isFinished()) {
 		oldProc->regs = cpu->regs;
 		oldProc->pc = cpu->pc;
+		oldProc->numReadRam = cpu->numReadRam;
+		oldProc->numWriteRam = cpu->numWriteRam;
 		rq->push(oldProc);
 	}
 
@@ -28,6 +30,8 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	cpu->cache.reset();
 	cpu->pc = 0;
 	cpu->process = 0;
+	cpu->numReadRam = 0;
+	cpu->numWriteRam = 0;
 
 	// Dispatch new proc
 	newProc = rq->front();
@@ -36,6 +40,8 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	cpu->regs = newProc->regs;
 	cpu->pc = newProc->pc;
 	cpu->process = newProc;
+	cpu->numReadRam = newProc->numReadRam;
+	cpu->numWriteRam = newProc->numWriteRam;
 
 	// TODO TODO TODO
 }
@@ -51,9 +57,12 @@ void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
 	cpu->regs = pcb->regs;
 	cpu->pc = pcb->pc;
 	cpu->process = pcb; // XXX/TODO: CPU should call this 'pcb'
+	cpu->numReadRam = pcb->numReadRam;
+	cpu->numWriteRam = pcb->numWriteRam;
 
+	// Move process code into CPU cache.
 	for(unsigned int i = 0; i < pcb->jobLength; i++) {
-		cpu->cache.set(i, mem->get(pcb->jobStart + i));
+		cpu->cache.set(i, mem->get(pcb->ram.jobStart + i));
 
 		//Instruction in = Instruction(cpu->cache.get(i)); // XXX: DEBUG
 		//cout << in.toString() << endl; // XXX: DEBUG

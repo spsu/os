@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "loader.hpp"
+#include "accounting.hpp"
 #include "memory.hpp"
 #include "number.hpp"
 #include "pcb.hpp"
@@ -12,7 +13,7 @@
 using namespace std;
 using namespace boost;
 
-PcbList* Loader::loadDisk(Memory* memory)
+ProcessList* Loader::loadDisk(Memory* memory)
 {
 	static const regex regex_job_header("JOB (\\w+) (\\w+) (\\w+)", 
 		regbase::normal | regbase::icase);
@@ -22,11 +23,12 @@ PcbList* Loader::loadDisk(Memory* memory)
 		regbase::normal | regbase::icase);
 
 	ifstream file; 
-	PcbList* pcbList = new vector<Pcb*>();
+	ProcessList* processList = 0; 
 	Pcb* curPcb = 0;
 	unsigned int memPos = 0;
 
 	file.open(filename, ios::in);
+	processList = new ProcessList();	
 
 	while(file.good()) 
 	{
@@ -40,11 +42,12 @@ PcbList* Loader::loadDisk(Memory* memory)
 			// Extract job details
 			curPcb = new Pcb();
 
-			curPcb->jobStart = memPos;
+			curPcb->disk.jobStart = memPos;
+			curPcb->ram.jobStart = memPos; // XXX TODO TODO TEMPORARY
 			curPcb->priority = hex_to_dec(result[3]);
 			curPcb->jobLength = hex_to_dec(result[2]);
 
-			pcbList->push_back(curPcb);
+			processList->all.push_back(curPcb);
 		}
 		else if(regex_search(line, result, regex_data_header))
 		{
@@ -53,7 +56,8 @@ PcbList* Loader::loadDisk(Memory* memory)
 			int out = hex_to_dec(result[2]);
 			int temp = hex_to_dec(result[3]);
 
-			curPcb->dataStart = memPos;
+			curPcb->disk.dataStart = memPos;
+			curPcb->ram.dataStart = memPos; // XXX TODO TODO TEMPORARY
 			curPcb->dataInLength = in;
 			curPcb->dataOutLength = out;
 			curPcb->dataTempLength = temp;
@@ -69,6 +73,6 @@ PcbList* Loader::loadDisk(Memory* memory)
 
 	// XXX / TODO: Close the file!
 	
-	return pcbList;
+	return processList;
 }
 

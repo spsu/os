@@ -33,6 +33,12 @@ class Dispatcher
 		 */
 		void dispatchPcb(Pcb* pcb, Memory* mem);
 
+		/**
+		 * Offloads process from the CPU. 
+		 * TODO: Ready Queue
+		 */
+		//void shelvePcb();
+
 		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
 
 	private:

@@ -8,4 +8,17 @@
  */
 typedef uint32_t word;
 
+/**
+ * Memory positions.
+ * Used for accounting in PCBs.
+ */
+struct Position 
+{
+	int jobStart;
+	int dataStart;
+
+	Position() : jobStart(0), dataStart(0) {};
+};
+
+
 #endif

@@ -9,7 +9,9 @@ Cpu::Cpu(Memory* r) :
 	regs(16),
 	cache(28),
 	process(0), // TODO: Rename 'pcb'
-	ram(r)
+	ram(r),
+	numReadRam(0),
+	numWriteRam(0)
 {
 	// Empty CTOR
 	// TODO: Inline it? 
@@ -21,12 +23,6 @@ void Cpu::execute() // XXX: One execution cycle
 
 	i = Instruction(cache[pc]);
 
-	// TODO TODO TODO: Verify every instruction works properly.
-
-	// XXX TODO: DEBUG
-	//cout << "PC(" << pc << ") ";
-	//cout << i.toString() << endl;
-	
 	switch(i.opcode()) 
 	{
 		// Read contents of input buffer into accumulator [IO]
@@ -35,6 +31,7 @@ void Cpu::execute() // XXX: One execution cycle
 										(i.reg2()) ?
 											regs[i.reg2()] :
 											i.address()));
+			numReadRam++;
 			break;
 
 		// Writes contents of accumulator into output buffer [IO]
@@ -44,16 +41,19 @@ void Cpu::execute() // XXX: One execution cycle
 							regs[i.reg2()] : 
 							i.address()), 
 					regs[i.reg1()]);
+			numWriteRam++;
 			break;
 
 		// Stores content of a register into an address [I]
 		case OPCODE_ST:
 			ram->set(effectiveAddress(regs[i.dReg()]), regs[i.bReg()]);
+			numWriteRam++;
 			break;
 
 		// Loads the content of an address into a register [I]
 		case OPCODE_LW:
 			regs[i.dReg()] = ram->get(effectiveAddress(regs[i.bReg()]));
+			numReadRam++;
 			break;
 
 		// Transfer contents of one register into another [R]
@@ -217,6 +217,12 @@ void Cpu::printRegs() const
 	cout << "PC = " << pc << endl;
 }
 
+word Cpu::getReg(int reg) const
+{
+	// XXX: No bounds checking!
+	return regs.get(reg);
+}
+
 unsigned int Cpu::effectiveAddress(unsigned int logical, 
 		bool convert) const
 {
@@ -228,8 +234,7 @@ unsigned int Cpu::effectiveAddress(unsigned int logical,
 	if(convert) {
 		// Dividing converts from per-byte addressing 
 		// into per-word addressing.
-		return logical / 4 + process->jobStart;
+		return logical / 4 + process->ram.jobStart;
 	}
-	return process->jobStart + logical;
+	return process->ram.jobStart + logical;
 }
-

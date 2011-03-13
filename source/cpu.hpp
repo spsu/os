@@ -2,6 +2,7 @@
 #define BT_OS_CPU
 
 #include "store.hpp"
+#include "types.hpp"
 
 class Pcb;
 class Memory;
@@ -34,6 +35,17 @@ class Cpu
 		 * Debug methods
 		 */
 		void printRegs() const;
+		word getReg(int reg) const;
+
+		/**
+		 * Statistics.
+		 * TODO: Make private
+		 * TODO: Reconsider CPU's relationship with PCB given the dispatcher.
+		 * 		(Should it even point to a PCB?)
+		 */
+		int numReadRam;
+		int numWriteRam;
+
 
 	private:
 		/**
@@ -84,7 +96,6 @@ class Cpu
 		 *   TODO: Need DMA instead
 		 */
 		Memory* ram;
-
 };
 
 #endif

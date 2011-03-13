@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Store class
  * A type of memory. Registers, Caches, Memory, and Disk are all 
- * implemented with this, either directly or throug subclasses. 
+ * implemented with this, either directly or through subclasses. 
  */
 class Store 
 {
@@ -20,14 +20,16 @@ class Store
 		 * 1028 words.
 		 */
 		Store()
-			: words(1028, 0) {};
+			: words(1028, 0),
+			allocated(1028, false) {};
 
 		/**
 		 * CTOR
-		 * Any number of words.
+		 * Specify the size (in number of words).
 		 */
-		Store(int numWords)
-			: words(numWords, 0) {};
+		Store(int size)
+			: words(size, 0),
+			allocated(size, false) {};
 
 		/**
 		 * Get the size of memory.
@@ -62,6 +64,20 @@ class Store
 		word& operator[](unsigned int offset);
 
 		/**
+		 * Clear a single memory location.
+		 * It will no longer be marked as allocated.
+		 * TODO: Allocation should only be for non-Register memories, yes?
+		 */
+		void clear(unsigned int offset) { clear(offset, 1); };
+
+		/**
+		 * Clear a contiguous memory region.
+		 * It will no longer be marked as allocated.
+		 * TODO: Allocation should only be for non-Register memories, yes?
+		 */
+		void clear(unsigned int offset, unsigned int length);
+
+		/**
 		 * Empty the entire memory store.
 		 * TODO: Disable functionality from working in Memory.
 		 */
@@ -78,6 +94,12 @@ class Store
 		 * Memory space.
 		 */
 		vector<word> words;
+
+		/**
+		 * Marks each address as being allocated.
+		 * TODO: Allocation should only be for non-Register memories, yes?
+		 */
+		vector<bool> allocated;
 };
 
 #endif

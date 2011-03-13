@@ -15,6 +15,9 @@ class Pcb;
 
 typedef std::queue<Pcb*> PcbQueue;
 
+/**
+ * Process Control Block
+ */
 class Pcb 
 {
 	/**
@@ -42,8 +45,8 @@ class Pcb
 		/**
 		 * Debugging Methods
 		 */
-		void printProg(const Memory& mem) const;
-		void printData(const Memory& mem) const;
+		void printProg(const Memory& disk) const;
+		void printData(const Memory& disk) const;
 
 		// XXX: Data members are *public*
 		
@@ -55,19 +58,30 @@ class Pcb
 		/**
 		 * Memory map
 		 */
-		unsigned int jobStart;
 		unsigned int jobLength;
-		unsigned int dataStart;
 		unsigned int dataLength;
 		unsigned int dataInLength;
 		unsigned int dataOutLength;
 		unsigned int dataTempLength;
 
 		/**
+		 * New memory map
+		 */
+		Position disk;
+		Position ram;
+
+		/**
 		 * CPU save state
 		 */
 		word pc;
 		Store regs;
+
+		/**
+		 * Statistics
+		 * TODO: Wait time, execution time, etc.
+		 */
+		int numReadRam;
+		int numWriteRam;
 
 	private:
 		/**

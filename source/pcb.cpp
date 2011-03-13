@@ -8,15 +8,15 @@ using namespace std;
 
 Pcb::Pcb() :
 	priority(0),
-	jobStart(0),
 	jobLength(0),
-	dataStart(0),
 	dataLength(0),
 	dataInLength(0),
 	dataOutLength(0),
 	dataTempLength(0),
 	pc(0),
 	regs(16),
+	numReadRam(0),
+	numWriteRam(0),
 	finished(false)
 {
 	// Nothing
@@ -31,7 +31,8 @@ string Pcb::toString() const
 	s << "len: " << jobLength << ", " << dataLength;
 	//s << " [" << dataInLength << "/" << dataOutLength << "/" << dataTempLength << "]";
 	s << ", ";
-	s << "start: " << jobStart << ", " << dataStart;
+	s << "ram: " << ram.jobStart << ", " << ram.dataStart;
+	s << "disk: " << disk.jobStart << ", " << disk.dataStart;
 	s << ">";
 
 	return s.str();
@@ -39,7 +40,7 @@ string Pcb::toString() const
 
 void Pcb::printProg(const Memory& mem) const
 {
-	unsigned int start = jobStart;
+	unsigned int start = disk.jobStart;
 	unsigned int end = start + jobLength;
 
 	for(unsigned int i = start; i < end; i++)
@@ -52,13 +53,13 @@ void Pcb::printProg(const Memory& mem) const
 
 void Pcb::printData(const Memory & mem) const
 {
-	unsigned int end = dataStart + dataLength;
-	unsigned int inEnd = dataStart + dataInLength;
+	unsigned int end = disk.dataStart + dataLength;
+	unsigned int inEnd = disk.dataStart + dataInLength;
 	unsigned int outEnd = inEnd + dataOutLength;
 
 	cout << "In >>> ";
 
-	for(unsigned int i = dataStart; i < end; i++) {
+	for(unsigned int i = disk.dataStart; i < end; i++) {
 		if(i == inEnd) {
 			cout << "Out >>> ";
 		}

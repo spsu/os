@@ -7,6 +7,7 @@
 word Store::get(unsigned int offset) const
 {
 	// TODO: Bounds checking
+	// TODO: Disable if not allocated?
 	return words[offset];
 }
 
@@ -24,6 +25,7 @@ void Store::set(unsigned int offset, word data)
 {
 	// TODO: Bounds checking
 	words[offset] = data;
+	allocated[offset] = true;
 }
 
 void Store::setByte(unsigned int offset, int data)
@@ -41,6 +43,7 @@ void Store::setByte(unsigned int offset, int data)
 	bin = bin.replace((offset % 4) * 8, 8, repl); 
 
 	words[offset/4] = bin_to_dec(bin);
+	allocated[offset/4] = true;
 }
 
 word& Store::operator[](unsigned int offset) 
@@ -49,9 +52,23 @@ word& Store::operator[](unsigned int offset)
 	return words[offset];	
 }
 
+void Store::clear(unsigned int offset, unsigned int length)
+{
+	unsigned int m = 0;
+
+	// TODO: Bounds checking
+	m = offset + length;
+	for(unsigned int i = offset; i < m; i++) {
+		words[i] = 0; // XXX: Not really necessary...
+		allocated[i] = false;
+	}
+}
+
 void Store::reset()
 {
-	words = vector<word>(words.size(), 0); // Reset memory.
+	// Reset memory.
+	words = vector<word>(words.size(), 0);
+	allocated = vector<bool>(allocated.size(), false);
 }
 
 string Store::toString() const
@@ -59,6 +76,7 @@ string Store::toString() const
 	stringstream out;
 	unsigned int j = 0;
 
+	// TODO: Report allocation state
 	for(unsigned int i = 0; i < words.size(); i++) {
 		out << i << ": " << words[i] << "\t";
 		// XXX: This formatting is NOT correct!

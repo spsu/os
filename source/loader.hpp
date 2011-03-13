@@ -8,8 +8,7 @@ using namespace std;
 
 class Memory;
 class Pcb;
-
-typedef vector<Pcb*> PcbList;
+class ProcessList;
 
 /**
  * Loader functions to load jobs and data into the 
@@ -31,7 +30,7 @@ class Loader
 			: filename(fname) {};
 
 		// TODO: I don't like the semantics of this class anymore.
-		PcbList* loadDisk(Memory* mem);
+		ProcessList* loadDisk(Memory* disk);
 
 	private:
 		// Name of file with instructions.
