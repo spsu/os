@@ -32,15 +32,22 @@ class LongTermScheduler
 		 */
 		void schedule();	
 
+	private:
 		/**
-		 * Return finished jobs to Disk.
+		 * Move new jobs into RAM
+		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
+		 * TODO TODO TODO: VERIFY WORKS
+		 */
+		void moveNewToRam();
+
+		/**
+		 * Move finished jobs back to Disk.
 		 * Saves the memory state. 
 		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
 		 * TODO TODO TODO: VERIFY WORKS
 		 */
 		void moveFinishedToDisk();
 
-	private:
 		/**
 		 * Disk and RAM shared ptrs.
 		 */

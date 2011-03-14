@@ -9,10 +9,14 @@ using namespace std;
 
 void LongTermScheduler::schedule()
 {
+	moveNewToRam();
+	moveFinishedToDisk();
+}
+
+void LongTermScheduler::moveNewToRam()
+{
 	vector<Pcb*> newPcbs;
 	Pcb* pcb = 0;
-
-	moveFinishedToDisk();
 
 	// TODO TODO TODO: LOCK PROCESS LIST / PCBS
 
@@ -73,7 +77,7 @@ void LongTermScheduler::schedule()
 
 void LongTermScheduler::moveFinishedToDisk()
 {
-	vector<Pcb*> oldPcbs;
+	vector<Pcb*> finished;
 	Pcb* pcb = 0;
 
 	// TODO TODO TODO: LOCK PROCESS LIST / PCBS
@@ -82,11 +86,11 @@ void LongTermScheduler::moveFinishedToDisk()
 	for(unsigned int i = 0; i < processList->all.size(); i++) {
 		pcb = processList->all[i];
 		if(pcb->state == STATE_TERM_ON_RAM) {
-			oldPcbs.push_back(pcb);
+			finished.push_back(pcb);
 		}
 	}
 
-	if(oldPcbs.size() == 0) {
+	if(finished.size() == 0) {
 		// Nothing is done. 
 		return;
 	}
@@ -94,26 +98,25 @@ void LongTermScheduler::moveFinishedToDisk()
 	ram->acquire();
 	disk->acquire();
 
-	for(unsigned int i = 0; i < oldPcbs.size(); i++) 
+	for(unsigned int i = 0; i < finished.size(); i++) 
 	{
-		pcb = oldPcbs[i];
+		pcb = finished[i];
 
-		// Copy Process Memory from RAM to Disk
+		// Copy Process Data Memory from RAM to Disk
 		for(unsigned int j = 0; j < pcb->dataLength; j++) {
 			word w = ram->get(pcb->ramPos.dataStart + j);
-			ram->set(pcb->diskPos.dataStart + j, w);
-
+			disk->set(pcb->diskPos.dataStart + j, w);
 		}
 
-		// Mark deallocated.
+		// Mark RAM deallocated.
 		ram->clear(pcb->ramPos.jobStart, pcb->size());
 
-		// Note result
+		// Note result in PCB
 		pcb->ramPos.jobStart = -1;
 		pcb->ramPos.dataStart = -1;
 		pcb->state = STATE_TERM_UNLOADED;
 
-		cout << "[LTS] Unloading process " << pcb->id << " ";
+		cout << "[LTS] Unloaded process " << pcb->id << " ";
 		cout << "(size: " << pcb->size() << ") to Disk.\n";
 	}
 
