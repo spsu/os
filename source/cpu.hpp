@@ -43,8 +43,8 @@ class Cpu
 		 * TODO: Reconsider CPU's relationship with PCB given the dispatcher.
 		 * 		(Should it even point to a PCB?)
 		 */
-		int numReadRam;
-		int numWriteRam;
+		int readCount;
+		int writeCount;
 
 
 	private:
@@ -63,6 +63,13 @@ class Cpu
 		 */
 		unsigned int effectiveAddress(unsigned int logical, 
 				bool convert = true) const;
+
+		/**
+		 * Clear CPU state.
+		 * Should only be called by the dispatcher. 
+		 */
+		void clear();
+
 
 		/**
 		 * Effective Address 

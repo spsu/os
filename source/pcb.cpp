@@ -6,8 +6,12 @@
 
 using namespace std;
 
+// Static init
+pthread_mutex_t Pcb::mux = PTHREAD_MUTEX_INITIALIZER;
+
 Pcb::Pcb() :
 	priority(0),
+	state(STATE_NONE),
 	jobLength(0),
 	dataLength(0),
 	dataInLength(0),
@@ -15,9 +19,8 @@ Pcb::Pcb() :
 	dataTempLength(0),
 	pc(0),
 	regs(16),
-	numReadRam(0),
-	numWriteRam(0),
-	finished(false)
+	readCount(0),
+	writeCount(0)
 {
 	// Nothing
 }

@@ -2,6 +2,8 @@
 
 # Compilation targets
 main
+uniprocessor
+multiprocessor
 
 # Build directory
 build/*

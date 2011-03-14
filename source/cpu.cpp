@@ -5,13 +5,13 @@
 #include "instruction.hpp"
 
 Cpu::Cpu(Memory* r) :
+	readCount(0),
+	writeCount(0),
 	pc(0),
 	regs(16),
 	cache(28),
 	process(0), // TODO: Rename 'pcb'
-	ram(r),
-	numReadRam(0),
-	numWriteRam(0)
+	ram(r)
 {
 	// Empty CTOR
 	// TODO: Inline it? 
@@ -31,7 +31,7 @@ void Cpu::execute() // XXX: One execution cycle
 										(i.reg2()) ?
 											regs[i.reg2()] :
 											i.address()));
-			numReadRam++;
+			readCount++;
 			break;
 
 		// Writes contents of accumulator into output buffer [IO]
@@ -41,19 +41,19 @@ void Cpu::execute() // XXX: One execution cycle
 							regs[i.reg2()] : 
 							i.address()), 
 					regs[i.reg1()]);
-			numWriteRam++;
+			writeCount++;
 			break;
 
 		// Stores content of a register into an address [I]
 		case OPCODE_ST:
 			ram->set(effectiveAddress(regs[i.dReg()]), regs[i.bReg()]);
-			numWriteRam++;
+			writeCount++;
 			break;
 
 		// Loads the content of an address into a register [I]
 		case OPCODE_LW:
 			regs[i.dReg()] = ram->get(effectiveAddress(regs[i.bReg()]));
-			numReadRam++;
+			readCount++;
 			break;
 
 		// Transfer contents of one register into another [R]
@@ -129,7 +129,7 @@ void Cpu::execute() // XXX: One execution cycle
 
 		// Halt, logical end of program
 		case OPCODE_HLT:
-			process->finished = true;
+			process->state = STATE_TERM;
 			return;
 
 		// No-op, do nothing
@@ -205,7 +205,7 @@ void Cpu::execute() // XXX: One execution cycle
 
 bool Cpu::isComplete() const
 {
-	return (process && process->finished);
+	return (process && process->state == STATE_TERM);
 }
 
 void Cpu::printRegs() const
@@ -238,3 +238,17 @@ unsigned int Cpu::effectiveAddress(unsigned int logical,
 	}
 	return process->ram.jobStart + logical;
 }
+
+// Only needs to be called by dispatcher.
+void Cpu::clear()
+{
+	pc = 0;
+	process = 0;
+	readCount= 0;
+	writeCount= 0;
+
+	regs.reset();
+	cache.reset();
+}
+
+

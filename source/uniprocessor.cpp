@@ -1,3 +1,7 @@
+/**
+ * UNIPROCESSOR
+ */
+
 #include <iostream>
 #include <sstream>
 #include "accounting.hpp"
@@ -36,7 +40,7 @@ void run_jobs(Cpu* cpu, Memory* mem, ProcessList* pList)
 		}
 		cout << "Process " << i << ": ";
 		cout << cpu->getReg(0) << "\t";
-		cout << cpu->numReadRam << "\t" << cpu->numWriteRam; 
+		cout << cpu->readCount << "\t" << cpu->writeCount; 
 		cout << endl;
 	}
 }

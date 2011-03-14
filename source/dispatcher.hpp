@@ -5,6 +5,7 @@
 
 class Cpu;
 class Memory;
+struct ProcessList;
 
 /**
  * TODO/XXX: Keep in mind that I need an m-dispatcher!
@@ -20,6 +21,12 @@ class Dispatcher
 			: cpu(c) {};
 
 		/**
+		 * XXX: New CTOR.
+		 */
+		Dispatcher(ProcessList* pList)
+			: processList(pList) {};
+
+		/**
 		 * Dispatch the next process in the Ready Queue. 
 		 * If the current process has not completed, shelve it for later. 
 		 * (TODO: Wait queue, IO queue, etc.)
@@ -33,16 +40,26 @@ class Dispatcher
 		 */
 		void dispatchPcb(Pcb* pcb, Memory* mem);
 
+		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
+
+	private:
+		/**
+		 * Loads a process to the CPU.
+		 * DOES NOT unload the CPU first!
+		 */
+		void loadCpu(Pcb* pcb);
+
 		/**
 		 * Offloads process from the CPU. 
 		 * TODO: Ready Queue
 		 */
-		//void shelvePcb();
+		void unloadCpu();
 
-		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
-
-	private:
+		/**
+		 * Member vars
+		 */
 		Cpu* cpu;
+		ProcessList* processList;
 };
 
 #endif

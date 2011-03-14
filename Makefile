@@ -9,7 +9,7 @@ SHARED = g++ -shared -lstdc++
 CD = cd
 RM = /bin/rm -f
 #INC = -I/usr/include/boost/tr1/tr1
-LIB = -lboost_regex-mt
+LIB = -lboost_regex-mt -lpthread
 #INC = `pkg-config --cflags-only-I ......` #
 #LIB = `pkg-config --libs ...... ` #
 
@@ -24,7 +24,7 @@ all:
 
 .PHONY: clean
 clean: 
-	$(RM) main os test
+	$(RM) uniprocessor multiprocessor main test
 	$(RM) *.o *.a *.so *.out
 	cd ./build && $(RM) *.o *.so
 	cd ./build && $(RM) */*.o */*.so */*/*.o */*/*.so
@@ -39,13 +39,22 @@ stats:
 # Build Targets 
 # ==============
 
-### MAIN #############################
-main: source/main.cpp required 
-	@echo "[compile] main"
-	@$(CD) ./build && $(C) $(INC) -c ../source/main.cpp
-	@echo "[link] naively linking main to all built files"
-	@$(LN) $(LIB) build/*.o -o main
-	@chmod +x main
+### UNIPROCESSOR MAIN #############################
+uniprocessor: source/uniprocessor.cpp required 
+	@echo "[compile] uniprocessor"
+	@$(CD) ./build && $(C) $(INC) -c ../source/uniprocessor.cpp
+	@echo "[link] linking to ALL built files"
+	@$(LN) $(LIB) build/*.o -o uniprocessor
+	@chmod +x uniprocessor 
+	@echo "\nBuild Success!\n"
+
+### MULTIPROCESSOR MAIN #############################
+multiprocessor: source/multiprocessor.cpp required 
+	@echo "[compile] multiprocessor"
+	@$(CD) ./build && $(C) $(INC) -c ../source/multiprocessor.cpp
+	@echo "[link] linking to ALL built files"
+	@$(LN) $(LIB) build/*.o -o multiprocessor
+	@chmod +x multiprocessor 
 	@echo "\nBuild Success!\n"
 
 

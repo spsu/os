@@ -3,6 +3,7 @@
 
 #include <string>
 #include <queue>
+#include <pthread.h>
 #include "types.hpp"
 #include "store.hpp"
 
@@ -14,6 +15,19 @@ class Memory;
 class Pcb;
 
 typedef std::queue<Pcb*> PcbQueue;
+
+/**
+ * State of any given process.
+ */
+enum ProcessState
+{
+	STATE_NONE,		// Not yet created
+	STATE_NEW,		// Newly created
+	STATE_READY,	// Ready for CPU
+	STATE_RUN,		// Running on CPU
+	STATE_WAIT,		// Waiting for device
+	STATE_TERM		// Finished
+};
 
 /**
  * Process Control Block
@@ -40,7 +54,7 @@ class Pcb
 		 * Whether the job has finished.
 		 * Set to true when HLT instruction run.
 		 */
-		bool isFinished() { return finished; };
+		bool isFinished() { return (state == STATE_TERM); };
 
 		/**
 		 * Debugging Methods
@@ -54,6 +68,11 @@ class Pcb
 		 * Job priority
 		 */
 		unsigned int priority;
+
+		/**
+		 * Process State
+		 */
+		ProcessState state;
 
 		/**
 		 * Memory map
@@ -80,15 +99,15 @@ class Pcb
 		 * Statistics
 		 * TODO: Wait time, execution time, etc.
 		 */
-		int numReadRam;
-		int numWriteRam;
+		int readCount;
+		int writeCount;
 
 	private:
 		/**
-		 * Whether the job has finished.
-		 * Set to true when HLT instruction run.
+		 * Global PCB locking. 
+		 * When any PCB is being accessed, all are locked.
 		 */
-		bool finished;
+		static pthread_mutex_t mux;
 };
 
 #endif
