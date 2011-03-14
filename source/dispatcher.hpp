@@ -16,6 +16,7 @@ class Dispatcher
 	public:
 		/**
 		 * CTOR. (Owns ProcessList)
+		 * TODO: Deprecate
 		 */
 		Dispatcher(Cpu* c, Memory* r);
 
@@ -28,14 +29,6 @@ class Dispatcher
 		 * DTOR.
 		 */
 		~Dispatcher();
-
-		/**
-		 * Dispatch the next process in the Ready Queue. 
-		 * If the current process has not completed, shelve it for later. 
-		 * (TODO: Wait queue, IO queue, etc.)
-		 */
-		// TODO: DEPRECATED, DELETE
-		void dispatch(PcbQueue* rq);
 
 		/**
 		 * Dispatch Pcb -- Test Method

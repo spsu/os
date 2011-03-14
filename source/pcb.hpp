@@ -12,21 +12,21 @@
  */
 
 class Memory;
-class Pcb;
-
-typedef std::queue<Pcb*> PcbQueue;
+class Cpu;
 
 /**
- * State of any given process.
+ * State of a process.
  */
 enum ProcessState
 {
-	STATE_NONE,		// Not yet created
-	STATE_NEW,		// Newly created
-	STATE_READY,	// Ready for CPU
-	STATE_RUN,		// Running on CPU
-	STATE_WAIT,		// Waiting for device
-	STATE_TERM		// Finished
+	STATE_UNDEFINED,	// Not yet created (ie. CTOR ran, but nothing set up.)
+	STATE_NEW_UNLOADED,	// Newly created, but not yet in RAM (ie. on disk)
+	STATE_NEW_UNSCHEDULED, // Newly created and loaded, but not yet scheduled.
+	STATE_READY,		// Ready for CPU
+	STATE_RUN,			// Running on CPU
+	STATE_WAIT,			// Waiting for device
+	STATE_TERM,			// Finished, but still lives in RAM
+	STATE_TERM_UNLOADED	// Finished and relegated back to the Disk
 };
 
 /**
@@ -55,6 +55,12 @@ class Pcb
 		 * Set to true when HLT instruction run.
 		 */
 		bool isFinished() { return (state == STATE_TERM); };
+
+		/**
+		 * The total size required on Disk/RAM for the 
+		 * process.
+		 */
+		unsigned int size() { return jobLength + dataLength; };
 
 		/**
 		 * Debugging Methods
@@ -88,6 +94,12 @@ class Pcb
 		 */
 		Position diskPos;
 		Position ramPos;
+
+		/**
+		 * Assigned CPU
+		 */
+		int cpuId;
+		Cpu* cpu; // TODO: Use this instead.
 
 		/**
 		 * CPU save state

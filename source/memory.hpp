@@ -34,6 +34,12 @@ class Memory : public Store
 		 */
 		void release();
 
+		/**
+		 * Find empty contiguous free regions.
+		 */
+		int findLargestContiguousHole(unsigned int reqSize) const;
+		int findSmallestContiguousHole(unsigned int reqSize) const;
+
 	private:
 		/**
 		 * Mutex for memory access.

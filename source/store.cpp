@@ -64,6 +64,17 @@ void Store::clear(unsigned int offset, unsigned int length)
 	}
 }
 
+unsigned int Store::numAllocated() const
+{
+	unsigned int n = 0;
+	for(unsigned int i = 0; i < allocated.size(); i++) {
+		if(allocated[i]) {
+			n++;
+		}
+	}
+	return n;
+}
+
 void Store::reset()
 {
 	// Reset memory.

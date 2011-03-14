@@ -5,6 +5,7 @@
 #include "types.hpp"
 
 class Pcb;
+class ProcessList;
 class Memory;
 
 class Cpu 
@@ -14,10 +15,21 @@ class Cpu
 
 	public:
 		/**
-		 * CTOR.
-		 * Needs access to RAM. 
+		 * Uniprocessor CTOR.
+		 * Utilizes "global" ProcessList.
+		 */
+		Cpu(Memory* r, ProcessList* pList);
+
+		/**
+		 * Multiprocessor CTOR.
+		 * Has its own ProcessList.
 		 */
 		Cpu(Memory* r);
+
+		/**
+		 * DTOR.
+		 */
+		~Cpu();
 
 		/**
 		 * Execute one instruction. 
@@ -30,6 +42,11 @@ class Cpu
 		 * process is complete. (ie. HLT reached.)
 		 */
 		bool isComplete() const;
+
+		/**
+		 * Gets the ProcessList for the CPU.
+		 */
+		ProcessList* getProcessList() { return processList; };
 
 		/**
 		 * Debug methods
@@ -99,10 +116,23 @@ class Cpu
 		Pcb* process;
 
 		/**
+		 * A list of processes assigned to the CPU.
+		 * Also, the ownership of the ProcessList. 
+		 */
+		ProcessList* processList;
+		bool ownsProcessList;
+
+		/**
 		 * RAM
 		 *   TODO: Need DMA instead
 		 */
 		Memory* ram;
+
+		/**
+		 * CPU counter.
+		 */
+		int id;
+		static int counter;
 };
 
 #endif

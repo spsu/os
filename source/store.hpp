@@ -78,6 +78,11 @@ class Store
 		void clear(unsigned int offset, unsigned int length);
 
 		/**
+		 * Determine the number of allocated memory locations.
+		 */
+		unsigned int numAllocated() const;
+
+		/**
 		 * Empty the entire memory store.
 		 * TODO: Disable functionality from working in Memory.
 		 */

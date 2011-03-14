@@ -33,6 +33,7 @@ clean:
 stats:
 	@echo " Lines\tWords\tBytes\t"
 	@wc -l -w -c */*.*pp 
+	@echo " Lines\tWords\tBytes\t"
 
 
 # ==============
@@ -69,7 +70,8 @@ required: \
 	build/memory.o \
 	build/number.o \
 	build/instruction.o \
-	build/scheduler.o \
+	build/ltscheduler.o \
+	build/stscheduler.o \
 	build/dispatcher.o \
 	build/pcb.o \
 	build/cpu.o
@@ -99,9 +101,13 @@ build/instruction.o: source/instruction.hpp source/instruction.cpp
 	@echo "[compile] instruction"
 	@$(CD) ./build && $(C) $(INC) -c ../source/instruction.cpp
 
-build/scheduler.o: source/scheduler.hpp source/scheduler.cpp
-	@echo "[compile] scheduler"
-	@$(CD) ./build && $(C) $(INC) -c ../source/scheduler.cpp
+build/ltscheduler.o: source/ltscheduler.hpp source/ltscheduler.cpp
+	@echo "[compile] ltscheduler"
+	@$(CD) ./build && $(C) $(INC) -c ../source/ltscheduler.cpp
+
+build/stscheduler.o: source/stscheduler.hpp source/stscheduler.cpp
+	@echo "[compile] stscheduler"
+	@$(CD) ./build && $(C) $(INC) -c ../source/stscheduler.cpp
 
 build/dispatcher.o: source/dispatcher.hpp source/dispatcher.cpp
 	@echo "[compile] dispatcher"

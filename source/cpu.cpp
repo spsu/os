@@ -3,6 +3,9 @@
 #include "pcb.hpp"
 #include "memory.hpp"
 #include "instruction.hpp"
+#include "accounting.hpp"
+
+int Cpu::counter = 0;
 
 Cpu::Cpu(Memory* r) :
 	readCount(0),
@@ -11,10 +14,38 @@ Cpu::Cpu(Memory* r) :
 	regs(16),
 	cache(28),
 	process(0), // TODO: Rename 'pcb'
-	ram(r)
+	processList(0),
+	ownsProcessList(true),
+	ram(r),
+	id(-1)
 {
-	// Empty CTOR
-	// TODO: Inline it? 
+	processList = new ProcessList();
+	id = counter;
+	counter++;
+}
+
+Cpu::Cpu(Memory* r, ProcessList* pList) :
+	readCount(0),
+	writeCount(0),
+	pc(0),
+	regs(16),
+	cache(28),
+	process(0), // TODO: Rename 'pcb'
+	processList(pList),
+	ownsProcessList(false),
+	ram(r),
+	id(-1)
+
+{
+	id = counter;
+	counter++;
+}
+
+Cpu::~Cpu()
+{
+	if(ownsProcessList) {
+		delete processList;
+	}
 }
 
 void Cpu::execute() // XXX: One execution cycle
@@ -258,5 +289,4 @@ void Cpu::clear()
 	regs.reset();
 	cache.reset();
 }
-
 

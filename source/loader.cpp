@@ -13,7 +13,7 @@
 using namespace std;
 using namespace boost;
 
-ProcessList* Loader::loadDisk(Memory* memory)
+ProcessList* Loader::loadDisk(Memory* disk)
 {
 	static const regex regex_job_header("JOB (\\w+) (\\w+) (\\w+)", 
 		regbase::normal | regbase::icase);
@@ -66,9 +66,14 @@ ProcessList* Loader::loadDisk(Memory* memory)
 		else if(regex_search(line, result, regex_memory_contents))
 		{
 			// Load job instructions or data to the memory space
-			memory->set(memPos, hex_to_dec(result[1]));
+			disk->set(memPos, hex_to_dec(result[1]));
 			memPos++;
 		}
+	}
+
+	// All processes have been created.
+	for(unsigned int i = 0; i < processList->all.size(); i++) {
+		processList->all[i]->state = STATE_NEW_UNLOADED;
 	}
 
 	// XXX / TODO: Close the file!

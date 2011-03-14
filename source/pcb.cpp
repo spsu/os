@@ -11,12 +11,13 @@ pthread_mutex_t Pcb::mux = PTHREAD_MUTEX_INITIALIZER;
 
 Pcb::Pcb() :
 	priority(0),
-	state(STATE_NONE),
+	state(STATE_UNDEFINED),
 	jobLength(0),
 	dataLength(0),
 	dataInLength(0),
 	dataOutLength(0),
 	dataTempLength(0),
+	cpuId(-1),
 	pc(0),
 	regs(16),
 	readCount(0),

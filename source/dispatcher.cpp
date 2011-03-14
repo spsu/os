@@ -31,8 +31,8 @@ Dispatcher::~Dispatcher()
 	}
 }
 
-// TODO
-void Dispatcher::dispatch(PcbQueue* rq)
+// TODO DEPRECATED, REMOVE COMPLETELY
+/*void Dispatcher::dispatch(PcbQueue* rq)
 {
 	Pcb* oldProc = 0;
 	Pcb* newProc = 0;
@@ -65,7 +65,7 @@ void Dispatcher::dispatch(PcbQueue* rq)
 	cpu->writeCount = newProc->writeCount;
 
 	// TODO TODO TODO
-}
+}*/
 
 void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
 {
@@ -92,7 +92,20 @@ void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
 
 void Dispatcher::dispatch()
 {
+	Pcb* pcb = 0;
 
+	unloadCpu();
+
+	if(processList->ready.size() == 0) {
+		// TODO: All -- signal scheduler
+		// TODO: SMP -- signal load balancer
+		return;
+	}
+
+	pcb = processList->ready.front();
+	processList->ready.pop();
+
+	loadCpu(pcb);
 }
 
 void Dispatcher::loadCpu(Pcb* pcb)
