@@ -6,6 +6,31 @@
 #include "instruction.hpp"
 #include <iostream>
 
+Dispatcher::Dispatcher(Cpu* c, Memory* r) :
+	cpu(c),
+	ram(r),
+	processList(0),
+	ownsProcList(true)
+{
+	processList = new ProcessList();
+}
+
+Dispatcher::Dispatcher(Cpu* c, Memory* r, ProcessList* p) :
+	cpu(c),
+	ram(r),
+	processList(p),
+	ownsProcList(false)
+{
+	// Nothing
+}
+
+Dispatcher::~Dispatcher()
+{
+	if(ownsProcList) {
+		delete processList;
+	}
+}
+
 // TODO
 void Dispatcher::dispatch(PcbQueue* rq)
 {
@@ -58,11 +83,16 @@ void Dispatcher::dispatchPcb(Pcb* pcb, Memory* mem)
 
 	// Move process code into CPU cache.
 	for(unsigned int i = 0; i < pcb->jobLength; i++) {
-		cpu->cache.set(i, mem->get(pcb->ram.jobStart + i));
+		cpu->cache.set(i, mem->get(pcb->ramPos.jobStart + i));
 
 		//Instruction in = Instruction(cpu->cache.get(i)); // XXX: DEBUG
 		//cout << in.toString() << endl; // XXX: DEBUG
 	}
+}
+
+void Dispatcher::dispatch()
+{
+
 }
 
 void Dispatcher::loadCpu(Pcb* pcb)
@@ -72,6 +102,13 @@ void Dispatcher::loadCpu(Pcb* pcb)
 	cpu->pc = pcb->pc;
 	cpu->readCount = pcb->readCount;
 	cpu->writeCount = pcb->writeCount;
+
+	// Move process code into CPU cache.
+	ram->acquire();
+	for(unsigned int i = 0; i < pcb->jobLength; i++) {
+		cpu->cache.set(i, ram->get(pcb->ramPos.jobStart + i));
+	}
+	ram->release();
 }
 
 void Dispatcher::unloadCpu()

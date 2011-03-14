@@ -34,8 +34,8 @@ string Pcb::toString() const
 	s << "len: " << jobLength << ", " << dataLength;
 	//s << " [" << dataInLength << "/" << dataOutLength << "/" << dataTempLength << "]";
 	s << ", ";
-	s << "ram: " << ram.jobStart << ", " << ram.dataStart;
-	s << "disk: " << disk.jobStart << ", " << disk.dataStart;
+	s << "ram: " << ramPos.jobStart << ", " << ramPos.dataStart;
+	s << "disk: " << diskPos.jobStart << ", " << diskPos.dataStart;
 	s << ">";
 
 	return s.str();
@@ -43,7 +43,7 @@ string Pcb::toString() const
 
 void Pcb::printProg(const Memory& mem) const
 {
-	unsigned int start = disk.jobStart;
+	unsigned int start = diskPos.jobStart;
 	unsigned int end = start + jobLength;
 
 	for(unsigned int i = start; i < end; i++)
@@ -56,13 +56,13 @@ void Pcb::printProg(const Memory& mem) const
 
 void Pcb::printData(const Memory & mem) const
 {
-	unsigned int end = disk.dataStart + dataLength;
-	unsigned int inEnd = disk.dataStart + dataInLength;
+	unsigned int end = diskPos.dataStart + dataLength;
+	unsigned int inEnd = diskPos.dataStart + dataInLength;
 	unsigned int outEnd = inEnd + dataOutLength;
 
 	cout << "In >>> ";
 
-	for(unsigned int i = disk.dataStart; i < end; i++) {
+	for(unsigned int i = diskPos.dataStart; i < end; i++) {
 		if(i == inEnd) {
 			cout << "Out >>> ";
 		}

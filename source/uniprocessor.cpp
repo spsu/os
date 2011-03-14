@@ -29,11 +29,12 @@ void run_jobs(Cpu* cpu, Memory* mem, ProcessList* pList)
 	Dispatcher* dsp = 0;
 	Pcb* pcb = 0;
 
-	dsp = new Dispatcher(cpu);
+	dsp = new Dispatcher(cpu, mem, pList);
 
 	for(unsigned int i = 0; i < pList->all.size(); i++) {
 		pcb = pList->all.at(i);
 		dsp->dispatchPcb(pcb, mem);
+		// TODO: dsp->dispatch();
 
 		while(!cpu->isComplete()) {
 			cpu->execute();
@@ -54,13 +55,11 @@ int main(int argc, char *argv[])
 	Memory* mem = 0;
 	ProcessList* pList = 0;
 	Cpu* cpu = 0;
-	Dispatcher* disp = 0;
 
 	loader = new Loader("data/datafile2.txt");
 	mem = new Memory(2048);
 
 	cpu = new Cpu(mem);
-	disp = new Dispatcher(cpu);
 
 	pList = loader->loadDisk(mem); // TODO: Poor form	
 	

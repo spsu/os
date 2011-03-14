@@ -42,8 +42,8 @@ ProcessList* Loader::loadDisk(Memory* memory)
 			// Extract job details
 			curPcb = new Pcb();
 
-			curPcb->disk.jobStart = memPos;
-			curPcb->ram.jobStart = memPos; // XXX TODO TODO TEMPORARY
+			curPcb->diskPos.jobStart = memPos;
+			curPcb->ramPos.jobStart = memPos; // XXX TODO TODO TEMPORARY
 			curPcb->priority = hex_to_dec(result[3]);
 			curPcb->jobLength = hex_to_dec(result[2]);
 
@@ -56,8 +56,8 @@ ProcessList* Loader::loadDisk(Memory* memory)
 			int out = hex_to_dec(result[2]);
 			int temp = hex_to_dec(result[3]);
 
-			curPcb->disk.dataStart = memPos;
-			curPcb->ram.dataStart = memPos; // XXX TODO TODO TEMPORARY
+			curPcb->diskPos.dataStart = memPos;
+			curPcb->ramPos.dataStart = memPos; // XXX TODO TODO TEMPORARY
 			curPcb->dataInLength = in;
 			curPcb->dataOutLength = out;
 			curPcb->dataTempLength = temp;

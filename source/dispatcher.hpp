@@ -15,22 +15,26 @@ class Dispatcher
 {
 	public:
 		/**
-		 * CTOR.
+		 * CTOR. (Owns ProcessList)
 		 */
-		Dispatcher(Cpu* c)
-			: cpu(c) {};
+		Dispatcher(Cpu* c, Memory* r);
 
 		/**
-		 * XXX: New CTOR.
+		 * CTOR. (Shares ProcessList)
 		 */
-		Dispatcher(ProcessList* pList)
-			: processList(pList) {};
+		Dispatcher(Cpu* c, Memory* r, ProcessList* p);
+
+		/**
+		 * DTOR.
+		 */
+		~Dispatcher();
 
 		/**
 		 * Dispatch the next process in the Ready Queue. 
 		 * If the current process has not completed, shelve it for later. 
 		 * (TODO: Wait queue, IO queue, etc.)
 		 */
+		// TODO: DEPRECATED, DELETE
 		void dispatch(PcbQueue* rq);
 
 		/**
@@ -38,28 +42,44 @@ class Dispatcher
 		 * Sets the process represented by the PCB for execution. 
 		 * XXX: This is for debugging only.  
 		 */
+		// TODO: DEPRECATED, DELETE
 		void dispatchPcb(Pcb* pcb, Memory* mem);
 
-		//void dispatch(Cpu* c, Pcb* p); // XXX: Possible m-dispatcher
+		/**
+		 * Dispatch the next process in the Ready Queue. 
+		 * If the current process has not completed, it gets saved
+		 * for later resumption. 
+		 */
+		void dispatch();
 
 	private:
 		/**
 		 * Loads a process to the CPU.
-		 * DOES NOT unload the CPU first!
+		 * DOES NOT unload the CPU or save any state! 
+		 * Make sure to call unloadCpu() first.
 		 */
 		void loadCpu(Pcb* pcb);
 
 		/**
-		 * Offloads process from the CPU. 
+		 * Offloads process from the CPU.
+		 * The process state is recorded in its PCB. 
 		 * TODO: Ready Queue
 		 */
 		void unloadCpu();
 
 		/**
-		 * Member vars
+		 * Access to the hardware. 
+		 * These are shared pointers.
 		 */
 		Cpu* cpu;
+		Memory* ram;
+
+		/**
+		 * Process List (and Ownership)
+		 * Maintains PCB list and Queues.
+		 */
 		ProcessList* processList;
+		bool ownsProcList;
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define BT_OS_MEMORY
 
 #include "store.hpp"
+#include <pthread.h>
 
 /**
  * Memory class
@@ -15,15 +16,31 @@ class Memory : public Store
 		 * Default CTOR.
 		 * 1028 words.
 		 */
-		Memory()
-			: Store() {};
+		Memory();
 
 		/**
 		 * CTOR
 		 * Any number of words.
 		 */
-		Memory(int numWords)
-			: Store(numWords) {};
+		Memory(int numWords);
+
+		/**
+		 * Acquire mutex lock.
+		 */
+		void acquire();
+
+		/**
+		 * Release mutex lock.
+		 */
+		void release();
+
+	private:
+		/**
+		 * Mutex for memory access.
+		 * Access methods DO NOT wrap their access!!
+		 * Callers must responsibly use acquire() and release().
+		 */
+		pthread_mutex_t mux;
 };
 
 #endif

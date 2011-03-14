@@ -27,32 +27,40 @@ void Cpu::execute() // XXX: One execution cycle
 	{
 		// Read contents of input buffer into accumulator [IO]
 		case OPCODE_RD:
+			ram->acquire();
 			regs[i.reg1()] = ram->get(effectiveAddress(
 										(i.reg2()) ?
 											regs[i.reg2()] :
 											i.address()));
+			ram->release();
 			readCount++;
 			break;
 
 		// Writes contents of accumulator into output buffer [IO]
 		case OPCODE_WR:
+			ram->acquire();
 			ram->set(effectiveAddress(
 						(i.reg2())?
 							regs[i.reg2()] : 
 							i.address()), 
 					regs[i.reg1()]);
+			ram->release();
 			writeCount++;
 			break;
 
 		// Stores content of a register into an address [I]
 		case OPCODE_ST:
+			ram->acquire();
 			ram->set(effectiveAddress(regs[i.dReg()]), regs[i.bReg()]);
+			ram->release();
 			writeCount++;
 			break;
 
 		// Loads the content of an address into a register [I]
 		case OPCODE_LW:
+			ram->acquire();
 			regs[i.dReg()] = ram->get(effectiveAddress(regs[i.bReg()]));
+			ram->release();
 			readCount++;
 			break;
 
@@ -234,9 +242,9 @@ unsigned int Cpu::effectiveAddress(unsigned int logical,
 	if(convert) {
 		// Dividing converts from per-byte addressing 
 		// into per-word addressing.
-		return logical / 4 + process->ram.jobStart;
+		return logical / 4 + process->ramPos.jobStart;
 	}
-	return process->ram.jobStart + logical;
+	return process->ramPos.jobStart + logical;
 }
 
 // Only needs to be called by dispatcher.

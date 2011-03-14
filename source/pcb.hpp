@@ -75,7 +75,7 @@ class Pcb
 		ProcessState state;
 
 		/**
-		 * Memory map
+		 * Memory lengths 
 		 */
 		unsigned int jobLength;
 		unsigned int dataLength;
@@ -84,10 +84,10 @@ class Pcb
 		unsigned int dataTempLength;
 
 		/**
-		 * New memory map
+		 * Memory map
 		 */
-		Position disk;
-		Position ram;
+		Position diskPos;
+		Position ramPos;
 
 		/**
 		 * CPU save state
