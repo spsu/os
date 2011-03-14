@@ -49,6 +49,12 @@ class Cpu
 		ProcessList* getProcessList() { return processList; };
 
 		/**
+		 * Gets the PCB assigned to the CPU.
+		 * NOTE: State will not be as it is on the CPU!
+		 */
+		Pcb* getPcb() { return process; };
+
+		/**
 		 * Debug methods
 		 */
 		void printRegs() const;

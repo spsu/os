@@ -3,6 +3,7 @@
 #include "cpu.hpp"
 #include "accounting.hpp"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -15,6 +16,12 @@ void ShortTermScheduler::rebuildQueue()
 	// TODO TODO TODO TODO ACQUIRE PCB LOCK
 
 	pList = cpu->getProcessList();
+
+	// XXX XXX DEBUG
+	//cout << "--- STS DEBUG: ---\n";
+	//for(unsigned int i = 0; i < pList->all.size(); i++) {
+	//	cout << pList->all[i]->toString() << endl; 
+	//}
 
 	// Get all unscheduled processes. 
 	for(unsigned int i = 0; i < pList->all.size(); i++) {

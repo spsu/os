@@ -12,6 +12,8 @@ void LongTermScheduler::schedule()
 	vector<Pcb*> newPcbs;
 	Pcb* pcb = 0;
 
+	moveFinishedToDisk();
+
 	// TODO TODO TODO: LOCK PROCESS LIST / PCBS
 
 	// Get all of the disk-localized jobs
@@ -54,6 +56,15 @@ void LongTermScheduler::schedule()
 		pcb->ramPos.jobStart = pos;
 		pcb->ramPos.dataStart = pos + pcb->jobLength;
 		pcb->state = STATE_NEW_UNSCHEDULED;
+
+		cout << "LTS: process " << pcb->id << " (size: ";
+		cout << pcb->size() << ") moved into RAM at position ";
+		cout << pos << ".\n";
+
+		// XXX XXX DEBUG
+		//cout << "PCB ID: " << pcb->id << endl;
+		//pcb->printProg(*ram);
+		//pcb->printData(*ram);
 	}
 
 	disk->release();
@@ -70,7 +81,7 @@ void LongTermScheduler::moveFinishedToDisk()
 	// Get all of the finished, but still RAM-localized jobs
 	for(unsigned int i = 0; i < processList->all.size(); i++) {
 		pcb = processList->all[i];
-		if(pcb->state == STATE_TERM) {
+		if(pcb->state == STATE_TERM_ON_RAM) {
 			oldPcbs.push_back(pcb);
 		}
 	}
@@ -101,6 +112,9 @@ void LongTermScheduler::moveFinishedToDisk()
 		pcb->ramPos.jobStart = -1;
 		pcb->ramPos.dataStart = -1;
 		pcb->state = STATE_TERM_UNLOADED;
+
+		cout << "LTS: process " << pcb->id << " ";
+		cout << "(size: " << pcb->size() << ") moved back to Disk.\n";
 	}
 
 	disk->release();

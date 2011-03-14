@@ -5,7 +5,6 @@
 
 class Cpu;
 class Memory;
-struct ProcessList;
 
 /**
  * TODO/XXX: Keep in mind that I need an m-dispatcher!
@@ -15,28 +14,9 @@ class Dispatcher
 {
 	public:
 		/**
-		 * CTOR. (Owns ProcessList)
-		 * TODO: Deprecate
+		 * CTOR.
 		 */
 		Dispatcher(Cpu* c, Memory* r);
-
-		/**
-		 * CTOR. (Shares ProcessList)
-		 */
-		Dispatcher(Cpu* c, Memory* r, ProcessList* p);
-
-		/**
-		 * DTOR.
-		 */
-		~Dispatcher();
-
-		/**
-		 * Dispatch Pcb -- Test Method
-		 * Sets the process represented by the PCB for execution. 
-		 * XXX: This is for debugging only.  
-		 */
-		// TODO: DEPRECATED, DELETE
-		void dispatchPcb(Pcb* pcb, Memory* mem);
 
 		/**
 		 * Dispatch the next process in the Ready Queue. 
@@ -66,13 +46,6 @@ class Dispatcher
 		 */
 		Cpu* cpu;
 		Memory* ram;
-
-		/**
-		 * Process List (and Ownership)
-		 * Maintains PCB list and Queues.
-		 */
-		ProcessList* processList;
-		bool ownsProcList;
 };
 
 #endif

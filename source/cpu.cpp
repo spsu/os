@@ -168,7 +168,7 @@ void Cpu::execute() // XXX: One execution cycle
 
 		// Halt, logical end of program
 		case OPCODE_HLT:
-			process->state = STATE_TERM;
+			process->state = STATE_TERM_ON_CPU;
 			return;
 
 		// No-op, do nothing
@@ -244,7 +244,7 @@ void Cpu::execute() // XXX: One execution cycle
 
 bool Cpu::isComplete() const
 {
-	return (process && process->state == STATE_TERM);
+	return (process && process->state == STATE_TERM_ON_CPU);
 }
 
 void Cpu::printRegs() const

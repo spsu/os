@@ -25,7 +25,8 @@ enum ProcessState
 	STATE_READY,		// Ready for CPU
 	STATE_RUN,			// Running on CPU
 	STATE_WAIT,			// Waiting for device
-	STATE_TERM,			// Finished, but still lives in RAM
+	STATE_TERM_ON_CPU,	// Finished, but still on the CPU
+	STATE_TERM_ON_RAM,	// Finished, but still lives in RAM
 	STATE_TERM_UNLOADED	// Finished and relegated back to the Disk
 };
 
@@ -54,7 +55,7 @@ class Pcb
 		 * Whether the job has finished.
 		 * Set to true when HLT instruction run.
 		 */
-		bool isFinished() { return (state == STATE_TERM); };
+		bool isFinished() const;
 
 		/**
 		 * The total size required on Disk/RAM for the 
@@ -67,12 +68,15 @@ class Pcb
 		 */
 		void printProg(const Memory& disk) const;
 		void printData(const Memory& disk) const;
+		std::string stateStr() const;
+		word accumulatorValue() const;
 
 		// XXX: Data members are *public*
 		
 		/**
-		 * Job priority
+		 * Job id, priority
 		 */
+		unsigned int id;
 		unsigned int priority;
 
 		/**
@@ -120,6 +124,11 @@ class Pcb
 		 * When any PCB is being accessed, all are locked.
 		 */
 		static pthread_mutex_t mux;
+
+		/**
+		 * PCB Counter
+		 */
+		static unsigned int counter;
 };
 
 #endif
