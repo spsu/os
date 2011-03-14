@@ -50,9 +50,10 @@ Cpu::~Cpu()
 
 void Cpu::execute() // XXX: One execution cycle
 {
-	Instruction i;
-
-	i = Instruction(cache[pc]);
+	//Instruction i;
+	//i = Instruction(cache[pc]);
+	
+	Instruction i(cache[pc]);
 
 	switch(i.opcode()) 
 	{

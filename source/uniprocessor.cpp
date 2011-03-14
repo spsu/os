@@ -89,9 +89,15 @@ void run_jobs()
 		//cout << pcb->toString() << endl;
 
 		// XXX XXX: Before the segfault...
-		if(pcb->id == 15) {
+		if(count == 23) {
 			//pcb->printProg(*ram);
 			//pcb->printData(*ram);
+			cout << "WRITING DISK AND RAM\n";
+			ram->writeDisk("ram.txt");
+			disk->writeDisk("disk.txt");
+			pList->printJobs();
+			cout << "PROCESS:\n";
+			cout << pcb->toString() << endl;
 		}
 
 		while(!cpu->isComplete()) {

@@ -93,6 +93,7 @@ class Store
 		 * XXX: For debug.
 		 */
 		string toString() const;
+		void writeDisk(string fname);
 
 	protected:
 		/**

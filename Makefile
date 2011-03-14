@@ -3,8 +3,8 @@
 # I *really* need to learn the Autotools
 # =======================================
 
-C = g++ -g -Wall -fPIC -std=c++0x
-LN = g++ -g -lstdc++
+C = g++ -O0 -g -Wall -fPIC -std=c++0x
+LN = g++ -O0 -g -lstdc++
 SHARED = g++ -shared -lstdc++
 CD = cd
 RM = /bin/rm -f

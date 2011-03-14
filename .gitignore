@@ -5,6 +5,10 @@ main
 uniprocessor
 multiprocessor
 
+# Output
+ram.txt
+disk.txt
+
 # Build directory
 build/*
 

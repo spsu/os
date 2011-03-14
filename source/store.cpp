@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include "store.hpp"
 #include "types.hpp"
 #include "number.hpp"
@@ -78,8 +79,13 @@ unsigned int Store::numAllocated() const
 void Store::reset()
 {
 	// Reset memory.
-	words = vector<word>(words.size(), 0);
-	allocated = vector<bool>(allocated.size(), false);
+	//words = vector<word>(words.size(), 0);
+	//allocated = vector<bool>(allocated.size(), false);
+
+	for(unsigned int i = 0; i < words.size(); i++) {
+		words[i] = 0;
+		allocated[i] = false;
+	}
 }
 
 string Store::toString() const
@@ -107,3 +113,17 @@ string Store::toString() const
 	out << endl;
 	return out.str();
 }
+
+void Store::writeDisk(string fname)
+{
+	ofstream ofile;
+	ofile.open(fname, ifstream::out);
+
+	for(unsigned int i = 0; i < words.size(); i++)
+	{
+		ofile << i << ":\t";
+		ofile << dec_to_bin(words[i]) << endl;
+	}
+	ofile.close();
+}
+
