@@ -1,6 +1,6 @@
 #include "ltscheduler.hpp"
 #include "memory.hpp"
-#include "accounting.hpp"
+#include "processlist.hpp"
 #include "pcb.hpp"
 #include <vector>
 #include <iostream>
@@ -57,8 +57,8 @@ void LongTermScheduler::schedule()
 		pcb->ramPos.dataStart = pos + pcb->jobLength;
 		pcb->state = STATE_NEW_UNSCHEDULED;
 
-		cout << "LTS: process " << pcb->id << " (size: ";
-		cout << pcb->size() << ") moved into RAM at position ";
+		cout << "[LTS] Loading process " << pcb->id << " (size: ";
+		cout << pcb->size() << ") into RAM at position ";
 		cout << pos << ".\n";
 
 		// XXX XXX DEBUG
@@ -113,8 +113,8 @@ void LongTermScheduler::moveFinishedToDisk()
 		pcb->ramPos.dataStart = -1;
 		pcb->state = STATE_TERM_UNLOADED;
 
-		cout << "LTS: process " << pcb->id << " ";
-		cout << "(size: " << pcb->size() << ") moved back to Disk.\n";
+		cout << "[LTS] Unloading process " << pcb->id << " ";
+		cout << "(size: " << pcb->size() << ") to Disk.\n";
 	}
 
 	disk->release();

@@ -1,7 +1,7 @@
 #include "stscheduler.hpp"
 #include "pcb.hpp"
 #include "cpu.hpp"
-#include "accounting.hpp"
+#include "processlist.hpp"
 #include <vector>
 #include <iostream>
 
@@ -35,6 +35,9 @@ void ShortTermScheduler::rebuildQueue()
 		// Nothing new to schedule... done.
 		return;
 	}
+
+	cout << "[STS] Rebuilding Ready Queue: ";
+	cout << unscheduled.size() << " new processes.\n";
 
 	// TODO TODO TODO
 	// ONLY DOES FCFS FOR NOW

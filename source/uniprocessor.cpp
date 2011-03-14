@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "accounting.hpp"
+#include "processlist.hpp"
 #include "loader.hpp"
 #include "memory.hpp"
 #include "number.hpp"
@@ -23,34 +23,6 @@ using namespace std;
 Cpu* cpu = 0;
 Memory* disk = 0;
 Memory* ram = 0;
-
-/**
- * Print All PCBs
- * A debugging facility
- */
-void print_jobs(ProcessList* pcbs) {
-	for(unsigned int i = 0; i < pcbs->all.size(); i++)
-		cout << pcbs->all[i]->toString() << endl;
-}
-
-void print_job_states(ProcessList* pcbs) {
-	for(unsigned int i = 0; i < pcbs->all.size(); i++) {
-		cout << "PCB[";
-		cout << pcbs->all[i]->id << "]: ";
-		cout << pcbs->all[i]->stateStr() << ",  ";
-	}
-}
-
-void print_ready_jobs(ProcessList* pcbs) {
-	cout << "Ready: ";
-	for(unsigned int i = 0; i < pcbs->all.size(); i++) {
-		if(pcbs->all[i]->state == STATE_READY) {
-			cout << pcbs->all[i]->id << ", ";
-		}
-	}
-}
-
-
 
 /**
  * Run Jobs
@@ -85,9 +57,9 @@ void run_jobs()
 		cout << " BEGIN ===\n";
 		count++;
 
-		cout << "Disk, Ram: ";
-		cout << disk->numAllocated() << ", ";
-		cout << ram->numAllocated() << endl;
+		//cout << "Disk, Ram: ";
+		//cout << disk->numAllocated() << ", ";
+		//cout << ram->numAllocated() << endl;
 
 		lts->schedule();
 
@@ -97,8 +69,8 @@ void run_jobs()
 		// XXX XXX DEBUG	
 		// XXX AFTER DSP, BEFORE GETPCB
 		if(pcb) {
-			cout << "Finished/next: ";
-			cout << pcb->toString() << endl;
+			//cout << "Finished/next: ";
+			//cout << pcb->toString() << endl;
 		}
 
 		// XXX DEBUG
@@ -108,11 +80,13 @@ void run_jobs()
 
 		// XXX: What the??
 		//print_jobs(pList);
-		print_ready_jobs(pList);
-		cout << endl;
+		pList->printUnready();
+		pList->printReady();
+		pList->printDone();
+		pList->printDoneValues();
 
-		cout << "Running: ";
-		cout << pcb->toString() << endl;
+		//cout << "Running: ";
+		//cout << pcb->toString() << endl;
 
 		// XXX XXX: Before the segfault...
 		if(pcb->id == 15) {
@@ -125,8 +99,8 @@ void run_jobs()
 		}
 
 		// XXX DEBUG
-		cout << "Finished: ";
-		cout << pcb->toString() << endl;
+		//cout << "Finished: ";
+		//cout << pcb->toString() << endl;
 		//cpu->printRegs();
 
 		// XXX DEBUG 

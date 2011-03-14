@@ -32,6 +32,16 @@ struct ProcessList
 	 * Processes in RAM that are waiting for an event.
 	 */
 	queue<Pcb*> wait;
+
+	/**
+	 * Debugging Methods
+	 */
+	void printJobs() const;
+	void printStates() const;
+	void printUnready() const;
+	void printReady() const;
+	void printDone() const;
+	void printDoneValues() const;
 };
 
 #endif

@@ -70,6 +70,7 @@ required: \
 	build/memory.o \
 	build/number.o \
 	build/instruction.o \
+	build/processlist.o \
 	build/ltscheduler.o \
 	build/stscheduler.o \
 	build/dispatcher.o \
@@ -96,6 +97,10 @@ build/memory.o: source/memory.hpp source/memory.cpp
 build/number.o: source/number.hpp source/number.cpp
 	@echo "[compile] number"
 	@$(CD) ./build && $(C) $(INC) -c ../source/number.cpp
+
+build/processlist.o: source/processlist.hpp source/processlist.cpp
+	@echo "[compile] processlist"
+	@$(CD) ./build && $(C) $(INC) -c ../source/processlist.cpp
 
 build/instruction.o: source/instruction.hpp source/instruction.cpp
 	@echo "[compile] instruction"

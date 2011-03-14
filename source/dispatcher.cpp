@@ -1,5 +1,5 @@
 #include "dispatcher.hpp"
-#include "accounting.hpp"
+#include "processlist.hpp"
 #include "cpu.hpp"
 #include "pcb.hpp"
 #include "memory.hpp"
@@ -36,7 +36,7 @@ void Dispatcher::dispatch()
 
 void Dispatcher::loadCpu(Pcb* pcb)
 {
-	cout << "DSP Loading: " << pcb->id << endl;
+	cout << "Dispatcher Loading: " << pcb->id << endl;
 
 	cpu->process = pcb;
 	cpu->regs = pcb->regs;
@@ -73,7 +73,7 @@ void Dispatcher::unloadCpu()
 	pcb->readCount = cpu->readCount;
 	pcb->writeCount = cpu->writeCount;
 
-	cout << "DSP Unloaded: " << pcb->id << endl;
+	cout << "Dispatcher Unloaded: " << pcb->id << endl;
 
 	// Return interrupted processes to the Ready Queue
 	// TODO: Should the CPU even set PCB attrs?
