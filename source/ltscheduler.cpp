@@ -23,9 +23,11 @@ void LongTermScheduler::moveNewToRam()
 	// Get all of the disk-localized jobs
 	for(unsigned int i = 0; i < processList->all.size(); i++) {
 		pcb = processList->all[i];
+		pcb->acquire();
 		if(pcb->state == STATE_NEW_UNLOADED) {
 			newPcbs.push_back(pcb);
 		}
+		pcb->release();
 	}
 
 	if(newPcbs.size() == 0) {
@@ -42,11 +44,14 @@ void LongTermScheduler::moveNewToRam()
 		int size = 0;
 
 		pcb = newPcbs[i];
+		pcb->acquire();
+
 		size = pcb->size();
 
 		// Find the smallest hole for the process (or abandon)
 		pos = ram->findSmallestContiguousHole(size);
 		if(pos < 0) {
+			pcb->release();
 			continue;
 		}
 
@@ -64,6 +69,8 @@ void LongTermScheduler::moveNewToRam()
 		cout << "[LTS] Loading process " << pcb->id << " (size: ";
 		cout << pcb->size() << ") into RAM at position ";
 		cout << pos << ".\n";
+
+		pcb->release();
 	}
 
 	disk->release();

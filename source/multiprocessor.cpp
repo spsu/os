@@ -56,7 +56,6 @@ void* cpu_thread(void*)
 	pList = cpu->getProcessList();
 
 	// Run the schedulers once at the start
-	// TODO: LoadBalancer
 	bal->importNewProcess();
 	sts->rebuildQueue();
 	dsp->dispatch();
@@ -72,15 +71,23 @@ void* cpu_thread(void*)
 		// CPU (non-interruptible)
 		// Note: It may not have a process at this point. 
 		while(!cpu->isComplete()) {
+			//cout << "CPU " << cpu->getId() << " EXECUTING\n"; // XXX DEBUG
 			cpu->execute();
 		}
 
+		//cout << "LTS COUNTER: " << ltsCnt << endl; // XXX DEBUG
+
 		// LTS only runs every so often.
 		// TODO: Make count global?
-		if(ltsCnt % 4 == 0) {
-			lts->schedule();
-		}
+		//if(ltsCnt % 4 == 0) {
+		//	lts->schedule();
+		//}
 		ltsCnt++;
+
+		/*cout << "CPU " << cpu->getId() << " #READY = "; // XXX DEBUG
+		pList->printReady();
+		cout << "CPU " << cpu->getId() << " #UNREADY = "; // XXX DEBUG
+		pList->printUnready();*/
 
 		// Balancer, STS, Dispatch
 		bal->importNewProcess();
@@ -120,6 +127,12 @@ int main(int argc, char *argv[])
 
 	lts = new LongTermScheduler(disk, ram, globalProcList);
 	sts = new ShortTermScheduler(cpu);
+
+	// Run LTS once at start
+	lts->schedule();
+
+	// XXX DEBUG
+	globalProcList->printJobs();
 
 	// Spawn CPU threads. 
 	// CPU Threads are Symmetric Processing units (self-scheduling, etc.)

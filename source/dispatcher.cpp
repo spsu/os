@@ -38,6 +38,8 @@ void Dispatcher::loadCpu(Pcb* pcb)
 {
 	cout << "[Dispatcher] Loading: " << pcb->id << endl;
 
+	pcb->acquire();
+
 	cpu->process = pcb;
 	cpu->regs = pcb->regs;
 	cpu->pc = pcb->pc;
@@ -55,6 +57,7 @@ void Dispatcher::loadCpu(Pcb* pcb)
 		cpu->cache.set(i, ram->get(pcb->ramPos.jobStart + i));
 	}
 	ram->release();
+	pcb->release();
 }
 
 void Dispatcher::unloadCpu()
@@ -69,8 +72,10 @@ void Dispatcher::unloadCpu()
 		return;
 	}
 
-	// Save old state
 	pcb = cpu->process;
+	pcb->acquire();
+
+	// Save old state
 	pcb->regs = cpu->regs;
 	pcb->pc = cpu->pc;
 	pcb->readCount = cpu->readCount;
@@ -88,6 +93,8 @@ void Dispatcher::unloadCpu()
 	else {
 		pcb->state = STATE_TERM_ON_RAM;
 	}
+
+	pcb->release();
 
 	// Clear CPU state. 
 	cpu->clear();

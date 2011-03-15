@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <vector>
+#include <pthread.h>
 
 using namespace std;
 
@@ -14,41 +15,69 @@ class Pcb;
  */
 struct ProcessList
 {
-	/**
-	 * All known processes, finished and otherwise.
-	 * PCBs are added as processes are loaded from the batch 
-	 * file.
-	 */
-	vector<Pcb*> all;
+	public:
+		/**
+		 * All known processes, finished and otherwise.
+		 * PCBs are added as processes are loaded from the batch 
+		 * file.
+		 */
+		vector<Pcb*> all;
 
-	/**
-	 * Ready Queue
-	 * Processes in RAM that are in contention for a CPU.
-	 */
-	queue<Pcb*> ready;
+		/**
+		 * Ready Queue
+		 * Processes in RAM that are in contention for a CPU.
+		 */
+		queue<Pcb*> ready;
 
-	/**
-	 * Wait Queue
-	 * Processes in RAM that are waiting for an event.
-	 */
-	queue<Pcb*> wait;
+		/**
+		 * Wait Queue
+		 * Processes in RAM that are waiting for an event.
+		 */
+		queue<Pcb*> wait;
 
-	/**
-	 * Gets the number of jobs that must run or be 
-	 * handled in some way. 
-	 * Only STATE_TERM_UNLOADED is not counted. 
-	 */
-	unsigned int numRemainingJobs() const;
+		/**
+		 * CTOR.
+		 */
+		ProcessList();
 
-	/**
-	 * Debugging Methods
-	 */
-	void printJobs() const;
-	void printStates() const;
-	void printUnready() const;
-	void printReady() const;
-	void printDone() const;
-	void printDoneValues() const;
+		/**
+		 * Gets the number of jobs that must run or be 
+		 * handled in some way. 
+		 * Only STATE_TERM_UNLOADED is not counted. 
+		 */
+		unsigned int numRemainingJobs() const;
+
+		/**
+		 * Acquire Mutex Lock 
+		 * Locking is not enforced. Caller is responsible for the
+		 * use of proper protocols for protecting critical sections.
+		 */
+		void acquire();
+
+		/**
+		 * Release Mutex Lock
+		 * Locking is not enforced. Caller is responsible for the
+		 * use of proper protocols for protecting critical sections.
+		 */
+		void release();
+
+		/**
+		 * Debugging Methods
+		 */
+		void printJobs() const;
+		void printStates() const;
+		void printUnready() const;
+		void printReady() const;
+		void printDone() const;
+		void printDoneValues() const;
+
+	private:
+		/**
+		 * ProcessList Mutex. 
+		 */
+		pthread_mutex_t mux;
+
+	
 };
 
 #endif

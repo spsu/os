@@ -4,6 +4,21 @@
 
 using namespace std;
 
+ProcessList::ProcessList()
+{
+	pthread_mutex_init(&mux, NULL);
+}
+
+void ProcessList::acquire()
+{
+	pthread_mutex_lock(&mux);
+}
+
+void ProcessList::release()
+{
+	pthread_mutex_unlock(&mux);
+}
+
 unsigned int ProcessList::numRemainingJobs() const
 {
 	unsigned int cnt = 0;

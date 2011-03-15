@@ -176,7 +176,9 @@ void Cpu::execute()
 
 		// Halt, logical end of program
 		case OPCODE_HLT:
+			process->acquire();
 			process->state = STATE_TERM_ON_CPU;
+			process->release();
 			cout << "[CPU] Process " << process->id << " finished.\n";
 			return;
 
