@@ -53,11 +53,6 @@ void* cpu_thread(void*)
 		pthread_cond_signal(&interrupt);
 		pthread_mutex_unlock(&mux);
 		
-		/*Pcb* pcb = cpu->getPcb();
-		if(pcb) {
-			cout << pcb->toString() << endl;
-		}*/
-
 		// See if we can stop the CPU.
 		for(unsigned int i = 0; i < pList->all.size(); i++) {
 			if(pList->all[i]->state != STATE_TERM_UNLOADED) {
@@ -78,28 +73,34 @@ void* cpu_thread(void*)
  */
 void* driver_thread(void*) 
 {
+	Loader loader;
 	ProcessList* pList = 0;
 	LongTermScheduler* lts = 0;
 	ShortTermScheduler* sts = 0;
 	Dispatcher* dsp = 0;
-
+	pthread_t cpuThread;
 	bool done = false;
 	unsigned int ltsCnt = 0;
-	pthread_t cpuThread;
 
-	pList = cpu->getProcessList();
+	disk = new Memory(2048);
+	ram = new Memory(1024);
+
+	loader = Loader("data/datafile2.txt");
+	pList = loader.loadDisk(disk);
+
+	cpu = new Cpu(ram, pList);
 
 	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList?
 	sts = new ShortTermScheduler(cpu);
 	dsp = new Dispatcher(cpu, ram);
 
-	// Run the LTS once at the start
+	// Run the schedulers once at the start
 	lts->schedule();
 	sts->rebuildQueue();
 	dsp->dispatch();
-
 	ltsCnt = 1;
 
+	// Spawn CPU thread. 
 	pthread_create(&cpuThread, 0, &cpu_thread, 0);
 
 	do
@@ -133,6 +134,17 @@ void* driver_thread(void*)
 	while(!done);
 
 	pthread_join(cpuThread, 0);
+
+	// Final Report
+	cout << "\nFinal PCB Values:\n";
+	cout << "=================\n";
+	pList->printJobs();
+	cout << endl;
+
+	cout << "Writing memories to disk...\n";
+	ram->writeDisk("ram.txt");
+	disk->writeDisk("disk.txt");
+
 	return 0;
 }
 
@@ -141,33 +153,11 @@ void* driver_thread(void*)
  */
 int main(int argc, char *argv[])
 {
-	Loader loader;
-	ProcessList* pList = 0;
 	pthread_t driverThread;
 
-	disk = new Memory(2048);
-	ram = new Memory(1024);
-
-	loader = Loader("data/datafile2.txt");
-	pList = loader.loadDisk(disk);
-
-	cpu = new Cpu(ram, pList);
-
-	// Create and Join threads. 
+	// Create and join driver thread
 	pthread_create(&driverThread, 0, &driver_thread, 0);
 	pthread_join(driverThread, 0);
-
-	// Final Report
-	cout << "\nFinal PCB Values:\n";
-	cout << "=================\n";
-	pList->printJobs();
-	cout << endl;
-
-	cout << "Writing memories to disk...\n\n";
-	ram->writeDisk("ram.txt");
-	disk->writeDisk("disk.txt");
-
-	cout << "\nDone.\n";
 
 	return 0;	
 }
