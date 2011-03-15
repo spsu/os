@@ -45,6 +45,7 @@ uniprocessor: source/uniprocessor.cpp required
 	@echo "[compile] uniprocessor"
 	@$(CD) ./build && $(C) $(INC) -c ../source/uniprocessor.cpp
 	@echo "[link] linking to ALL built files"
+	@$(RM) ./build/multiprocessor.o
 	@$(LN) $(LIB) build/*.o -o uniprocessor
 	@chmod +x uniprocessor 
 	@echo "\nBuild Success!\n"
@@ -54,6 +55,7 @@ multiprocessor: source/multiprocessor.cpp required
 	@echo "[compile] multiprocessor"
 	@$(CD) ./build && $(C) $(INC) -c ../source/multiprocessor.cpp
 	@echo "[link] linking to ALL built files"
+	@$(RM) ./build/uniprocessor.o
 	@$(LN) $(LIB) build/*.o -o multiprocessor
 	@chmod +x multiprocessor 
 	@echo "\nBuild Success!\n"

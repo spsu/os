@@ -1,71 +1,120 @@
 /**
- * MULTIPROCESSOR
+ * Multiprocessor 
  */
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "processlist.hpp"
 #include "loader.hpp"
 #include "memory.hpp"
 #include "number.hpp"
 #include "instruction.hpp"
 #include "dispatcher.hpp"
+#include "stscheduler.hpp"
+#include "ltscheduler.hpp"
 #include "pcb.hpp"
 #include "cpu.hpp"
 
 using namespace std;
 
 /**
- * Print All PCBs
- * 	Debugging facility
+ * Globals.
  */
-/*void print_pcbs(PcbList& pcbs) {
-	for(unsigned int i = 0; i < pcbs.size(); i++)
-		cout << pcbs.at(i)->toString() << endl;
-}*/
+vector<Cpu*> cpus;
+Memory* disk = 0;
+Memory* ram = 0;
 
-void run_jobs(Cpu* cpu, Memory* mem, ProcessList* pList)
+/**
+ * Run Jobs
+ */
+/*void run_jobs() 
 {
+	ProcessList* pList = 0;
+	LongTermScheduler* lts = 0;
+	ShortTermScheduler* sts = 0;
 	Dispatcher* dsp = 0;
-	Pcb* pcb = 0;
+	Cpu* cpu = 0;
 
-	dsp = new Dispatcher(cpu);
+	bool done = false;
+	unsigned int ltsCnt = 0;
 
-	for(unsigned int i = 0; i < pList->all.size(); i++) {
-		pcb = pList->all.at(i);
-		dsp->dispatchPcb(pcb, mem);
+	pList = cpu->getProcessList();
 
+	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList?
+	sts = new ShortTermScheduler(cpu);
+	dsp = new Dispatcher(cpu, ram);
+
+	// Run the LTS once at the start
+	lts->schedule();
+	ltsCnt = 1;
+
+	do
+	{
+		done = true;
+
+		// LTS only runs every so often.
+		if(ltsCnt % 4 == 0) {
+			lts->schedule();
+		}
+		ltsCnt++;
+
+		// STS, Dispatcher
+		sts->rebuildQueue();
+		dsp->dispatch();
+
+		// CPU (non-interruptible)
 		while(!cpu->isComplete()) {
 			cpu->execute();
 		}
-		cout << "Process " << i << ": ";
-		cout << cpu->getReg(0) << "\t";
-		cout << cpu->readCount << "\t" << cpu->writeCount; 
-		cout << endl;
-	}
-}
+
+		// See if we can stop. 
+		for(unsigned int i = 0; i < pList->all.size(); i++) {
+			if(pList->all[i]->state != STATE_TERM_UNLOADED) {
+				done = false;
+				break;
+			}
+		}
+	} while(!done);
+}*/
 
 /**
  * Main func
  */
 int main(int argc, char *argv[])
 {
-	Loader* loader = 0;
-	Memory* mem = 0;
+	Loader loader;
 	ProcessList* pList = 0;
-	Cpu* cpu = 0;
-	Dispatcher* disp = 0;
 
-	loader = new Loader("data/datafile2.txt");
-	mem = new Memory(2048);
+	disk = new Memory(2048);
+	ram = new Memory(1024);
 
-	cpu = new Cpu(mem);
-	disp = new Dispatcher(cpu);
+	loader = Loader("data/datafile2.txt");
+	pList = loader.loadDisk(disk);
 
-	pList = loader->loadDisk(mem); // TODO: Poor form	
-	
-	// XXX: DEBUG
-	run_jobs(cpu, mem, pList);
+	cpus.push_back(new Cpu(ram));
+	cpus.push_back(new Cpu(ram));
+	cpus.push_back(new Cpu(ram));
+	cpus.push_back(new Cpu(ram));
+
+	for(unsigned int i = 0; i < cpus.size(); i++) {
+		cout << cpus[i]->toString();	
+	}
+
+	return 0;
+
+	// Run Jobs
+	//run_jobs();
+
+	// Final Report
+	cout << "\nFinal PCB Values:\n";
+	cout << "=================\n";
+	pList->printJobs();
+	cout << endl;
+
+	cout << "Writing memories to disk...\n\n";
+	ram->writeDisk("ram.txt");
+	disk->writeDisk("disk.txt");
 
 	return 0;	
 }

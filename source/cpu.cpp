@@ -1,9 +1,12 @@
 #include <iostream>
+#include <sstream>
 #include "cpu.hpp"
 #include "pcb.hpp"
 #include "memory.hpp"
 #include "instruction.hpp"
 #include "processlist.hpp"
+
+using namespace std;
 
 int Cpu::counter = 0;
 
@@ -174,6 +177,7 @@ void Cpu::execute()
 		// Halt, logical end of program
 		case OPCODE_HLT:
 			process->state = STATE_TERM_ON_CPU;
+			cout << "[CPU] Process " << process->id << " finished.\n";
 			return;
 
 		// No-op, do nothing
@@ -265,6 +269,24 @@ word Cpu::getReg(int reg) const
 {
 	// XXX: No bounds checking!
 	return regs.get(reg);
+}
+
+string Cpu::toString() const
+{
+	stringstream s;
+
+	s << "CPU <";
+	s << "id: " << id << ", ";
+	if(isComplete()) {
+		s << "not running";
+	} 
+	else {
+		s << "running process #";
+		s << process->id;
+	}
+	s << ">";
+
+	return s.str();
 }
 
 unsigned int Cpu::effectiveAddress(unsigned int logical, 

@@ -3,6 +3,7 @@
 
 #include "store.hpp"
 #include "types.hpp"
+#include <string>
 
 class Pcb;
 class ProcessList;
@@ -50,9 +51,14 @@ class Cpu
 
 		/**
 		 * Gets the PCB assigned to the CPU.
-		 * NOTE: State will not be as it is on the CPU!
+		 * NOTE: State will not be in sync with the CPU!
 		 */
 		Pcb* getPcb() { return process; };
+
+		/**
+		 * String representation of CPU.
+		 */
+		std::string toString() const;
 
 		/**
 		 * Debug methods

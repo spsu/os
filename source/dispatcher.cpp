@@ -36,7 +36,7 @@ void Dispatcher::dispatch()
 
 void Dispatcher::loadCpu(Pcb* pcb)
 {
-	cout << "Dispatcher Loading: " << pcb->id << endl;
+	cout << "[Dispatcher] Loading: " << pcb->id << endl;
 
 	cpu->process = pcb;
 	cpu->regs = pcb->regs;
@@ -73,7 +73,7 @@ void Dispatcher::unloadCpu()
 	pcb->readCount = cpu->readCount;
 	pcb->writeCount = cpu->writeCount;
 
-	cout << "Dispatcher Unloaded: " << pcb->id << endl;
+	cout << "[Dispatcher] Unloaded: " << pcb->id << endl;
 
 	// Return interrupted processes to the Ready Queue
 	// TODO: Should the CPU even set PCB attrs?
