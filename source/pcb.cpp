@@ -7,7 +7,6 @@
 using namespace std;
 
 // Static init
-pthread_mutex_t Pcb::mux = PTHREAD_MUTEX_INITIALIZER;
 unsigned int Pcb::counter = 0;
 
 Pcb::Pcb() :
@@ -27,6 +26,8 @@ Pcb::Pcb() :
 {
 	id = counter;
 	counter++;
+
+	pthread_mutex_init(&mux, NULL);
 }
 
 string Pcb::toString() const

@@ -65,19 +65,17 @@ class Pcb
 
 		/**
 		 * Acquire Mutex Lock 
-		 * ALL PCBs ARE LOCKED 
 		 * Locking is not enforced. Caller is responsible for the
 		 * use of proper protocols for protecting critical sections.
 		 */
-		static void acquire();
+		void acquire();
 
 		/**
 		 * Release Mutex Lock
-		 * ALL PCBs ARE RELEASED
 		 * Locking is not enforced. Caller is responsible for the
 		 * use of proper protocols for protecting critical sections.
 		 */
-		static void release();
+		void release();
 
 		/**
 		 * Debugging Methods
@@ -136,10 +134,9 @@ class Pcb
 
 	private:
 		/**
-		 * Global PCB locking. 
-		 * When any PCB is being accessed, ALL PCBS are locked.
+		 * PCB mutex. 
 		 */
-		static pthread_mutex_t mux;
+		pthread_mutex_t mux;
 
 		/**
 		 * PCB Counter

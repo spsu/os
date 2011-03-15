@@ -62,8 +62,6 @@ void Dispatcher::unloadCpu()
 	ProcessList* pList = 0;
 	Pcb* pcb = 0;
 
-	pList = cpu->getProcessList();
-
 	if(!cpu->process) {
 		// Nothing to unload.
 		// Perhaps an interrupt occurred and was already handled. Exit.
@@ -84,6 +82,7 @@ void Dispatcher::unloadCpu()
 	// TODO: Should the CPU even set PCB attrs?
 	if(!pcb->isFinished()) {
 		pcb->state = STATE_READY;
+		pList = cpu->getProcessList();
 		pList->ready.push(pcb);
 	}
 	else {

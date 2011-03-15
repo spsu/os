@@ -5,8 +5,9 @@ class Cpu;
 
 /**
  * CPU Scheduling Algorithms.
+ * TODO
  */
-enum CpuScheduleAlgo
+/*enum CpuScheduleAlgo
 {
 	// Nonpreemptive scheduling
 	SCHEDULE_FCFS,		// First Come First Serve
@@ -16,7 +17,7 @@ enum CpuScheduleAlgo
 	// Preemptive scheduling (TODO)
 	SCHEDULE_SJF_P,		// Shortest Job First (Preemptive)
 	SCHEDULE_PRIORITY_P	// Priority Scheduling (Preemptive)
-};
+};*/
 
 /**
  * Short Term Scheduler.
@@ -26,18 +27,12 @@ class ShortTermScheduler
 	public:
 		/**
 		 * CTOR. (First Come First Serve)
+		 * TODO: Other sched. algos.
 		 */
 		ShortTermScheduler(Cpu* c) : cpu(c) {};
-			//algorithm(SCHEDULE_FCFS) {};
-
-		// TODO: Other algos.
-		/*ShortTermScheduler(Cpu* c, CpuScheduleAlgo algo):
-			cpu(c), 
-			algorithm(algo) {};*/
 
 		/**
 		 * Rebuild the Ready Queue.
-		 * TODO TODO TODO: Verify works
 		 * TODO TODO TODO: Acquire locks properly (Esp. PCB/pList)
 		 */
 		void rebuildQueue();
@@ -48,9 +43,6 @@ class ShortTermScheduler
 		 */
 		Cpu* cpu;
 
-		/**
-		 * CPU Scheduling Algorithm.
-		 */
 		// TODO: CpuScheduleAlgo algorithm;
 };
 
