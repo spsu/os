@@ -17,6 +17,8 @@ class LongTermScheduler
 	public:
 		/**
 		 * CTOR
+		 * Loads Disk to RAM (and unloads RAM to Disk).
+		 * Needs accesses to the *global* ProcessList.
 		 * TODO: Specify algorithm to use
 		 */
 		LongTermScheduler(Memory* d, Memory* r, ProcessList* p) :

@@ -61,7 +61,23 @@ class Pcb
 		 * The total size required on Disk/RAM for the 
 		 * process.
 		 */
-		unsigned int size() { return jobLength + dataLength; };
+		unsigned int size() const { return jobLength + dataLength; };
+
+		/**
+		 * Acquire Mutex Lock 
+		 * ALL PCBs ARE LOCKED 
+		 * Locking is not enforced. Caller is responsible for the
+		 * use of proper protocols for protecting critical sections.
+		 */
+		static void acquire();
+
+		/**
+		 * Release Mutex Lock
+		 * ALL PCBs ARE RELEASED
+		 * Locking is not enforced. Caller is responsible for the
+		 * use of proper protocols for protecting critical sections.
+		 */
+		static void release();
 
 		/**
 		 * Debugging Methods
@@ -121,7 +137,7 @@ class Pcb
 	private:
 		/**
 		 * Global PCB locking. 
-		 * When any PCB is being accessed, all are locked.
+		 * When any PCB is being accessed, ALL PCBS are locked.
 		 */
 		static pthread_mutex_t mux;
 

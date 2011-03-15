@@ -36,15 +36,11 @@ string Pcb::toString() const
 	s << "PCB <";
 	s << "id: " << id << ", ";
 	s << "pri: " << priority << ", ";
-	s << "len: " << jobLength << ", " << dataLength;
-	//s << " [" << dataInLength << "/" << dataOutLength << "/" << dataTempLength << "]";
-	s << ", ";
-	s << "ram: " << ramPos.jobStart << ", " << ramPos.dataStart;
-	s << ", ";
-	s << "disk: " << diskPos.jobStart << ", " << diskPos.dataStart;
-	s << ", ";
-	s << "state: " << stateStr();
-	s << ", ";
+	s << "len: " << size() << ", "; 
+	s << "ram: " << ramPos.jobStart << ", ";
+	s << "disk: " << diskPos.jobStart << ", ";
+	s << "cpu: " << cpuId << ", ";
+	s << "state: " << stateStr() << ", ";
 	s << "acc: " << accumulatorValue();
 	s << ">";
 
@@ -56,6 +52,16 @@ bool Pcb::isFinished() const
 	return (state == STATE_TERM_ON_CPU ||
 			state == STATE_TERM_ON_RAM ||
 			state == STATE_TERM_UNLOADED);
+}
+
+void Pcb::acquire()
+{
+	pthread_mutex_lock(&mux);
+}
+
+void Pcb::release()
+{
+	pthread_mutex_unlock(&mux);
 }
 
 void Pcb::printProg(const Memory& mem) const

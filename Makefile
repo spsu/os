@@ -76,6 +76,7 @@ required: \
 	build/ltscheduler.o \
 	build/stscheduler.o \
 	build/dispatcher.o \
+	build/loadbalancer.o \
 	build/pcb.o \
 	build/cpu.o
 		@$(CD) .
@@ -119,6 +120,10 @@ build/stscheduler.o: source/stscheduler.hpp source/stscheduler.cpp
 build/dispatcher.o: source/dispatcher.hpp source/dispatcher.cpp
 	@echo "[compile] dispatcher"
 	@$(CD) ./build && $(C) $(INC) -c ../source/dispatcher.cpp
+
+build/loadbalancer.o: source/loadbalancer.hpp source/loadbalancer.cpp
+	@echo "[compile] loadbalancer"
+	@$(CD) ./build && $(C) $(INC) -c ../source/loadbalancer.cpp
 
 build/pcb.o: source/pcb.hpp source/pcb.cpp
 	@echo "[compile] pcb"

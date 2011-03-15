@@ -44,6 +44,11 @@ void Dispatcher::loadCpu(Pcb* pcb)
 	cpu->readCount = pcb->readCount;
 	cpu->writeCount = pcb->writeCount;
 
+	// XXX: This should only be necessary in the uniprocessor case
+	if(pcb->cpuId < 0) {
+		pcb->cpuId = cpu->id;
+	}
+
 	// Move process code into CPU cache.
 	ram->acquire();
 	for(unsigned int i = 0; i < pcb->jobLength; i++) {

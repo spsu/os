@@ -1,10 +1,11 @@
 /**
- * Multiprocessor 
+ * MULTIPROCESSOR 
  */
 
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <pthread.h>
 #include "processlist.hpp"
 #include "loader.hpp"
 #include "memory.hpp"
@@ -13,6 +14,7 @@
 #include "dispatcher.hpp"
 #include "stscheduler.hpp"
 #include "ltscheduler.hpp"
+#include "loadbalancer.hpp"
 #include "pcb.hpp"
 #include "cpu.hpp"
 
@@ -21,62 +23,84 @@ using namespace std;
 /**
  * Globals.
  */
-vector<Cpu*> cpus;
 Memory* disk = 0;
 Memory* ram = 0;
+ProcessList* globalProcList = 0;
+LongTermScheduler* lts = 0;
+pthread_mutex_t mux = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t interrupt = PTHREAD_COND_INITIALIZER;
+vector<pthread_t> cpuThreads;
+vector<Cpu*> cpus;
+unsigned int NUM_THREADS = 4;
 
 /**
- * Run Jobs
+ * CPU Thread 
+ * Runs the CPU.
  */
-/*void run_jobs() 
+void* cpu_thread(void*)
 {
-	ProcessList* pList = 0;
-	LongTermScheduler* lts = 0;
+	Cpu* cpu = 0;
 	ShortTermScheduler* sts = 0;
 	Dispatcher* dsp = 0;
-	Cpu* cpu = 0;
-
+	LoadBalancer* bal = 0;
+	ProcessList* pList = 0;
 	bool done = false;
-	unsigned int ltsCnt = 0;
+	int ltsCnt = 0; // TODO: Global?
 
-	pList = cpu->getProcessList();
-
-	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList?
+	// Thread-specific instances
+	cpu = new Cpu(ram);
+	bal = new LoadBalancer(cpu, globalProcList);
 	sts = new ShortTermScheduler(cpu);
 	dsp = new Dispatcher(cpu, ram);
 
-	// Run the LTS once at the start
-	lts->schedule();
-	ltsCnt = 1;
+	pList = cpu->getProcessList();
 
-	do
+	// Run the schedulers once at the start
+	// TODO: LoadBalancer
+	bal->importNewProcess();
+	sts->rebuildQueue();
+	dsp->dispatch();
+	ltsCnt++;
+
+	// TODO TODO: Locking, signalling...
+	do 
 	{
 		done = true;
 
+		//cout << "CPU " << cpu->getId() << " ITER\n"; // XXX DEBUG
+
+		// CPU (non-interruptible)
+		// Note: It may not have a process at this point. 
+		while(!cpu->isComplete()) {
+			cpu->execute();
+		}
+
 		// LTS only runs every so often.
+		// TODO: Make count global?
 		if(ltsCnt % 4 == 0) {
 			lts->schedule();
 		}
 		ltsCnt++;
 
-		// STS, Dispatcher
+		// Balancer, STS, Dispatch
+		bal->importNewProcess();
 		sts->rebuildQueue();
 		dsp->dispatch();
 
-		// CPU (non-interruptible)
-		while(!cpu->isComplete()) {
-			cpu->execute();
-		}
-
-		// See if we can stop. 
-		for(unsigned int i = 0; i < pList->all.size(); i++) {
-			if(pList->all[i]->state != STATE_TERM_UNLOADED) {
+		// See if we can stop the CPU.
+		for(unsigned int i = 0; i < globalProcList->all.size(); i++) {
+			if(globalProcList->all[i]->state != STATE_TERM_UNLOADED) {
 				done = false;
 				break;
 			}
 		}
-	} while(!done);
-}*/
+	} 
+	while(!done);
+
+	cout << "CPU " << cpu->getId() << " DONE\n";
+
+	return 0;
+}
 
 /**
  * Main func
@@ -84,35 +108,40 @@ Memory* ram = 0;
 int main(int argc, char *argv[])
 {
 	Loader loader;
-	ProcessList* pList = 0;
+	Cpu* cpu = 0;
+	ShortTermScheduler* sts = 0;
+	pthread_t cpuThread;
 
 	disk = new Memory(2048);
 	ram = new Memory(1024);
 
 	loader = Loader("data/datafile2.txt");
-	pList = loader.loadDisk(disk);
+	globalProcList = loader.loadDisk(disk);
 
-	cpus.push_back(new Cpu(ram));
-	cpus.push_back(new Cpu(ram));
-	cpus.push_back(new Cpu(ram));
-	cpus.push_back(new Cpu(ram));
+	lts = new LongTermScheduler(disk, ram, globalProcList);
+	sts = new ShortTermScheduler(cpu);
 
-	for(unsigned int i = 0; i < cpus.size(); i++) {
-		cout << cpus[i]->toString();	
+	// Spawn CPU threads. 
+	// CPU Threads are Symmetric Processing units (self-scheduling, etc.)
+	for(unsigned int i = 0; i < NUM_THREADS; i++)
+	{
+		cout << "Spawning CPU Thread...\n";
+		pthread_create(&cpuThread, 0, &cpu_thread, 0);
+		cpuThreads.push_back(cpuThread);
 	}
 
-	return 0;
-
-	// Run Jobs
-	//run_jobs();
+	// Join all CPU threads
+	for(unsigned int i = 0; i < cpuThreads.size(); i++) {
+		pthread_join(cpuThreads[i], 0);
+	}
 
 	// Final Report
 	cout << "\nFinal PCB Values:\n";
 	cout << "=================\n";
-	pList->printJobs();
+	globalProcList->printJobs();
 	cout << endl;
 
-	cout << "Writing memories to disk...\n\n";
+	cout << "Writing memories to disk...\n";
 	ram->writeDisk("ram.txt");
 	disk->writeDisk("disk.txt");
 

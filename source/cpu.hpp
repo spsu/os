@@ -45,6 +45,11 @@ class Cpu
 		bool isComplete() const;
 
 		/**
+		 * Gets the CPU ID.
+		 */
+		int getId() { return id; };
+
+		/**
 		 * Gets the ProcessList for the CPU.
 		 */
 		ProcessList* getProcessList() { return processList; };
