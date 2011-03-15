@@ -60,16 +60,6 @@ class Cpu
 		void printRegs() const;
 		word getReg(int reg) const;
 
-		/**
-		 * Statistics.
-		 * TODO: Make private
-		 * TODO: Reconsider CPU's relationship with PCB given the dispatcher.
-		 * 		(Should it even point to a PCB?)
-		 */
-		int readCount;
-		int writeCount;
-
-
 	private:
 		/**
 		 * Effective Addressing (A PCB must be in use)
@@ -130,7 +120,7 @@ class Cpu
 
 		/**
 		 * RAM
-		 *   TODO: Need DMA instead
+		 * TODO: Need DMA instead
 		 */
 		Memory* ram;
 
@@ -139,6 +129,12 @@ class Cpu
 		 */
 		int id;
 		static int counter;
+
+		/**
+		 * Statistics.
+		 */
+		int readCount;
+		int writeCount;
 };
 
 #endif

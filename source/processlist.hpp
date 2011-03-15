@@ -34,6 +34,13 @@ struct ProcessList
 	queue<Pcb*> wait;
 
 	/**
+	 * Gets the number of jobs that must run or be 
+	 * handled in some way. 
+	 * Only STATE_TERM_UNLOADED is not counted. 
+	 */
+	unsigned int numRemainingJobs() const;
+
+	/**
 	 * Debugging Methods
 	 */
 	void printJobs() const;

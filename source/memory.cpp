@@ -1,7 +1,7 @@
-//#include <iostream>
 #include "memory.hpp"
-//#include "types.hpp"
+#include "number.hpp"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -54,7 +54,7 @@ int Memory::findLargestContiguousHole(unsigned int reqSize) const
 		}
 	}
 
-	if(largestSize < reqSize) {
+	if(largestSize < (int)reqSize) {
 		return -1;
 	}
 	return largestPos;
@@ -71,7 +71,7 @@ int Memory::findSmallestContiguousHole(unsigned int reqSize) const
 	{
 		if(allocated[i]) {
 			// Retain the smallest hole that fits our size requirements.
-			if(curSize >= reqSize && (curSize < goodSize || goodSize == -1)) {
+			if(curSize >= (int)reqSize && (curSize < goodSize || goodSize == -1)) {
 				goodSize = curSize;
 				goodPos = curPos;
 			}
@@ -93,21 +93,22 @@ int Memory::findSmallestContiguousHole(unsigned int reqSize) const
 		goodPos = curPos;
 	}
 
-	if(goodSize < reqSize) {
+	if(goodSize < (int)reqSize) {
 		return -1;
 	}
 	return goodPos;
 }
 
-/*word Memory::get(unsigned int offset) const
+void Memory::writeDisk(string fname)
 {
-	// TODO: Bounds checking
-	// TODO: Mutex
-}*/
+	ofstream ofile;
+	ofile.open(fname, ifstream::out);
 
-/*void Memory::set(unsigned int offset, word data)
-{
-	// TODO: Bounds checking
-	// TODO: Mutex
-}*/
+	for(unsigned int i = 0; i < words.size(); i++)
+	{
+		ofile << i << ":  \t";
+		ofile << dec_to_bin(words[i]) << endl;
+	}
+	ofile.close();
+}
 

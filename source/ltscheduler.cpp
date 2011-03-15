@@ -9,8 +9,8 @@ using namespace std;
 
 void LongTermScheduler::schedule()
 {
-	moveNewToRam();
 	moveFinishedToDisk();
+	moveNewToRam();
 }
 
 void LongTermScheduler::moveNewToRam()
@@ -64,11 +64,6 @@ void LongTermScheduler::moveNewToRam()
 		cout << "[LTS] Loading process " << pcb->id << " (size: ";
 		cout << pcb->size() << ") into RAM at position ";
 		cout << pos << ".\n";
-
-		// XXX XXX DEBUG
-		//cout << "PCB ID: " << pcb->id << endl;
-		//pcb->printProg(*ram);
-		//pcb->printData(*ram);
 	}
 
 	disk->release();

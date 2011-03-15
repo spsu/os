@@ -30,108 +30,50 @@ Memory* ram = 0;
 void run_jobs() 
 {
 	ProcessList* pList = 0;
-	Pcb* pcb = 0;
 	LongTermScheduler* lts = 0;
 	ShortTermScheduler* sts = 0;
 	Dispatcher* dsp = 0;
+
 	bool done = false;
-	unsigned int count = 0;
+	unsigned int ltsCnt = 0;
 
 	pList = cpu->getProcessList();
 
-	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList
+	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList?
 	sts = new ShortTermScheduler(cpu);
 	dsp = new Dispatcher(cpu, ram);
 
-	// XXX XXX DEBUG
-	//cout << "=== ALL JOBS ===\n";
-	//print_jobs(pList);
-	//print_job_states(pList);
-	//cout << endl;
+	// Run the LTS once at the start
+	lts->schedule();
+	ltsCnt = 1;
 
-	while(!done)
+	do
 	{
-		bool canStop = true;
+		done = true;
 
-		cout << "=== CPU CYCLE " << count;
-		cout << " BEGIN ===\n";
-		count++;
+		// LTS only runs every so often.
+		if(ltsCnt % 4 == 0) {
+			lts->schedule();
+		}
+		ltsCnt++;
 
-		//cout << "Disk, Ram: ";
-		//cout << disk->numAllocated() << ", ";
-		//cout << ram->numAllocated() << endl;
-
-		lts->schedule();
-
+		// STS, Dispatcher
 		sts->rebuildQueue();
 		dsp->dispatch();
 
-		// XXX XXX DEBUG	
-		// XXX AFTER DSP, BEFORE GETPCB
-		if(pcb) {
-			//cout << "Finished/next: ";
-			//cout << pcb->toString() << endl;
-		}
-
-		// XXX DEBUG
-		pcb = cpu->getPcb();
-		//pcb->printProg(*ram);
-		//pcb->printData(*ram);
-
-		// XXX: What the??
-		//print_jobs(pList);
-		pList->printUnready();
-		pList->printReady();
-		pList->printDone();
-		pList->printDoneValues();
-
-		//cout << "Running: ";
-		//cout << pcb->toString() << endl;
-
-		// XXX XXX: Before the segfault...
-		if(count == 23) {
-			//pcb->printProg(*ram);
-			//pcb->printData(*ram);
-			cout << "WRITING DISK AND RAM\n";
-			ram->writeDisk("ram.txt");
-			disk->writeDisk("disk.txt");
-			pList->printJobs();
-			cout << "PROCESS:\n";
-			cout << pcb->toString() << endl;
-		}
-
+		// CPU (non-interruptible)
 		while(!cpu->isComplete()) {
 			cpu->execute();
 		}
 
-		// XXX DEBUG
-		//cout << "Finished: ";
-		//cout << pcb->toString() << endl;
-		//cpu->printRegs();
-
-		// XXX DEBUG 
-		cout << endl;
-
+		// See if we can stop. 
 		for(unsigned int i = 0; i < pList->all.size(); i++) {
 			if(pList->all[i]->state != STATE_TERM_UNLOADED) {
-				canStop = false;
+				done = false;
 				break;
 			}
 		}
-
-		if(canStop) {
-			done = true;
-		}
-	}
-
-	/*for(unsigned int i = 0; i < pList->all.size(); i++) 
-	{
-		pcb = pList->all.at(i);
-		cout << "Process " << i << ": ";
-		cout << cpu->getReg(0) << "\t";
-		cout << cpu->readCount << "\t" << cpu->writeCount; 
-		cout << endl;
-	}*/
+	} while(!done);
 }
 
 /**
@@ -142,15 +84,26 @@ int main(int argc, char *argv[])
 	Loader loader;
 	ProcessList* pList = 0;
 
-	loader = Loader("data/datafile2.txt");
 	disk = new Memory(2048);
 	ram = new Memory(1024);
 
+	loader = Loader("data/datafile2.txt");
 	pList = loader.loadDisk(disk);
+
 	cpu = new Cpu(ram, pList);
-	
-	// XXX: DEBUG
+
+	// Run Jobs
 	run_jobs();
+
+	// Final Report
+	cout << "\nFinal PCB Values:\n";
+	cout << "=================\n";
+	pList->printJobs();
+	cout << endl;
+
+	cout << "Writing memories to disk...\n\n";
+	ram->writeDisk("ram.txt");
+	disk->writeDisk("disk.txt");
 
 	return 0;	
 }

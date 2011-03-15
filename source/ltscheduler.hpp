@@ -28,7 +28,6 @@ class LongTermScheduler
 		 * Schedule RAM
 		 * Moves processes from Disk to Ram.
 		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
-		 * TODO TODO TODO: VERIFY WORKS
 		 */
 		void schedule();	
 
@@ -36,7 +35,6 @@ class LongTermScheduler
 		/**
 		 * Move new jobs into RAM
 		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
-		 * TODO TODO TODO: VERIFY WORKS
 		 */
 		void moveNewToRam();
 
@@ -44,7 +42,6 @@ class LongTermScheduler
 		 * Move finished jobs back to Disk.
 		 * Saves the memory state. 
 		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
-		 * TODO TODO TODO: VERIFY WORKS
 		 */
 		void moveFinishedToDisk();
 

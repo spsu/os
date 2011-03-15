@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include "store.hpp"
 #include "types.hpp"
 #include "number.hpp"
@@ -112,18 +111,5 @@ string Store::toString() const
 	}
 	out << endl;
 	return out.str();
-}
-
-void Store::writeDisk(string fname)
-{
-	ofstream ofile;
-	ofile.open(fname, ifstream::out);
-
-	for(unsigned int i = 0; i < words.size(); i++)
-	{
-		ofile << i << ":\t";
-		ofile << dec_to_bin(words[i]) << endl;
-	}
-	ofile.close();
 }
 

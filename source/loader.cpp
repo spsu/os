@@ -76,8 +76,7 @@ ProcessList* Loader::loadDisk(Memory* disk)
 		processList->all[i]->state = STATE_NEW_UNLOADED;
 	}
 
-	// XXX / TODO: Close the file!
-	
+	file.close();	
 	return processList;
 }
 

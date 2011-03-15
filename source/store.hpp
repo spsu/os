@@ -89,11 +89,10 @@ class Store
 		void reset();
 
 		/**
-		 * Print memory
-		 * XXX: For debug.
+		 * String-formatted memory
+		 * Good for debugging.
 		 */
 		string toString() const;
-		void writeDisk(string fname);
 
 	protected:
 		/**

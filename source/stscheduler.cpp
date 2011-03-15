@@ -17,12 +17,6 @@ void ShortTermScheduler::rebuildQueue()
 
 	pList = cpu->getProcessList();
 
-	// XXX XXX DEBUG
-	//cout << "--- STS DEBUG: ---\n";
-	//for(unsigned int i = 0; i < pList->all.size(); i++) {
-	//	cout << pList->all[i]->toString() << endl; 
-	//}
-
 	// Get all unscheduled processes. 
 	for(unsigned int i = 0; i < pList->all.size(); i++) {
 		pcb = pList->all[i];
@@ -36,6 +30,7 @@ void ShortTermScheduler::rebuildQueue()
 		return;
 	}
 
+	// XXX: This isn't really happening yet...
 	cout << "[STS] Rebuilding Ready Queue: ";
 	cout << unscheduled.size() << " new processes.\n";
 

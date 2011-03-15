@@ -69,9 +69,9 @@ class Instruction
 		 * Default CTOR.
 		 * (Useless)
 		 */
-		/*Instruction()
+		Instruction()
 			: instr(0),
-			binaryInstr("") {};*/
+			binaryInstr("") {};
 
 		/**
 		 * CTOR: Specify instruction

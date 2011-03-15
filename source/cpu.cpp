@@ -8,8 +8,6 @@
 int Cpu::counter = 0;
 
 Cpu::Cpu(Memory* r) :
-	readCount(0),
-	writeCount(0),
 	pc(0),
 	regs(16),
 	cache(28),
@@ -17,7 +15,9 @@ Cpu::Cpu(Memory* r) :
 	processList(0),
 	ownsProcessList(true),
 	ram(r),
-	id(-1)
+	id(-1),
+	readCount(0),
+	writeCount(0)
 {
 	processList = new ProcessList();
 	id = counter;
@@ -25,8 +25,6 @@ Cpu::Cpu(Memory* r) :
 }
 
 Cpu::Cpu(Memory* r, ProcessList* pList) :
-	readCount(0),
-	writeCount(0),
 	pc(0),
 	regs(16),
 	cache(28),
@@ -34,8 +32,9 @@ Cpu::Cpu(Memory* r, ProcessList* pList) :
 	processList(pList),
 	ownsProcessList(false),
 	ram(r),
-	id(-1)
-
+	id(-1),
+	readCount(0),
+	writeCount(0)
 {
 	id = counter;
 	counter++;
@@ -48,12 +47,17 @@ Cpu::~Cpu()
 	}
 }
 
-void Cpu::execute() // XXX: One execution cycle
+// XXX: One execution cycle
+void Cpu::execute() 
 {
-	//Instruction i;
-	//i = Instruction(cache[pc]);
-	
-	Instruction i(cache[pc]);
+	Instruction i;
+
+	if(!process) {
+		// No process assigned to execute. 
+		return;
+	}
+
+	i = Instruction(cache[pc]);
 
 	switch(i.opcode()) 
 	{
@@ -245,7 +249,7 @@ void Cpu::execute() // XXX: One execution cycle
 
 bool Cpu::isComplete() const
 {
-	return (process && process->state == STATE_TERM_ON_CPU);
+	return (!process || process->state == STATE_TERM_ON_CPU);
 }
 
 void Cpu::printRegs() const

@@ -3,6 +3,7 @@
 
 #include "store.hpp"
 #include <pthread.h>
+#include <string>
 
 /**
  * Memory class
@@ -39,6 +40,11 @@ class Memory : public Store
 		 */
 		int findLargestContiguousHole(unsigned int reqSize) const;
 		int findSmallestContiguousHole(unsigned int reqSize) const;
+
+		/**
+		 * Write memory to the computer's disk.
+		 */
+		void writeDisk(std::string fname);
 
 	private:
 		/**
