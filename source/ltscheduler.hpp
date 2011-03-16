@@ -4,21 +4,31 @@
 class Memory;
 class ProcessList;
 
-enum DiskScheduleAlgo
+// TODO: RAM scheduling algorithms are not yet implemented.
+// First Come First Serve is used as default. 
+enum RamScheduleAlgo
 {
+	SCHEDULE_RAM_FCFS,			// Schedule RAM with FCFS 
+	SCHEDULE_RAM_PRIORITY,		// Schedule RAM with Priority
 	SCHEDULE_RAM_CPU_BOUND,		// Maximize CPU bound processes in RAM
 	SCHEDULE_RAM_IO_BOUND,		// Maximize I/O bound processes in RAM
 	SCHEDULE_RAM_PROCESS_MIX,	// Maintain a process mix
 	SCHEDULE_RAM_MAINTAIN_FULL	// Keep RAM as full as possible
 };
 
+/**
+ * Long Term Scheduler.
+ * Schedules what jobs are to be loaded into RAM from the Disk.
+ * This runs in both Uniprocessor and Symmetric Multiprocessing
+ * cases. 
+ */
 class LongTermScheduler
 {
 	public:
 		/**
 		 * CTOR
-		 * Loads Disk to RAM (and unloads RAM to Disk).
-		 * Needs accesses to the *global* ProcessList.
+		 * Needs shared pointers to Disk, Ram, and
+		 * the *GLOBAL* ProcessList. 
 		 * TODO: Specify algorithm to use
 		 */
 		LongTermScheduler(Memory* d, Memory* r, ProcessList* p) :
@@ -28,27 +38,26 @@ class LongTermScheduler
 
 		/**
 		 * Schedule RAM
-		 * Moves processes from Disk to Ram.
-		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
+		 * Moves processes from Disk to RAM based on
+		 * the scheduling algorithm (FCFS).
 		 */
 		void schedule();	
 
 	private:
 		/**
-		 * Move new jobs into RAM
-		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
+		 * Move new jobs into RAM when there is 
+		 * contiguous space available. 
 		 */
 		void moveNewToRam();
 
 		/**
-		 * Move finished jobs back to Disk.
-		 * Saves the memory state. 
-		 * TODO TODO TODO: LOCK PROCESS LIST / PCBS
+		 * Move finished jobs back to Disk, preserving 
+		 * their data buffers/state.
 		 */
 		void moveFinishedToDisk();
 
 		/**
-		 * Disk and RAM shared ptrs.
+		 * Shared Pointers
 		 */
 		Memory* disk;
 		Memory* ram;

@@ -8,9 +8,10 @@
 using namespace std;
 
 /**
- * Store class
- * A type of memory. Registers, Caches, Memory, and Disk are all 
- * implemented with this, either directly or through subclasses. 
+ * Store -- stores a set number of 32 bit 'words'. 
+ * Registers, Caches, Memory, and Disk are all implemented through
+ * the Store class, either directly or through subclasses.
+ * TODO: Better Documentation.
  */
 class Store 
 {
@@ -64,25 +65,6 @@ class Store
 		word& operator[](unsigned int offset);
 
 		/**
-		 * Clear a single memory location.
-		 * It will no longer be marked as allocated.
-		 * TODO: Allocation should only be for non-Register memories, yes?
-		 */
-		void clear(unsigned int offset) { clear(offset, 1); };
-
-		/**
-		 * Clear a contiguous memory region.
-		 * It will no longer be marked as allocated.
-		 * TODO: Allocation should only be for non-Register memories, yes?
-		 */
-		void clear(unsigned int offset, unsigned int length);
-
-		/**
-		 * Determine the number of allocated memory locations.
-		 */
-		unsigned int numAllocated() const;
-
-		/**
 		 * Empty the entire memory store.
 		 * TODO: Disable functionality from working in Memory.
 		 */
@@ -101,8 +83,10 @@ class Store
 		vector<word> words;
 
 		/**
-		 * Marks each address as being allocated.
-		 * TODO: Allocation should only be for non-Register memories, yes?
+		 * Marks each address as being allocated or not.
+		 * Only utilized in Memory subclasses. 
+		 * TODO: Move to Memory class. Will require virtual
+		 * methods though.
 		 */
 		vector<bool> allocated;
 };

@@ -7,10 +7,6 @@
 #include "types.hpp"
 #include "store.hpp"
 
-/**
- * TODO: Documentation.
- */
-
 class Memory;
 class Cpu;
 
@@ -32,6 +28,8 @@ enum ProcessState
 
 /**
  * Process Control Block
+ * Contains all of the information of a job, including its
+ * Disk and RAM locations, priority, statistics, state, etc.
  */
 class Pcb 
 {

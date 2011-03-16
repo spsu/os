@@ -99,6 +99,29 @@ int Memory::findSmallestContiguousHole(unsigned int reqSize) const
 	return goodPos;
 }
 
+void Memory::deallocate(unsigned int offset, unsigned int length)
+{
+	unsigned int m = 0;
+
+	// TODO: Bounds checking
+	m = offset + length;
+	for(unsigned int i = offset; i < m; i++) {
+		words[i] = 0; // XXX: Not really necessary...
+		allocated[i] = false;
+	}
+}
+
+unsigned int Memory::numAllocated() const
+{
+	unsigned int n = 0;
+	for(unsigned int i = 0; i < allocated.size(); i++) {
+		if(allocated[i]) {
+			n++;
+		}
+	}
+	return n;
+}
+
 void Memory::writeDisk(string fname)
 {
 	ofstream ofile;

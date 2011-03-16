@@ -52,29 +52,6 @@ word& Store::operator[](unsigned int offset)
 	return words[offset];	
 }
 
-void Store::clear(unsigned int offset, unsigned int length)
-{
-	unsigned int m = 0;
-
-	// TODO: Bounds checking
-	m = offset + length;
-	for(unsigned int i = offset; i < m; i++) {
-		words[i] = 0; // XXX: Not really necessary...
-		allocated[i] = false;
-	}
-}
-
-unsigned int Store::numAllocated() const
-{
-	unsigned int n = 0;
-	for(unsigned int i = 0; i < allocated.size(); i++) {
-		if(allocated[i]) {
-			n++;
-		}
-	}
-	return n;
-}
-
 void Store::reset()
 {
 	// Reset memory.

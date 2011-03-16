@@ -5,15 +5,20 @@ class Cpu;
 class ProcessList;
 
 /**
- * Load Balancing
- * Only relevant in multiprocessing cases.
- * Built for symmetric multiprocessing.
+ * Load Balancer
+ * Assigns unclaimed processes from RAM to a CPU.
+ * Also moves processes from overloaded CPUs to underloaded
+ * ones (TODO). Only utilized in Symmetric Multiprocessing.
  */
 class LoadBalancer
 {
 	public:
 		/**
 		 * CTOR.
+		 * Supply pointers to the CPU it is balancing as well
+		 * as the *GLOBAL* ProcessList.
+		 * TODO: Will need access to a list of all CPUs if 
+		 * proper load balancing is to be done. 
 		 */
 		LoadBalancer(Cpu* c, ProcessList* global) :
 			cpu(c),
@@ -29,18 +34,18 @@ class LoadBalancer
 		 */
 		void importNewProcess();
 
-		// TODO:
+		// TODO: Actual load balancing!
 		// void push();
 		// void pull();
 
 		/**
-		 * Set to print debug messages.
+		 * Set to print debug messages about load balancing.
 		 */
 		void setDebug(bool d) { printDebug = d; };
 
 	private:
 		/**
-		 * The assigned CPU
+		 * The assigned CPU.
 		 */
 		Cpu* cpu;
 

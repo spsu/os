@@ -111,7 +111,7 @@ void LongTermScheduler::moveFinishedToDisk()
 		}
 
 		// Mark RAM deallocated.
-		ram->clear(pcb->ramPos.jobStart, pcb->size());
+		ram->deallocate(pcb->ramPos.jobStart, pcb->size());
 
 		// Note result in PCB
 		pcb->ramPos.jobStart = -1;

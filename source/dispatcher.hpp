@@ -1,27 +1,35 @@
 #ifndef BT_OS_DISPATCHER
 #define BT_OS_DISPATCHER
 
-#include "pcb.hpp" // TODO: Get rid of this.
-
 class Cpu;
 class Memory;
+class Pcb;
 
 /**
- * TODO/XXX: Keep in mind that I need an m-dispatcher!
- * Would this be better as a function? 
+ * Dispatcher
+ * Unloads the current process from the CPU (saving the state
+ * in the PCB) and dispatches the next available process from 
+ * the CPU's ProcessList ready queue.
+ * Works in both Uniprocessing and Symmetric Multiprocessing
+ * cases. 
  */
 class Dispatcher
 {
 	public:
 		/**
 		 * CTOR.
+		 * Supply pointers to the CPU needing the dispatcher
+		 * as well as the RAM memory. 
 		 */
 		Dispatcher(Cpu* c, Memory* r);
 
 		/**
-		 * Dispatch the next process in the Ready Queue. 
-		 * If the current process has not completed, it gets saved
-		 * for later resumption. 
+		 * Dispatch the next process in the CPU's ProcessList
+		 * Ready Queue. 
+		 * If the current process has not completed (ie. it got
+		 * interrupted), it gets saved for later resumption. 
+		 * (XXX: Interruption is not yet completely supported in 
+		 * other code.)
 		 */
 		void dispatch();
 
@@ -32,22 +40,21 @@ class Dispatcher
 
 	private:
 		/**
-		 * Loads a process to the CPU.
-		 * DOES NOT unload the CPU or save any state! 
-		 * Make sure to call unloadCpu() first.
-		 */
-		void loadCpu(Pcb* pcb);
-
-		/**
 		 * Offloads process from the CPU.
 		 * The process state is recorded in its PCB. 
-		 * TODO: Ready Queue
 		 */
 		void unloadCpu();
 
 		/**
-		 * Access to the hardware. 
-		 * These are shared pointers.
+		 * Loads a process to the CPU.
+		 * DOES NOT unload the CPU or save any state! (That 
+		 * is the job of unloadCpu(), so make sure to call 
+		 * it first). 
+		 */
+		void loadCpu(Pcb* pcb);
+
+		/**
+		 * Shared pointers.
 		 */
 		Cpu* cpu;
 		Memory* ram;
