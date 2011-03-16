@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 	loader = Loader("data/datafile2.txt");
 	globalProcList = loader.loadDisk(disk);
 
-	lts = new LongTermScheduler(disk, ram, globalProcList);
+	lts = new LongTermScheduler(disk, ram, globalProcList, SCHEDULE_RAM_FCFS);
 	sts = new ShortTermScheduler(cpu);
 
 	// Run LTS once at start
