@@ -71,6 +71,11 @@ class Cpu
 		void printRegs() const;
 		word getReg(int reg) const;
 
+		/**
+		 * Set to print debug messages.
+		 */
+		void setDebug(bool d) { printDebug = d; };
+
 	private:
 		/**
 		 * Effective Addressing (A PCB must be in use)
@@ -146,6 +151,11 @@ class Cpu
 		 */
 		int readCount;
 		int writeCount;
+
+		/**
+		 * Print debugging messages?
+		 */
+		bool printDebug;
 };
 
 #endif

@@ -20,7 +20,8 @@ Cpu::Cpu(Memory* r) :
 	ram(r),
 	id(-1),
 	readCount(0),
-	writeCount(0)
+	writeCount(0),
+	printDebug(false)
 {
 	processList = new ProcessList();
 	id = counter;
@@ -37,7 +38,8 @@ Cpu::Cpu(Memory* r, ProcessList* pList) :
 	ram(r),
 	id(-1),
 	readCount(0),
-	writeCount(0)
+	writeCount(0),
+	printDebug(false)
 {
 	id = counter;
 	counter++;
@@ -179,7 +181,9 @@ void Cpu::execute()
 			process->acquire();
 			process->state = STATE_TERM_ON_CPU;
 			process->release();
-			cout << "[CPU] Process " << process->id << " finished.\n";
+			if(printDebug) {
+				cout << "[CPU] Process " << process->id << " finished.\n";
+			}
 			return;
 
 		// No-op, do nothing

@@ -21,6 +21,12 @@
 using namespace std;
 
 /**
+ * OPTIONS.
+ */
+const unsigned int NUM_THREADS = 4;
+const bool DEBUGGING = true;
+
+/**
  * Globals.
  */
 Memory* disk = 0;
@@ -31,7 +37,6 @@ pthread_mutex_t mux = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t interrupt = PTHREAD_COND_INITIALIZER;
 vector<pthread_t> cpuThreads;
 vector<Cpu*> cpus;
-unsigned int NUM_THREADS = 4;
 
 /**
  * CPU Thread 
@@ -52,6 +57,13 @@ void* cpu_thread(void*)
 	bal = new LoadBalancer(cpu, globalProcList);
 	sts = new ShortTermScheduler(cpu);
 	dsp = new Dispatcher(cpu, ram);
+
+	if(DEBUGGING) {
+		cpu->setDebug(true);
+		bal->setDebug(true);
+		sts->setDebug(true);
+		dsp->setDebug(true);
+	}
 
 	pList = cpu->getProcessList();
 
@@ -104,7 +116,9 @@ void* cpu_thread(void*)
 	} 
 	while(!done);
 
-	cout << "CPU " << cpu->getId() << " DONE\n";
+	if(DEBUGGING) {
+		cout << "CPU THREAD " << cpu->getId() << " DONE\n";
+	}
 
 	return 0;
 }
@@ -115,8 +129,6 @@ void* cpu_thread(void*)
 int main(int argc, char *argv[])
 {
 	Loader loader;
-	Cpu* cpu = 0;
-	ShortTermScheduler* sts = 0;
 	pthread_t cpuThread;
 
 	disk = new Memory(2048);
@@ -126,13 +138,13 @@ int main(int argc, char *argv[])
 	globalProcList = loader.loadDisk(disk);
 
 	lts = new LongTermScheduler(disk, ram, globalProcList, SCHEDULE_RAM_FCFS);
-	sts = new ShortTermScheduler(cpu);
+
+	if(DEBUGGING) {
+		lts->setDebug(true);
+	}
 
 	// Run LTS once at start
 	lts->schedule();
-
-	// XXX DEBUG
-	globalProcList->printJobs();
 
 	// Spawn CPU threads. 
 	// CPU Threads are Symmetric Processing units (self-scheduling, etc.)

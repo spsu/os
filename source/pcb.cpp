@@ -34,15 +34,14 @@ string Pcb::toString() const
 {
 	stringstream s;
 
-	s << "PCB <";
-	s << "id: " << id << ", ";
-	s << "pri: " << priority << ", ";
-	s << "len: " << size() << ", "; 
-	s << "ram: " << ramPos.jobStart << ", ";
-	s << "disk: " << diskPos.jobStart << ", ";
-	s << "cpu: " << cpuId << ", ";
-	s << "state: " << stateStr() << ", ";
-	s << "acc: " << accumulatorValue();
+	s << "PCB " << id << " <";
+	s << "p: " << priority << ", ";
+	s << "sz: " << size() << ", "; 
+	s << "R:: " << ramPos.jobStart << ", ";
+	s << "D: " << diskPos.jobStart << ", ";
+	s << "C: " << cpuId << ", ";
+	s << stateStr() << ", ";
+	s << accumulatorValue();
 	s << ">";
 
 	return s.str();
