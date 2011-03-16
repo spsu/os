@@ -29,13 +29,20 @@ class ShortTermScheduler
 		 * CTOR. (First Come First Serve)
 		 * TODO: Other sched. algos.
 		 */
-		ShortTermScheduler(Cpu* c) : cpu(c) {};
+		ShortTermScheduler(Cpu* c) : 
+			cpu(c),
+			printDebug(false) {};
 
 		/**
 		 * Rebuild the Ready Queue.
 		 * TODO TODO TODO: Acquire locks properly (Esp. PCB/pList)
 		 */
 		void rebuildQueue();
+
+		/**
+		 * Set to print debug messages.
+		 */
+		void setDebug(bool d) { printDebug = d; };
 
 	private:
 		/**
@@ -44,6 +51,11 @@ class ShortTermScheduler
 		Cpu* cpu;
 
 		// TODO: CpuScheduleAlgo algorithm;
+		
+		/**
+		 * Print debugging messages?
+		 */
+		bool printDebug;
 };
 
 #endif

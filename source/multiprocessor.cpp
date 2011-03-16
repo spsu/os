@@ -79,9 +79,9 @@ void* cpu_thread(void*)
 
 		// LTS only runs every so often.
 		// TODO: Make count global?
-		//if(ltsCnt % 4 == 0) {
-		//	lts->schedule();
-		//}
+		if(ltsCnt % 4 == 0) {
+			lts->schedule();
+		}
 		ltsCnt++;
 
 		/*cout << "CPU " << cpu->getId() << " #READY = "; // XXX DEBUG

@@ -25,6 +25,11 @@ class Dispatcher
 		 */
 		void dispatch();
 
+		/**
+		 * Set to print debug messages.
+		 */
+		void setDebug(bool d) { printDebug = d; };
+
 	private:
 		/**
 		 * Loads a process to the CPU.
@@ -46,6 +51,11 @@ class Dispatcher
 		 */
 		Cpu* cpu;
 		Memory* ram;
+
+		/**
+		 * Print debugging messages?
+		 */
+		bool printDebug;
 };
 
 #endif

@@ -33,8 +33,10 @@ void LoadBalancer::importNewProcess()
 	pcb->cpuId = cpu->getId();
 	local->all.push_back(pcb);
 
-	cout << "[LoadBalancer] Process " << pcb->id;
-	cout << " assigned to CPU " << pcb->cpuId << ".\n";
+	if(printDebug) {
+		cout << "[LoadBalancer] Process " << pcb->id;
+		cout << " assigned to CPU " << pcb->cpuId << ".\n";
+	}
 
 	globalList->release();
 }

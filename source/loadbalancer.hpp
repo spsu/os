@@ -17,7 +17,8 @@ class LoadBalancer
 		 */
 		LoadBalancer(Cpu* c, ProcessList* global) :
 			cpu(c),
-			globalList(global) {};
+			globalList(global),
+			printDebug(false) {};
 
 		/**
 		 * Import a single new process to the CPU.
@@ -32,6 +33,11 @@ class LoadBalancer
 		// void push();
 		// void pull();
 
+		/**
+		 * Set to print debug messages.
+		 */
+		void setDebug(bool d) { printDebug = d; };
+
 	private:
 		/**
 		 * The assigned CPU
@@ -43,6 +49,11 @@ class LoadBalancer
 		 * This is not the CPU's local one.
 		 */
 		ProcessList* globalList;
+
+		/**
+		 * Print debugging messages?
+		 */
+		bool printDebug;
 };
 
 #endif

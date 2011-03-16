@@ -30,9 +30,10 @@ void ShortTermScheduler::rebuildQueue()
 		return;
 	}
 
-	// XXX: This isn't really happening yet...
-	cout << "[STS] Rebuilding Ready Queue: ";
-	cout << unscheduled.size() << " new processes.\n";
+	if(printDebug) {
+		cout << "[STS] Rebuilding Ready Queue: ";
+		cout << unscheduled.size() << " new processes.\n";
+	}
 
 	// TODO TODO TODO
 	// ONLY DOES FCFS FOR NOW

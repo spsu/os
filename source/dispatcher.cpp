@@ -8,7 +8,8 @@
 
 Dispatcher::Dispatcher(Cpu* c, Memory* r) :
 	cpu(c),
-	ram(r)
+	ram(r),
+	printDebug(false)
 {
 	// Nothing
 }
@@ -36,7 +37,9 @@ void Dispatcher::dispatch()
 
 void Dispatcher::loadCpu(Pcb* pcb)
 {
-	cout << "[Dispatcher] Loading: " << pcb->id << endl;
+	if(printDebug) {
+		cout << "[Dispatcher] Loading: " << pcb->id << endl;
+	}
 
 	pcb->acquire();
 
@@ -81,7 +84,9 @@ void Dispatcher::unloadCpu()
 	pcb->readCount = cpu->readCount;
 	pcb->writeCount = cpu->writeCount;
 
-	cout << "[Dispatcher] Unloaded: " << pcb->id << endl;
+	if(printDebug) {
+		cout << "[Dispatcher] Unloaded: " << pcb->id << endl;
+	}
 
 	// Return interrupted processes to the Ready Queue
 	// TODO: Should the CPU even set PCB attrs?
