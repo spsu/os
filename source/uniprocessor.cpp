@@ -19,6 +19,11 @@
 using namespace std;
 
 /**
+ * OPTIONS.
+ */
+const bool DEBUGGING = true;
+
+/**
  * Globals.
  */
 Cpu* cpu = 0;
@@ -93,6 +98,13 @@ void* driver_thread(void*)
 	lts = new LongTermScheduler(disk, ram, pList); // TODO: CPU instead of pList?
 	sts = new ShortTermScheduler(cpu);
 	dsp = new Dispatcher(cpu, ram);
+
+	if(DEBUGGING) {
+		cpu->setDebug(true);
+		lts->setDebug(true);
+		sts->setDebug(true);
+		dsp->setDebug(true);
+	}
 
 	// Run the schedulers once at the start
 	lts->schedule();

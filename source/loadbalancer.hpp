@@ -4,6 +4,8 @@
 class Cpu;
 class ProcessList;
 
+// XXX: Needs redesign to support different scheduling algos.
+
 /**
  * Load Balancer
  * Assigns unclaimed processes from RAM to a CPU.

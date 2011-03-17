@@ -41,7 +41,11 @@ string Pcb::toString() const
 	s << "D: " << diskPos.jobStart << ", ";
 	s << "C: " << cpuId << ", ";
 	s << stateStr() << ", ";
-	s << accumulatorValue();
+	s << accumulatorValue() << ", ";
+	s << "r: " << runTime.getCpuTime() << "s, ";
+	s << runTime.getWallTime() << "s";
+	s << "w: " << waitTime.getCpuTime() << "s, ";
+	s << waitTime.getWallTime() << "s";
 	s << ">";
 
 	return s.str();

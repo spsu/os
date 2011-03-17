@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "types.hpp"
 #include "store.hpp"
+#include "timer.hpp"
 
 class Memory;
 class Cpu;
@@ -113,6 +114,7 @@ class Pcb
 
 		/**
 		 * Assigned CPU
+		 * ID is negative if unassigned. 
 		 */
 		int cpuId;
 		Cpu* cpu; // TODO: Use this instead.
@@ -124,11 +126,16 @@ class Pcb
 		Store regs;
 
 		/**
-		 * Statistics
-		 * TODO: Wait time, execution time, etc.
+		 * RAM statistics
 		 */
-		int readCount;
-		int writeCount;
+		unsigned int readCount;
+		unsigned int writeCount;
+
+		/**
+		 * Timers for run and wait time.
+		 */
+		Timer waitTime;
+		Timer runTime;
 
 	private:
 		/**

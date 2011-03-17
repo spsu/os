@@ -80,11 +80,21 @@ void* cpu_thread(void*)
 
 		//cout << "CPU " << cpu->getId() << " ITER\n"; // XXX DEBUG
 
+		// TODO/XXX -- temporary until integrated elsewhere:
+		if(cpu->getPcb()) {
+			cpu->getPcb()->runTime.start();
+		}
+
 		// CPU (non-interruptible)
 		// Note: It may not have a process at this point. 
 		while(!cpu->isComplete()) {
 			//cout << "CPU " << cpu->getId() << " EXECUTING\n"; // XXX DEBUG
 			cpu->execute();
+		}
+
+		// TODO/XXX -- temporary until integrated elsewhere:
+		if(cpu->getPcb()) {
+			cpu->getPcb()->runTime.end();
 		}
 
 		//cout << "LTS COUNTER: " << ltsCnt << endl; // XXX DEBUG
@@ -166,7 +176,7 @@ int main(int argc, char *argv[])
 	globalProcList->printJobs();
 	cout << endl;
 
-	cout << "Writing memories to disk...\n";
+	cout << "Writing memories to disk... (ram.txt, disk.txt)\n";
 	ram->writeDisk("ram.txt");
 	disk->writeDisk("disk.txt");
 

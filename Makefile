@@ -71,6 +71,7 @@ required: \
 	build/store.o \
 	build/memory.o \
 	build/number.o \
+	build/timer.o \
 	build/instruction.o \
 	build/processlist.o \
 	build/ltscheduler.o \
@@ -100,6 +101,10 @@ build/memory.o: source/memory.hpp source/memory.cpp
 build/number.o: source/number.hpp source/number.cpp
 	@echo "[compile] number"
 	@$(CD) ./build && $(C) $(INC) -c ../source/number.cpp
+
+build/timer.o: source/timer.hpp source/timer.cpp
+	@echo "[compile] timer"
+	@$(CD) ./build && $(C) $(INC) -c ../source/timer.cpp
 
 build/processlist.o: source/processlist.hpp source/processlist.cpp
 	@echo "[compile] processlist"

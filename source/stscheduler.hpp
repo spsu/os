@@ -7,7 +7,7 @@ class Cpu;
  * CPU Scheduling Algorithms.
  * TODO: These are not yet implemented.
  */
-enum CpuScheduleAlgo
+/*enum CpuScheduleAlgo
 {
 	// Nonpreemptive scheduling
 	SCHEDULE_CPU_FCFS,		// First Come First Serve
@@ -17,7 +17,7 @@ enum CpuScheduleAlgo
 	// Preemptive scheduling (TODO)
 	SCHEDULE_CPU_SJF_P,		// Shortest Job First (Preemptive)
 	SCHEDULE_CPU_PRIORITY_P	// Priority Scheduling (Preemptive)
-};
+};*/
 
 /**
  * Short Term Scheduler

@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+// XXX: This file contains simple types.
+
 /**
  * Words are 32 bits, fixed size.
  */
@@ -19,6 +21,5 @@ struct Position
 
 	Position() : jobStart(0), dataStart(0) {};
 };
-
 
 #endif
